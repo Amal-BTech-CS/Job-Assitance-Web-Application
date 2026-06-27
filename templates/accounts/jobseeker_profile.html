@@ -1,0 +1,710 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>
+Complete Profile
+</title>
+
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+
+<style>
+
+body{
+
+    background:#f8f7ff;
+
+}
+
+
+
+.profile-wrapper{
+
+    max-width:1200px;
+
+    margin:40px auto;
+
+    padding:20px;
+
+}
+
+
+
+.profile-header{
+
+    background:linear-gradient(
+        135deg,
+        #6a0dad,
+        #9333ea
+    );
+
+    color:white;
+
+    padding:35px;
+
+    border-radius:20px;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.profile-header h1{
+
+    font-size:32px;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:18px;
+
+    margin-bottom:25px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+
+}
+
+
+
+.card h2{
+
+    color:#6a0dad;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+}
+
+
+
+.full{
+
+    grid-column:1/-1;
+
+}
+
+
+
+label{
+
+    font-weight:600;
+
+    display:block;
+
+    margin-bottom:8px;
+
+}
+
+
+
+input,
+textarea{
+
+    width:100%;
+
+    padding:13px;
+
+    border-radius:10px;
+
+    border:1px solid #ddd;
+
+    font-size:15px;
+
+}
+
+
+
+textarea{
+
+    min-height:120px;
+
+}
+
+
+
+.resume-box{
+
+    text-align:center;
+
+    border:2px dashed #c084fc;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    background:#faf5ff;
+
+}
+
+
+
+.btn{
+
+    background:#6a0dad;
+
+    color:white;
+
+    border:none;
+
+    padding:13px 28px;
+
+    border-radius:25px;
+
+    cursor:pointer;
+
+    margin-top:15px;
+
+    font-weight:600;
+
+}
+
+
+
+.btn:hover{
+
+    background:#4c1d95;
+
+}
+
+
+
+.edu-card,
+.exp-card{
+
+    background:#fafafa;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.save-area{
+
+    text-align:center;
+
+}
+
+
+
+@media(max-width:800px){
+
+.grid{
+
+    grid-template-columns:1fr;
+
+}
+
+}
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="navbar">
+
+    <div class="logo">
+
+        Job Portal
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{% url 'logout' %}">
+            Logout
+        </a>
+
+    </div>
+
+
+</div>
+
+
+
+
+<div class="profile-wrapper">
+
+
+
+<div class="profile-header">
+
+
+<h1>
+Welcome, {{request.user.username}}
+</h1>
+
+
+<p>
+Complete your profile and let AI help recruiters discover you.
+</p>
+
+
+</div>
+
+
+
+
+
+<!-- Resume -->
+
+
+<div class="card">
+
+
+<h2>
+AI Resume Analysis
+</h2>
+
+
+
+<div class="resume-box">
+
+
+<p>
+Upload your resume and automatically extract your skills,
+education and experience.
+</p>
+
+
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+
+<input 
+type="file"
+name="resume"
+accept=".pdf"
+>
+
+
+
+<button 
+class="btn"
+name="upload_resume">
+
+Analyze Resume
+
+</button>
+
+
+</form>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<form method="POST">
+
+{% csrf_token %}
+
+
+
+
+
+<!-- Personal Details -->
+
+
+<div class="card">
+
+
+<h2>
+Personal Information
+</h2>
+
+
+<div class="grid">
+
+
+<div>
+
+<label>
+Full Name
+</label>
+
+<input 
+name="full_name"
+value="{{profile.full_name}}">
+
+</div>
+
+
+
+<div>
+
+<label>
+Email
+</label>
+
+<input
+name="email"
+value="{{profile.email}}">
+
+</div>
+
+
+
+<div>
+
+<label>
+Phone
+</label>
+
+<input
+name="phone"
+value="{{profile.phone}}">
+
+</div>
+
+
+
+<div>
+
+<label>
+LinkedIn
+</label>
+
+<input
+name="linkedin"
+value="{{profile.linkedin}}">
+
+</div>
+
+
+
+<div>
+
+<label>
+Github
+</label>
+
+<input
+name="github"
+value="{{profile.github}}">
+
+</div>
+
+
+
+<div>
+
+<label>
+Skills
+</label>
+
+
+<textarea name="skills">
+
+{{profile.skills}}
+
+</textarea>
+
+
+</div>
+
+
+
+<div class="full">
+
+
+<label>
+Professional Summary
+</label>
+
+
+<textarea name="summary">
+
+{{profile.summary}}
+
+</textarea>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<!-- Education -->
+
+
+<div class="card">
+
+
+<h2>
+Education
+</h2>
+
+
+
+<div class="edu-card">
+
+<h3>
+10th
+</h3>
+
+
+<input name="10th_degree"
+placeholder="Qualification"
+value="{{tenth.degree|default:''}}">
+
+
+<input name="10th_college"
+placeholder="School"
+value="{{tenth.college|default:''}}">
+
+
+</div>
+
+
+
+
+
+<div class="edu-card">
+
+
+<h3>
+Plus Two
+</h3>
+
+
+<input name="plus_two_degree"
+placeholder="Qualification"
+value="{{plus_two.degree|default:''}}">
+
+
+<input name="plus_two_college"
+placeholder="College"
+value="{{plus_two.college|default:''}}">
+
+
+</div>
+
+
+
+
+
+
+<div class="edu-card">
+
+
+<h3>
+Degree
+</h3>
+
+
+<input name="degree_degree"
+placeholder="Degree"
+value="{{degree.degree|default:''}}">
+
+
+<input name="degree_college"
+placeholder="College"
+value="{{degree.college|default:''}}">
+
+
+</div>
+
+
+
+<button 
+class="btn"
+name="save_education">
+
+Save Education
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- Experience -->
+
+
+<div class="card">
+
+
+<h2>
+Experience
+</h2>
+
+
+
+{% for exp in experience %}
+
+
+<div class="exp-card">
+
+
+<h3>
+{{exp.job_title}}
+</h3>
+
+
+<p>
+
+{{exp.company}}
+
+</p>
+
+
+<p>
+
+{{exp.description}}
+
+</p>
+
+
+</div>
+
+
+
+{% empty %}
+
+
+<p>
+No experience added yet.
+</p>
+
+
+{% endfor %}
+
+
+
+
+
+<h3>
+Add Experience
+</h3>
+
+
+<input 
+name="job_title"
+placeholder="Job Title">
+
+
+<input 
+name="company"
+placeholder="Company">
+
+
+
+<textarea
+name="description"
+placeholder="Description">
+
+</textarea>
+
+
+
+
+<button
+class="btn"
+name="add_experience">
+
+Add Experience
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="save-area">
+
+
+<button
+class="btn"
+name="save_profile">
+
+
+Save Complete Profile
+
+
+</button>
+
+
+</div>
+
+
+
+
+</form>
+
+
+
+</div>
+
+
+
+</body>
+
+</html>

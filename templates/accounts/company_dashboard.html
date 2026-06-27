@@ -1,0 +1,169 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>
+        Company Dashboard
+    </title>
+
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+
+<div class="navbar">
+
+
+    <div class="logo">
+        Job Portal
+    </div>
+
+
+    <div class="nav-links">
+
+
+        <a href="#">
+            Company Profile
+        </a>
+
+
+        <a href="#">
+            Post Job
+        </a>
+
+
+        <a href="#">
+            Manage Jobs
+        </a>
+
+
+        <a href="#">
+            Applicants
+        </a>
+
+
+        <a href="{% url 'logout' %}">
+            Logout
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+<div class="dashboard-container">
+
+
+    <h1>
+        Welcome {{ request.user.username }}
+    </h1>
+
+
+    <h2>
+        Company Dashboard
+    </h2>
+
+
+    <p>
+        Post jobs and manage candidates.
+    </p>
+
+
+
+
+    <div class="cards">
+
+
+
+        <div class="card">
+
+
+            <h3>
+                Company Profile
+            </h3>
+
+
+            <p>
+                Add company information.
+            </p>
+
+
+            <button>
+                Create Profile
+            </button>
+
+
+        </div>
+
+
+
+
+
+        <div class="card">
+
+
+            <h3>
+                Post New Job
+            </h3>
+
+
+            <p>
+                Upload new job openings.
+            </p>
+
+
+            <button>
+                Post Job
+            </button>
+
+
+        </div>
+
+
+
+
+
+        <div class="card">
+
+
+            <h3>
+                Applicants
+            </h3>
+
+
+            <p>
+                View candidates who applied.
+            </p>
+
+
+            <button>
+                View Applicants
+            </button>
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+</body>
+
+</html>

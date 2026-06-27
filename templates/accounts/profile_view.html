@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Profile View</title><style>
+body{margin:0;font-family:Arial;background:#f4f4ff}.container{max-width:1100px;margin:40px auto;background:#fff;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden}.header{background:linear-gradient(135deg,#6a0dad,#8b5cf6);color:#fff;padding:35px;text-align:center}.content{padding:30px}.card{background:#faf8ff;padding:20px;border-radius:12px;margin-bottom:25px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.item label{font-weight:bold;color:#6a0dad}.item p{background:#fff;border:1px solid #ddd;padding:10px;border-radius:8px}.edu,.exp{background:#fff;border:1px solid #ddd;padding:15px;border-radius:10px;margin-top:12px}.btn{display:inline-block;background:#6a0dad;color:#fff;text-decoration:none;padding:12px 26px;border-radius:25px}
+</style></head><body><div class="container"><div class="header"><h1>{{ profile.full_name }}</h1><p>{{ profile.email }}</p></div><div class="content">
+<div class="card"><h2>Personal Information</h2><div class="grid">
+<div class="item"><label>Phone</label><p>{{ profile.phone }}</p></div>
+<div class="item"><label>Email</label><p>{{ profile.email }}</p></div>
+<div class="item"><label>LinkedIn</label><p>{{ profile.linkedin }}</p></div>
+<div class="item"><label>GitHub</label><p>{{ profile.github }}</p></div>
+</div></div>
+<div class="card"><h2>Professional Summary</h2><p>{{ profile.summary }}</p></div>
+<div class="card"><h2>Skills</h2><p>{{ profile.skills }}</p></div>
+<div class="card"><h2>Education</h2>
+<div class="edu"><h3>10th</h3><p>{{ tenth.degree }}</p><p>{{ tenth.college }}</p><p>{{ tenth.percentage }}</p><p>{{ tenth.start_year }} - {{ tenth.end_year }}</p></div>
+<div class="edu"><h3>Plus Two</h3><p>{{ plus_two.degree }}</p><p>{{ plus_two.college }}</p><p>{{ plus_two.percentage }}</p><p>{{ plus_two.start_year }} - {{ plus_two.end_year }}</p></div>
+<div class="edu"><h3>Degree</h3><p>{{ degree.degree }}</p><p>{{ degree.college }}</p><p>{{ degree.percentage }}</p><p>{{ degree.start_year }} - {{ degree.end_year }}</p></div>
+</div>
+<div class="card"><h2>Experience</h2>{% for exp in experience %}<div class="exp"><h3>{{ exp.job_title }}</h3><p>{{ exp.company }}</p><p>{{ exp.start_date }} - {{ exp.end_date }}</p><p>{{ exp.description }}</p></div>{% empty %}<p>No experience added.</p>{% endfor %}</div>
+<div style="text-align:center"><a class="btn" href="{% url 'jobseeker_profile' %}">Edit Profile</a></div>
+</div></div></body></html>

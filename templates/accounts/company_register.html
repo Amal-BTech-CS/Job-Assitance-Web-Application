@@ -1,0 +1,134 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>
+        Employer Registration
+    </title>
+
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+
+
+<div class="auth-container">
+
+
+<div class="auth-card">
+
+
+<h2>
+Create Employer Account
+</h2>
+
+
+<p class="auth-subtitle">
+Register your company and start hiring talented professionals
+</p>
+
+
+
+<form method="POST">
+
+{% csrf_token %}
+
+
+
+<div class="form-group">
+
+<label>
+Company Username
+</label>
+
+{{ form.username }}
+
+</div>
+
+
+
+
+<div class="form-group">
+
+<label>
+Company Email
+</label>
+
+{{ form.email }}
+
+</div>
+
+
+
+
+<div class="form-group">
+
+<label>
+Password
+</label>
+
+{{ form.password }}
+
+</div>
+
+
+
+
+<div class="form-group">
+
+<label>
+Confirm Password
+</label>
+
+{{ form.confirm_password }}
+
+</div>
+
+
+
+
+<button type="submit" class="btn btn-primary">
+
+Create Company Account
+
+</button>
+
+
+
+</form>
+
+
+
+
+
+<p class="login-link">
+
+Already registered?
+
+<a href="{% url 'company_login' %}">
+Login
+</a>
+
+
+</p>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</body>
+
+</html>

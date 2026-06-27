@@ -1,0 +1,218 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Job Portal</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+
+<div class="navbar">
+
+    <div class="logo">
+        Job Portal
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{% url 'jobseeker_login' %}">
+            Job Seeker Login
+        </a>
+
+
+        <a href="{% url 'company_login' %}">
+            Employer Login
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<section class="hero">
+
+
+<div class="hero-content">
+
+
+<h1>
+    Find Your Dream Career
+</h1>
+
+
+<p>
+    India's Smart AI Powered Recruitment Platform connecting talented
+    Job Seekers with trusted Employers.
+</p>
+
+
+
+<div class="role-grid">
+
+
+
+<div class="role-card">
+
+
+<h3>
+    Job Seeker
+</h3>
+
+
+<p>
+    Create your profile, upload your resume and discover
+    new career opportunities.
+</p>
+
+
+<a href="{% url 'jobseeker_register' %}" 
+class="btn btn-primary">
+
+Get Started
+
+</a>
+
+
+</div>
+
+
+
+
+
+<div class="role-card">
+
+
+<h3>
+    Employer
+</h3>
+
+
+<p>
+    Post jobs, find skilled candidates and build
+    your professional team.
+</p>
+
+
+<a href="{% url 'company_register' %}" 
+class="btn btn-primary">
+
+Start Hiring
+
+</a>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<section class="features">
+
+
+<h2>
+Why Choose Our Platform?
+</h2>
+
+
+
+<div class="feature-grid">
+
+
+
+<div class="feature-card">
+
+
+<h3>
+AI Resume Analysis
+</h3>
+
+
+<p>
+Upload your resume and automatically extract
+skills, education and experience.
+</p>
+
+
+</div>
+
+
+
+
+
+<div class="feature-card">
+
+
+<h3>
+Verified Employers
+</h3>
+
+
+<p>
+Connect with trusted companies and recruiters.
+</p>
+
+
+</div>
+
+
+
+
+
+<div class="feature-card">
+
+
+<h3>
+Smart Job Matching
+</h3>
+
+
+<p>
+Receive job recommendations based on your profile.
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+<footer>
+
+© 2026 Job Portal | AI Powered Recruitment Platform
+
+</footer>
+
+
+
+</body>
+
+</html>

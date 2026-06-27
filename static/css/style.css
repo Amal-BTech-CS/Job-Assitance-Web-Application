@@ -1,0 +1,515 @@
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+
+}
+
+
+body{
+
+    background:#f8f5ff;
+    color:#333;
+    min-height:100vh;
+
+}
+
+
+/* Navbar */
+
+.navbar{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 8%;
+    background:#6a0dad;
+
+}
+
+
+.logo{
+
+    color:white;
+    font-size:26px;
+    font-weight:bold;
+
+}
+
+
+.nav-links{
+
+    display:flex;
+    gap:25px;
+
+}
+
+
+.nav-links a{
+
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+
+}
+
+
+.nav-links a:hover{
+
+    opacity:.8;
+
+}
+
+
+
+/* Hero */
+
+.hero{
+
+    min-height:75vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+
+    background:linear-gradient(
+        135deg,
+        #6a0dad,
+        #9b59b6
+    );
+
+    padding:40px 20px;
+
+}
+
+
+.hero-content{
+
+    max-width:850px;
+
+}
+
+
+
+.hero h1{
+
+    font-size:52px;
+    color:white;
+    margin-bottom:20px;
+
+}
+
+
+
+.hero p{
+
+    font-size:20px;
+    color:white;
+    line-height:1.7;
+    margin-bottom:35px;
+
+}
+
+
+
+/* Buttons */
+
+.btn{
+
+    display:inline-block;
+    padding:12px 28px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+    border:none;
+
+}
+
+
+.btn-primary,
+.btn-secondary{
+
+    background:#7c3aed;
+    color:white;
+
+}
+
+
+.btn-primary:hover,
+.btn-secondary:hover{
+
+    background:#5b21b6;
+    transform:translateY(-2px);
+
+}
+
+
+
+/* Feature & Role Sections */
+
+.features,
+.roles{
+
+    padding:70px 8%;
+    text-align:center;
+
+}
+
+
+
+.features h2,
+.roles h2{
+
+    color:#6a0dad;
+    font-size:36px;
+    margin-bottom:40px;
+
+}
+
+
+
+/* Cards */
+
+.feature-grid,
+.role-grid{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:25px;
+
+}
+
+
+
+.feature-card,
+.role-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:14px;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,0.08);
+
+    transition:.3s;
+
+}
+
+
+
+.feature-card:hover,
+.role-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+
+
+.feature-card h3,
+.role-card h3{
+
+    color:#6a0dad;
+    margin-bottom:15px;
+
+}
+
+
+
+.feature-card p,
+.role-card p{
+
+    line-height:1.6;
+    font-size:15px;
+    color:#555;
+
+}
+
+
+
+/* Forms */
+
+.form-container,
+.profile-form-container{
+
+    width:450px;
+    max-width:90%;
+    margin:60px auto;
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:15px;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,0.1);
+
+}
+
+
+
+.form-container h2,
+.profile-form-container h2{
+
+    text-align:center;
+    color:#6a0dad;
+    margin-bottom:25px;
+
+}
+
+
+
+.form-container input,
+.form-container select,
+.profile-form-container input,
+.profile-form-container textarea{
+
+
+    width:100%;
+    padding:12px;
+
+    margin-bottom:15px;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+}
+
+
+
+.form-container button,
+.profile-form-container button{
+
+    width:100%;
+
+    padding:12px;
+
+    background:#7c3aed;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+
+
+/* Dashboard Cards */
+
+
+.cards{
+
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    margin-top:40px;
+
+}
+
+
+
+.card{
+
+    background:white;
+
+    width:260px;
+
+    padding:25px;
+
+    border-radius:14px;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,0.08);
+
+}
+
+
+
+.card h3{
+
+    color:#6a0dad;
+
+}
+
+
+
+/* Footer */
+
+
+footer{
+
+    background:#6a0dad;
+
+    color:white;
+
+    text-align:center;
+
+    padding:18px;
+
+    margin-top:40px;
+
+}
+
+
+
+/* Mobile */
+
+@media(max-width:768px){
+
+
+.navbar{
+
+    flex-direction:column;
+    gap:15px;
+
+}
+
+
+.hero h1{
+
+    font-size:38px;
+
+}
+
+
+.hero p{
+
+    font-size:17px;
+
+}
+
+
+.cards{
+
+    flex-direction:column;
+    align-items:center;
+
+}
+
+
+}
+
+/* Authentication Pages */
+
+
+.auth-container {
+
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f1f5f9;
+
+}
+
+
+
+.auth-card {
+
+
+    width: 400px;
+    background: white;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+}
+
+
+
+.auth-card h2 {
+
+    text-align: center;
+    margin-bottom: 10px;
+
+}
+
+
+
+.auth-subtitle {
+
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 25px;
+
+}
+
+
+
+.form-group {
+
+    margin-bottom: 18px;
+
+}
+
+
+
+.form-group label {
+
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+
+}
+
+
+
+.form-group input {
+
+
+    width:100%;
+    padding:12px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    font-size:15px;
+
+}
+
+
+
+.form-group input:focus {
+
+    outline:none;
+    border-color:#0f766e;
+
+}
+
+
+
+.auth-card button {
+
+
+    width:100%;
+    cursor:pointer;
+
+}
+
+
+
+.login-link {
+
+    text-align:center;
+    margin-top:20px;
+
+}
+
+
+
+.login-link a {
+
+    color:#0f766e;
+    text-decoration:none;
+    font-weight:600;
+
+}

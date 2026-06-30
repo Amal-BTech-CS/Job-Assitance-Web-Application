@@ -1,134 +1,147 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Registration | CareerPilot AI</title>
 
-    <title>
-        Employer Registration
-    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            bg: '#0b1320',      
+                            card: '#121b2b',    
+                            border: '#1e293b',  
+                            gold: '#e6c387',    
+                            goldHover: '#f3d095',
+                            textMuted: '#8b9bb4',
+                            textLight: '#f8fafc',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
+    <style>
+        /* Automatically style Django's rendered form inputs to match the dark theme */
+        .django-form-input input {
+            width: 100%;
+            background-color: #0b1320; /* brand-bg */
+            border: 1px solid #1e293b; /* brand-border */
+            color: #f8fafc;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        
+        .django-form-input input:focus {
+            outline: none;
+            border-color: #e6c387; /* brand-gold */
+            box-shadow: 0 0 0 1px #e6c387;
+        }
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
+        .django-form-input input::placeholder {
+            color: #475569;
+        }
+    </style>
 </head>
-
-
-<body>
-
-
-
-<div class="auth-container">
-
-
-<div class="auth-card">
-
-
-<h2>
-Create Employer Account
-</h2>
-
-
-<p class="auth-subtitle">
-Register your company and start hiring talented professionals
-</p>
-
-
-
-<form method="POST">
-
-{% csrf_token %}
-
-
-
-<div class="form-group">
-
-<label>
-Company Username
-</label>
-
-{{ form.username }}
-
-</div>
-
-
-
-
-<div class="form-group">
-
-<label>
-Company Email
-</label>
-
-{{ form.email }}
-
-</div>
-
-
-
-
-<div class="form-group">
-
-<label>
-Password
-</label>
-
-{{ form.password }}
-
-</div>
-
-
-
-
-<div class="form-group">
-
-<label>
-Confirm Password
-</label>
-
-{{ form.confirm_password }}
-
-</div>
-
-
-
-
-<button type="submit" class="btn btn-primary">
-
-Create Company Account
-
-</button>
-
-
-
-</form>
-
-
-
-
-
-<p class="login-link">
-
-Already registered?
-
-<a href="{% url 'company_login' %}">
-Login
-</a>
-
-
-</p>
-
-
-
-</div>
-
-
-
-</div>
-
-
+<body class="font-sans bg-brand-bg text-brand-textLight min-h-screen flex flex-col selection:bg-brand-gold selection:text-brand-bg">
+
+    <nav class="h-20 px-6 lg:px-12 flex items-center justify-between border-b border-brand-border bg-brand-bg relative z-10">
+        <a href="{% url 'home' %}" class="flex items-center gap-3 group">
+            <div class="w-8 h-8 rounded bg-brand-gold flex items-center justify-center text-brand-bg transition group-hover:scale-105">
+                <i class="fa-solid fa-arrow-trend-up text-sm"></i>
+            </div>
+            <span class="font-semibold tracking-widest text-sm uppercase text-white group-hover:text-brand-gold transition">
+                CareerPilot
+            </span>
+        </a>
+        <a href="{% url 'home' %}" class="text-brand-textMuted hover:text-white text-sm font-medium flex items-center gap-2 transition">
+            <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </a>
+    </nav>
+
+    <div class="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
+        
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-gold/5 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div class="w-full max-w-md bg-brand-card border border-brand-border rounded-2xl p-8 shadow-2xl relative z-10">
+            
+            <div class="text-center mb-8">
+                <div class="w-12 h-12 rounded-full bg-[#1e2b41] border border-brand-border flex items-center justify-center text-brand-gold text-xl mx-auto mb-4">
+                    <i class="fa-regular fa-building"></i>
+                </div>
+                <h2 class="text-2xl font-serif font-semibold text-white mb-2">Create Employer Account</h2>
+                <p class="text-brand-textMuted text-sm">Register your company and start hiring talented professionals.</p>
+            </div>
+
+            <form method="POST" class="space-y-5">
+                {% csrf_token %}
+
+                <div class="django-form-input">
+                    <label class="block text-brand-textMuted text-xs font-medium uppercase tracking-wider">
+                        <i class="fa-solid fa-signature mr-1"></i> Company Username
+                    </label>
+                    {{ form.username }}
+                </div>
+
+                <div class="django-form-input">
+                    <label class="block text-brand-textMuted text-xs font-medium uppercase tracking-wider">
+                        <i class="fa-regular fa-envelope mr-1"></i> Company Email
+                    </label>
+                    {{ form.email }}
+                </div>
+
+                <div class="django-form-input">
+                    <label class="block text-brand-textMuted text-xs font-medium uppercase tracking-wider">
+                        <i class="fa-solid fa-lock mr-1"></i> Password
+                    </label>
+                    {{ form.password }}
+                </div>
+
+                <div class="django-form-input">
+                    <label class="block text-brand-textMuted text-xs font-medium uppercase tracking-wider">
+                        <i class="fa-solid fa-lock mr-1"></i> Confirm Password
+                    </label>
+                    {{ form.confirm_password }}
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-3.5 bg-brand-gold text-brand-bg rounded-lg font-semibold hover:bg-brand-goldHover shadow-lg shadow-brand-gold/20 transition transform hover:-translate-y-0.5">
+                        Create Company Account
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-8 text-center border-t border-brand-border pt-6">
+                <p class="text-brand-textMuted text-sm">
+                    Already registered? 
+                    <a href="{% url 'company_login' %}" class="text-brand-gold font-medium hover:text-brand-goldHover hover:underline transition">
+                        Log in here
+                    </a>
+                </p>
+            </div>
+
+        </div>
+    </div>
 
 </body>
-
 </html>

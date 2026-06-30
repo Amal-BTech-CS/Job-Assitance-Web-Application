@@ -143,74 +143,51 @@ class Profile(models.Model):
 # Education
 # ==========================
 
-
 class Education(models.Model):
 
-
     profile = models.ForeignKey(
-
         Profile,
-
         on_delete=models.CASCADE,
+        related_name="educations"
+    )
 
-        related_name="education"
 
+    qualification_level = models.CharField(
+        max_length=100
     )
 
 
     degree = models.CharField(
-
         max_length=200
-
     )
 
 
     college = models.CharField(
-
         max_length=200
-
     )
 
 
-    percentage = models.CharField(
-
+    cgpa = models.CharField(
         max_length=50,
-
         blank=True
-
     )
 
 
     start_year = models.CharField(
-
-        max_length=10
-
+        max_length=10,
+        blank=True
     )
 
 
     end_year = models.CharField(
-
-        max_length=10
-
+        max_length=10,
+        blank=True
     )
-
-
-    education_type = models.CharField(
-
-        max_length=50,
-
-        default="degree"
-
-    )
-
 
 
     def __str__(self):
 
         return self.degree
-
-
-
 
 
 # ==========================
@@ -222,60 +199,36 @@ class Experience(models.Model):
 
 
     profile = models.ForeignKey(
-
         Profile,
-
         on_delete=models.CASCADE,
-
-        related_name="experience"
-
+        related_name="experiences"
     )
 
 
     job_title = models.CharField(
-
         max_length=200
-
     )
 
 
     company = models.CharField(
-
         max_length=200
-
     )
 
 
     start_date = models.CharField(
-
         max_length=50
-
     )
 
 
     end_date = models.CharField(
-
         max_length=50,
-
         blank=True
-
     )
-
-
-    description = models.TextField(
-
-        blank=True
-
-    )
-
 
 
     def __str__(self):
 
         return self.job_title
-
-
-
 
 
 # ==========================
@@ -335,3 +288,45 @@ class CompanyProfile(models.Model):
     def __str__(self):
 
         return self.company_name
+    
+class Job(models.Model):
+
+    company = models.ForeignKey(
+        CompanyProfile,
+        on_delete=models.CASCADE,
+        related_name="jobs"
+    )
+
+    title = models.CharField(
+        max_length=200
+    )
+
+    location = models.CharField(
+        max_length=150
+    )
+
+    employment_type = models.CharField(
+        max_length=50
+    )
+
+    experience = models.CharField(
+        max_length=100
+    )
+
+    salary = models.CharField(
+        max_length=100
+    )
+
+    skills = models.TextField()
+
+    description = models.TextField()
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return f"{self.title} - {self.company.company_name}"
+    
+

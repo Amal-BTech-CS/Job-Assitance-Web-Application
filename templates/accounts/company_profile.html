@@ -1,122 +1,68 @@
+{% extends 'accounts/jobseeker_base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html>
+{% block title %}Complete Company Profile{% endblock %}
 
-<head>
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 lg:px-12 pt-10 pb-20 w-full transition-colors duration-300">
+    
+    <!-- HEADER -->
+    <header class="mb-10">
+        <h1 class="text-4xl font-serif font-semibold text-light-text dark:text-white mb-2 transition-colors">Complete Company Profile</h1>
+        <p class="text-light-muted dark:text-brand-textMuted transition-colors">Add your company details before posting jobs to ensure candidates know who you are.</p>
+    </header>
 
-    <title>
-        Complete Company Profile
-    </title>
+    <!-- FORM CARD -->
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 shadow-sm transition-colors duration-300">
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Company Name -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Company Name</label>
+                    <input type="text" name="company_name" value="{{ profile.company_name }}" placeholder="e.g. Acme Corp" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
 
-</head>
+                <!-- Company Email -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Company Email</label>
+                    <input type="email" name="company_email" value="{{ profile.company_email }}" placeholder="contact@company.com" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+            </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Phone -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Phone Number</label>
+                    <input type="text" name="company_phone" value="{{ profile.company_phone }}" placeholder="+1 234 567 890"
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
 
-<body>
+                <!-- Website -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Website</label>
+                    <input type="url" name="website" value="{{ profile.website }}" placeholder="https://example.com"
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+            </div>
 
+            <!-- Description -->
+            <div>
+                <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Company Description</label>
+                <textarea name="description" rows="5" placeholder="Tell candidates about your company culture and mission..."
+                    class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors resize-none placeholder-gray-400 dark:placeholder-brand-border">{{ profile.description }}</textarea>
+            </div>
 
-<div class="profile-container">
-
-
-    <h1>
-        Complete Company Profile
-    </h1>
-
-
-    <p>
-        Add your company details before posting jobs.
-    </p>
-
-
-
-    <form method="POST">
-
-        {% csrf_token %}
-
-
-
-        <label>
-            Company Name
-        </label>
-
-        <input 
-            type="text"
-            name="company_name"
-            value="{{profile.company_name}}"
-            placeholder="Company Name"
-            required
-        >
-
-
-
-        <label>
-            Company Email
-        </label>
-
-        <input 
-            type="email"
-            name="company_email"
-            value="{{profile.company_email}}"
-            placeholder="Company Email"
-            required
-        >
-
-
-
-        <label>
-            Phone Number
-        </label>
-
-        <input 
-            type="text"
-            name="company_phone"
-            value="{{profile.company_phone}}"
-            placeholder="Phone Number"
-        >
-
-
-
-        <label>
-            Website
-        </label>
-
-        <input 
-            type="url"
-            name="website"
-            value="{{profile.website}}"
-            placeholder="https://example.com"
-        >
-
-
-
-        <label>
-            Company Description
-        </label>
-
-        <textarea 
-            name="description"
-            placeholder="Describe your company"
-        >{{profile.description}}</textarea>
-
-
-
-
-        <button type="submit">
-
-            Save Company Profile
-
-        </button>
-
-
-    </form>
-
-
-
+            <!-- Save Button -->
+            <div class="pt-4">
+                <button type="submit" class="w-full md:w-auto px-10 py-3.5 bg-amber-600 dark:bg-brand-gold text-white dark:text-brand-bg rounded-lg font-semibold hover:bg-amber-700 dark:hover:bg-brand-goldHover shadow-lg shadow-amber-600/20 dark:shadow-brand-gold/20 transition transform hover:-translate-y-0.5">
+                    Save Company Profile
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
-
-
-</body>
-
-</html>
+{% endblock %}

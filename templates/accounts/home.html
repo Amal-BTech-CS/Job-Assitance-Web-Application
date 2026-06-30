@@ -1,218 +1,209 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerPilot | AI Recruitment Platform</title>
 
-    <title>Job Portal</title>
-
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        light: { bg: '#ffffff', card: '#f8fafc', border: '#e2e8f0', text: '#1e293b', muted: '#64748b' },
+                        brand: { bg: '#0b1320', card: '#121b2b', border: '#1e293b', gold: '#e6c387', goldHover: '#f3d095', textMuted: '#8b9bb4', textLight: '#f8fafc' }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        .dark ::-webkit-scrollbar-track { background: #0b1320; }
+        .dark ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #334155; }
+        
+        /* Subtle background glow for the hero section */
+        .dark .hero-glow {
+            background: radial-gradient(circle at 50% 0%, rgba(230, 195, 135, 0.05) 0%, rgba(11, 19, 32, 1) 50%);
+        }
+        .hero-glow {
+            background: radial-gradient(circle at 50% 0%, rgba(217, 119, 6, 0.05) 0%, rgba(255, 255, 255, 1) 50%);
+        }
+    </style>
 </head>
-
-
-<body>
-
-
-<div class="navbar">
-
-    <div class="logo">
-        Job Portal
-    </div>
-
-
-    <div class="nav-links">
-
-        <a href="{% url 'jobseeker_login' %}">
-            Job Seeker Login
-        </a>
-
-
-        <a href="{% url 'company_login' %}">
-            Employer Login
-        </a>
-
-    </div>
-
-</div>
-
-
-
-<section class="hero">
-
-
-<div class="hero-content">
-
-
-<h1>
-    Find Your Dream Career
-</h1>
-
-
-<p>
-    India's Smart AI Powered Recruitment Platform connecting talented
-    Job Seekers with trusted Employers.
-</p>
-
-
-
-<div class="role-grid">
-
-
-
-<div class="role-card">
-
-
-<h3>
-    Job Seeker
-</h3>
-
-
-<p>
-    Create your profile, upload your resume and discover
-    new career opportunities.
-</p>
-
-
-<a href="{% url 'jobseeker_register' %}" 
-class="btn btn-primary">
-
-Get Started
-
-</a>
-
-
-</div>
-
-
-
-
-
-<div class="role-card">
-
-
-<h3>
-    Employer
-</h3>
-
-
-<p>
-    Post jobs, find skilled candidates and build
-    your professional team.
-</p>
-
-
-<a href="{% url 'company_register' %}" 
-class="btn btn-primary">
-
-Start Hiring
-
-</a>
-
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-<section class="features">
-
-
-<h2>
-Why Choose Our Platform?
-</h2>
-
-
-
-<div class="feature-grid">
-
-
-
-<div class="feature-card">
-
-
-<h3>
-AI Resume Analysis
-</h3>
-
-
-<p>
-Upload your resume and automatically extract
-skills, education and experience.
-</p>
-
-
-</div>
-
-
-
-
-
-<div class="feature-card">
-
-
-<h3>
-Verified Employers
-</h3>
-
-
-<p>
-Connect with trusted companies and recruiters.
-</p>
-
-
-</div>
-
-
-
-
-
-<div class="feature-card">
-
-
-<h3>
-Smart Job Matching
-</h3>
-
-
-<p>
-Receive job recommendations based on your profile.
-</p>
-
-
-</div>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-<footer>
-
-© 2026 Job Portal | AI Powered Recruitment Platform
-
-</footer>
-
-
-
+<body class="font-sans bg-light-bg dark:bg-brand-bg text-light-text dark:text-brand-textLight transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="h-auto min-h-[75px] py-4 lg:py-0 flex flex-wrap items-center justify-between px-6 lg:px-12 border-b border-light-border dark:border-brand-border bg-light-bg/90 dark:bg-brand-bg/90 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded bg-amber-600 dark:bg-brand-gold flex items-center justify-center text-white dark:text-brand-bg shadow-lg transition-colors">
+                <i class="fa-solid fa-arrow-trend-up text-lg"></i>
+            </div>
+            <span class="font-semibold tracking-widest text-lg uppercase text-light-text dark:text-white transition-colors">
+                CareerPilot <span class="text-amber-600 dark:text-brand-gold">.</span>
+            </span>
+        </div>
+
+        <div class="flex items-center gap-4 md:gap-6 text-sm font-medium">
+            <button id="theme-toggle" class="p-2 text-amber-600 dark:text-brand-gold hover:bg-light-border dark:hover:bg-brand-card rounded-full transition">
+                <i id="theme-icon" class="fa-solid fa-moon"></i>
+            </button>
+
+            <a href="{% url 'jobseeker_login' %}" class="text-light-muted dark:text-brand-textMuted hover:text-light-text dark:hover:text-white transition hidden sm:block">
+                Candidate Login
+            </a>
+            <a href="{% url 'company_login' %}" class="text-light-muted dark:text-brand-textMuted hover:text-light-text dark:hover:text-white transition hidden md:block">
+                Employer Login
+            </a>
+            <a href="{% url 'company_login' %}" class="px-5 py-2.5 border border-amber-600 dark:border-brand-gold text-amber-600 dark:text-brand-gold rounded hover:bg-amber-600 dark:hover:bg-brand-gold hover:text-white dark:hover:text-brand-bg transition duration-300 ml-2">
+                Post a Job
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-glow py-20 lg:py-32 px-6 relative overflow-hidden transition-colors duration-300">
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-[#1e2b41] border border-amber-200 dark:border-brand-border text-amber-700 dark:text-brand-gold text-xs font-medium uppercase tracking-widest mb-6 transition-colors">
+                <i class="fa-solid fa-sparkles"></i> AI-Powered Recruitment
+            </div>
+            <h1 class="text-5xl md:text-7xl font-serif font-semibold leading-tight text-light-text dark:text-white mb-6 transition-colors">
+                Build Your Career.<br>
+                Find The Right <span class="text-amber-600 dark:text-brand-gold italic">Talent.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-light-muted dark:text-brand-textMuted max-w-2xl mx-auto mb-10 leading-relaxed transition-colors">
+                An intelligent recruitment platform connecting skilled job seekers with trusted employers through smarter, faster hiring solutions.
+            </p>
+        </div>
+    </section>
+
+    <!-- Split Audience Section -->
+    <section class="py-16 px-6 lg:px-12 max-w-7xl mx-auto w-full border-t border-light-border dark:border-brand-border/50 transition-colors duration-300">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-serif font-semibold text-light-text dark:text-white mb-4 transition-colors">Designed For Everyone</h2>
+            <p class="text-light-muted dark:text-brand-textMuted max-w-xl mx-auto transition-colors">Whether you are looking for your next big opportunity or searching for the perfect candidate, we have you covered.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            
+            <!-- Job Seeker Card -->
+            <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-8 md:p-10 hover:-translate-y-1 hover:border-gray-300 dark:hover:border-[#334155] transition duration-300 shadow-xl">
+                <div class="w-14 h-14 rounded-xl bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border flex items-center justify-center text-amber-600 dark:text-brand-gold text-2xl mb-6 shadow-md transition-colors">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <h3 class="text-2xl font-medium text-light-text dark:text-white mb-3 transition-colors">Job Seekers</h3>
+                <p class="text-light-muted dark:text-brand-textMuted leading-relaxed mb-8 transition-colors">
+                    Create your professional profile, upload your resume to be parsed by AI, showcase your skills, and discover highly-matched career opportunities.
+                </p>
+                <a href="{% url 'jobseeker_register' %}" class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-3.5 bg-amber-600 dark:bg-brand-gold text-white dark:text-brand-bg rounded-lg font-semibold hover:bg-amber-700 dark:hover:bg-brand-goldHover shadow-lg transition">
+                    Get Started <i class="fa-solid fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Employer Card -->
+            <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-8 md:p-10 hover:-translate-y-1 hover:border-gray-300 dark:hover:border-[#334155] transition duration-300 shadow-xl">
+                <div class="w-14 h-14 rounded-xl bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-2xl mb-6 shadow-md transition-colors">
+                    <i class="fa-regular fa-building"></i>
+                </div>
+                <h3 class="text-2xl font-medium text-light-text dark:text-white mb-3 transition-colors">Employers</h3>
+                <p class="text-light-muted dark:text-brand-textMuted leading-relaxed mb-8 transition-colors">
+                    Post jobs, utilize our smart AI candidate matching to find skilled professionals quickly, and build your ultimate team.
+                </p>
+                <a href="{% url 'company_register' %}" class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-3.5 bg-transparent border border-light-border dark:border-brand-border text-light-text dark:text-white rounded-lg font-semibold hover:border-amber-600 dark:hover:border-brand-gold hover:text-amber-600 dark:hover:text-brand-gold transition">
+                    Start Hiring <i class="fa-solid fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 px-6 lg:px-12 max-w-7xl mx-auto w-full mb-10">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-serif font-semibold text-light-text dark:text-white mb-4 transition-colors">Why Choose CareerPilot?</h2>
+            <div class="w-16 h-1 bg-amber-600 dark:bg-brand-gold mx-auto rounded transition-colors"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 text-center hover:border-amber-600/50 dark:hover:border-brand-gold/50 transition">
+                <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#1e2b41] flex items-center justify-center text-amber-600 dark:text-brand-gold text-2xl mx-auto mb-6 transition-colors">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <h3 class="text-xl font-medium text-light-text dark:text-white mb-3 transition-colors">AI Resume Analysis</h3>
+                <p class="text-light-muted dark:text-brand-textMuted text-sm leading-relaxed transition-colors">
+                    Automatically analyze resumes and extract skills, education, and experience with zero manual entry.
+                </p>
+            </div>
+
+            <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 text-center hover:border-amber-600/50 dark:hover:border-brand-gold/50 transition">
+                <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#1e2b41] flex items-center justify-center text-amber-600 dark:text-brand-gold text-2xl mx-auto mb-6 transition-colors">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h3 class="text-xl font-medium text-light-text dark:text-white mb-3 transition-colors">Smart Job Matching</h3>
+                <p class="text-light-muted dark:text-brand-textMuted text-sm leading-relaxed transition-colors">
+                    Get highly suitable job recommendations based precisely on your unique professional profile.
+                </p>
+            </div>
+
+            <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 text-center hover:border-amber-600/50 dark:hover:border-brand-gold/50 transition">
+                <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#1e2b41] flex items-center justify-center text-amber-600 dark:text-brand-gold text-2xl mx-auto mb-6 transition-colors">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 class="text-xl font-medium text-light-text dark:text-white mb-3 transition-colors">Verified Employers</h3>
+                <p class="text-light-muted dark:text-brand-textMuted text-sm leading-relaxed transition-colors">
+                    Connect securely with genuine companies and trusted opportunities across various industries.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-light-border dark:border-brand-border bg-gray-50 dark:bg-[#070b13] py-8 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 text-light-text dark:text-white font-serif text-lg transition-colors">
+                <i class="fa-solid fa-arrow-trend-up text-amber-600 dark:text-brand-gold"></i> CareerPilot 
+            </div>
+            <p class="text-light-muted dark:text-[#8b9bb4] text-sm text-center md:text-left transition-colors">
+                &copy; {% now "Y" %} CareerPilot | AI Powered Recruitment Platform. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle Script (Global Persistence) -->
+    <script>
+        const html = document.documentElement;
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        // Check local storage on initial load
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        // Click handler
+        toggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.theme = 'dark';
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                localStorage.theme = 'light';
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        });
+    </script>
 </body>
-
 </html>

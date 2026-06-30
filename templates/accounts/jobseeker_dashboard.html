@@ -1,132 +1,147 @@
+{% extends 'accounts/jobseeker_base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html>
-<head>
+{% block title %}Job Seeker Dashboard - CareerPilot AI{% endblock %}
 
-    <title>Job Seeker Dashboard</title>
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 lg:px-12 pt-10 pb-16 font-sans">
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- HEADER -->
+    <header class="mb-12">
+        <p class="text-light-muted dark:text-brand-textMuted text-xs tracking-widest uppercase mb-4">{% now "l, j F Y" %}</p>
+        <h1 class="text-4xl md:text-5xl font-serif font-semibold mb-4 text-light-text dark:text-white transition-colors">
+            Welcome, <span class="text-amber-600 dark:text-brand-gold">{{ request.user.username }}</span>.
+        </h1>
+        <p class="text-light-muted dark:text-brand-textMuted text-base md:text-lg max-w-2xl transition-colors">
+            Manage your career profile, discover opportunities and track your job applications.
+        </p>
+    </header>
 
-</head>
+    <!-- METRICS / PRIMARY ACTIONS GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <!-- Profile Card -->
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 flex flex-col h-full hover:border-gray-300 dark:hover:border-[#334155] transition duration-300">
+            <div class="w-12 h-12 rounded-lg bg-gray-100 dark:bg-[#1e2b41] flex items-center justify-center text-amber-600 dark:text-brand-gold mb-6 transition-colors">
+                <i class="fa-regular fa-id-badge text-xl"></i>
+            </div>
+            <h3 class="text-light-text dark:text-white text-xl font-medium mb-3 transition-colors">My Profile</h3>
+            <p class="text-light-muted dark:text-brand-textMuted text-sm mb-8 flex-grow leading-relaxed transition-colors">Update your personal details, skills, education, experience and resume.</p>
+            <a href="{% url 'profile_view' %}" class="inline-flex items-center justify-center w-full py-3 bg-transparent border border-amber-600 dark:border-brand-gold text-amber-600 dark:text-brand-gold rounded-lg font-medium text-sm hover:bg-amber-600 dark:hover:bg-brand-gold hover:text-white dark:hover:text-brand-bg transition duration-300">View Profile</a>
+        </div>
 
-<body>
+        <!-- Find Jobs Card -->
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 flex flex-col h-full hover:border-gray-300 dark:hover:border-[#334155] transition duration-300">
+            <div class="w-12 h-12 rounded-lg bg-gray-100 dark:bg-[#1e2b41] flex items-center justify-center text-amber-600 dark:text-brand-gold mb-6 transition-colors">
+                <i class="fa-solid fa-magnifying-glass-chart text-xl"></i>
+            </div>
+            <h3 class="text-light-text dark:text-white text-xl font-medium mb-3 transition-colors">Find Jobs</h3>
+            <p class="text-light-muted dark:text-brand-textMuted text-sm mb-8 flex-grow leading-relaxed transition-colors">Explore suitable job opportunities based on your professional skills.</p>
+            <a href="#" class="inline-flex items-center justify-center w-full py-3 bg-transparent border border-amber-600 dark:border-brand-gold text-amber-600 dark:text-brand-gold rounded-lg font-medium text-sm hover:bg-amber-600 dark:hover:bg-brand-gold hover:text-white dark:hover:text-brand-bg transition duration-300">Explore Jobs</a>
+        </div>
 
-
-<div class="navbar">
-
-    <div class="logo">
-        Job Portal
+        <!-- Applications Card -->
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 flex flex-col h-full hover:border-gray-300 dark:hover:border-[#334155] transition duration-300">
+            <div class="w-12 h-12 rounded-lg bg-gray-100 dark:bg-[#1e2b41] flex items-center justify-center text-amber-600 dark:text-brand-gold mb-6 transition-colors">
+                <i class="fa-solid fa-layer-group text-xl"></i>
+            </div>
+            <h3 class="text-light-text dark:text-white text-xl font-medium mb-3 transition-colors">Applications</h3>
+            <p class="text-light-muted dark:text-brand-textMuted text-sm mb-8 flex-grow leading-relaxed transition-colors">Track your applied jobs and monitor your application progress.</p>
+            <a href="#" class="inline-flex items-center justify-center w-full py-3 bg-transparent border border-amber-600 dark:border-brand-gold text-amber-600 dark:text-brand-gold rounded-lg font-medium text-sm hover:bg-amber-600 dark:hover:bg-brand-gold hover:text-white dark:hover:text-brand-bg transition duration-300">View Applications</a>
+        </div>
     </div>
 
-    <div class="nav-links">
+    <!-- SECONDARY GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
+        <!-- Platform Insights -->
+        <div class="lg:col-span-2 bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 transition-colors duration-300">
+            <h2 class="text-2xl font-serif font-semibold text-light-text dark:text-white mb-8 transition-colors">Platform Insights</h2>
+            <div class="space-y-6">
+                <div class="flex gap-5 pb-6 border-b border-light-border dark:border-brand-border transition-colors">
+                    <i class="fa-solid fa-circle-check text-amber-600 dark:text-brand-gold mt-1"></i>
+                    <div>
+                        <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">Career Profile</h3>
+                        <p class="text-light-muted dark:text-brand-textMuted text-sm">Keep your profile updated to get better job matches.</p>
+                    </div>
+                </div>
+                <div class="flex gap-5">
+                    <i class="fa-solid fa-robot text-amber-600 dark:text-brand-gold mt-1"></i>
+                    <div>
+                        <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">AI Matching</h3>
+                        <p class="text-light-muted dark:text-brand-textMuted text-sm">Our system automatically connects your skills with suitable job opportunities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <a href="#">
-            Profile
-        </a>
-
-        <a href="#">
-            Jobs
-        </a>
-
-        <a href="#">
-            Applications
-        </a>
-
-        <a href="{% url 'logout' %}">
-            Logout
-        </a>
-
+        <!-- Quick Actions -->
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 transition-colors duration-300">
+            <h2 class="text-lg font-medium text-light-text dark:text-white mb-6">Quick Actions</h2>
+            <div class="space-y-4">
+                <a href="{% url 'jobseeker_profile' %}" class="flex items-center gap-4 p-4 rounded-lg bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border text-light-text dark:text-white hover:border-amber-600 dark:hover:border-brand-gold transition group">
+                    <i class="fa-regular fa-user-pen w-5 text-center text-light-muted dark:text-brand-textMuted"></i>
+                    <span class="font-medium text-sm">Edit Profile</span>
+                </a>
+            </div>
+        </div>
     </div>
 
+    <!-- DYNAMIC JOB FEED -->
+    <h2 class="text-2xl font-serif font-semibold text-light-text dark:text-white mb-8">Latest Job Opportunities</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for job in jobs %}
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-6 hover:border-amber-600 dark:hover:border-brand-gold/50 transition group flex flex-col">
+            <h3 class="text-lg font-medium text-light-text dark:text-white mb-2">{{ job.title }}</h3>
+            <p class="text-xs text-amber-600 dark:text-brand-gold font-medium mb-4">{{ job.company.company_name }}</p>
+            <div class="text-light-muted dark:text-brand-textMuted text-sm space-y-2 mb-6 flex-grow">
+                <p><i class="fa-solid fa-location-dot mr-2 w-4"></i> {{ job.location }}</p>
+                <p><i class="fa-solid fa-wallet mr-2 w-4"></i> {{ job.salary }}</p>
+                <p><i class="fa-solid fa-briefcase mr-2 w-4"></i> {{ job.experience }}</p>
+            </div>
+            <button onclick="viewJob('{{ job.title }}', '{{ job.location }}', '{{ job.salary }}', '{{ job.experience }}', '{{ job.description|escapejs }}')"
+                    class="w-full py-2 bg-gray-100 dark:bg-brand-bg text-light-text dark:text-white rounded-lg text-xs font-semibold hover:bg-gray-200 dark:hover:bg-[#1e2b41] transition-colors">
+                View Full Details
+            </button>
+        </div>
+        {% empty %}
+        <p class="text-light-muted dark:text-brand-textMuted italic">No jobs available right now.</p>
+        {% endfor %}
+    </div>
 </div>
 
-
-
-<div class="dashboard-container">
-
-
-    <h1>
-        Welcome {{ request.user.username }}
-    </h1>
-
-
-    <h2>
-        Job Seeker Dashboard
-    </h2>
-
-
-    <p>
-        Find jobs, manage your profile and track applications.
-    </p>
-
-
-
-    <div class="cards">
-
-
-        <div class="card">
-
-            <h3>
-                My Profile
-            </h3>
-
-            <p>
-                Add your skills, education and resume.
-            </p>
-
-        <a href="{% url 'jobseeker_profile' %}">
-            <button type="button">
-                Complete Profile
-            </button>
-        </a>
-
+<!-- Modal -->
+<div id="jobViewModal" class="fixed inset-0 z-50 bg-light-bg/80 dark:bg-brand-bg/80 backdrop-blur-sm hidden items-center justify-center px-4">
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 w-full max-w-lg shadow-2xl relative">
+        <button type="button" onclick="closeJobModal()" class="absolute top-6 right-6 text-xl text-light-muted dark:text-brand-textMuted">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h2 id="modalTitle" class="text-2xl font-serif font-semibold text-light-text dark:text-white mb-6"></h2>
+        <div class="space-y-3 mb-6 text-sm text-light-text dark:text-white">
+            <p><span class="font-bold text-light-muted dark:text-brand-textMuted uppercase text-[10px] mr-2">Location:</span> <span id="modalLocation"></span></p>
+            <p><span class="font-bold text-light-muted dark:text-brand-textMuted uppercase text-[10px] mr-2">Salary:</span> <span id="modalSalary"></span></p>
+            <p><span class="font-bold text-light-muted dark:text-brand-textMuted uppercase text-[10px] mr-2">Experience:</span> <span id="modalExperience"></span></p>
         </div>
-
-
-
-
-        <div class="card">
-
-            <h3>
-                Search Jobs
-            </h3>
-
-            <p>
-                Explore available job opportunities.
-            </p>
-
-            <button>
-                View Jobs
-            </button>
-
-        </div>
-
-
-
-
-        <div class="card">
-
-            <h3>
-                Applications
-            </h3>
-
-            <p>
-                Check your applied jobs status.
-            </p>
-
-            <button>
-                My Applications
-            </button>
-
-        </div>
-
-
+        <h3 class="text-sm font-semibold uppercase text-light-text dark:text-white mb-2">Description</h3>
+        <p id="modalDescription" class="text-light-muted dark:text-brand-textMuted text-sm leading-relaxed max-h-60 overflow-y-auto"></p>
     </div>
-
-
 </div>
 
-
-</body>
-</html>
+<script>
+    function viewJob(title, location, salary, experience, description) {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalLocation').innerText = location;
+        document.getElementById('modalSalary').innerText = salary;
+        document.getElementById('modalExperience').innerText = experience;
+        document.getElementById('modalDescription').innerText = description;
+        const modal = document.getElementById("jobViewModal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        document.body.style.overflow = "hidden";
+    }
+    function closeJobModal() {
+        const modal = document.getElementById("jobViewModal");
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        document.body.style.overflow = "auto";
+    }
+</script>
+{% endblock %}

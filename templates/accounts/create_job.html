@@ -1,0 +1,82 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Post New Job{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 lg:px-12 pt-10 pb-20 w-full transition-colors duration-300">
+    
+    <!-- HEADER -->
+    <header class="mb-10">
+        <h1 class="text-4xl font-serif font-semibold mb-2 text-light-text dark:text-white transition-colors">Post a New Job</h1>
+        <p class="text-light-muted dark:text-brand-textMuted transition-colors">Fill in the details below to publish a new vacancy to our network of talented professionals.</p>
+    </header>
+
+    <!-- FORM CARD -->
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 shadow-sm transition-colors duration-300">
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Job Title -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Job Title</label>
+                    <input type="text" name="title" placeholder="e.g. Senior Frontend Engineer" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Location</label>
+                    <input type="text" name="location" placeholder="e.g. San Francisco / Remote" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Employment Type -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Employment Type</label>
+                    <input type="text" name="employment_type" placeholder="Full Time" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+
+                <!-- Experience -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Experience</label>
+                    <input type="text" name="experience" placeholder="e.g. 2-5 Years" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+
+                <!-- Salary -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Salary Range</label>
+                    <input type="text" name="salary" placeholder="e.g. ₹8-12 LPA" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div>
+                <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Required Skills</label>
+                <textarea name="skills" rows="2" placeholder="e.g. Python, Django, AWS, CI/CD..." required
+                    class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors resize-none placeholder-gray-400 dark:placeholder-brand-border"></textarea>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Job Description</label>
+                <textarea name="description" rows="6" placeholder="Provide a detailed description of the role and expectations..." required
+                    class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors resize-none placeholder-gray-400 dark:placeholder-brand-border"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="w-full md:w-auto px-10 py-3.5 bg-amber-600 dark:bg-brand-gold text-white dark:text-brand-bg rounded-lg font-semibold hover:bg-amber-700 dark:hover:bg-brand-goldHover shadow-lg shadow-amber-600/20 dark:shadow-brand-gold/20 transition transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> Post Job
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

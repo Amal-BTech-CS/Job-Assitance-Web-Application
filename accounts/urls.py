@@ -89,4 +89,33 @@ urlpatterns = [
         views.company_profile,
         name="company_profile"
     ),
+    path(
+    "company/profile/view/",
+    views.company_profile_view,
+    name="company_profile_view"
+    ),
+
+    path(
+    "company/job/create/",
+    views.create_job,
+    name="create_job"
+    ),
+
+    path(
+    "company/jobs/",
+    views.manage_jobs,
+    name="manage_jobs"
+    ),
+
+    path(
+    "company/edit-job/<int:id>/",
+    views.edit_job,
+    name="edit_job"
+    ),
+
+    path(
+    "company/delete-job/<int:id>/",
+    views.delete_job,
+    name="delete_job"
+    ),
 ]

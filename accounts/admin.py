@@ -6,7 +6,8 @@ from .models import (
     Profile,
     Education,
     Experience,
-    CompanyProfile
+    CompanyProfile,
+    Job
 )
 
 
@@ -19,3 +20,5 @@ admin.site.register(Education)
 admin.site.register(Experience)
 
 admin.site.register(CompanyProfile)
+
+admin.site.register(Job)

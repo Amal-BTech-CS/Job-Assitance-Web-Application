@@ -1,0 +1,71 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Edit Job Posting{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 lg:px-12 pt-10 pb-20 w-full transition-colors duration-300">
+    
+    <!-- HEADER -->
+    <header class="mb-10">
+        <h1 class="text-4xl font-serif font-semibold text-light-text dark:text-white mb-2 transition-colors">Edit Job Posting</h1>
+        <p class="text-light-muted dark:text-brand-textMuted transition-colors">Update the details for this vacancy to keep your information accurate for candidates.</p>
+    </header>
+
+    <!-- FORM CARD -->
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 shadow-sm transition-colors duration-300">
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Job Title -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Job Title</label>
+                    <input type="text" name="title" value="{{ job.title }}" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Location</label>
+                    <input type="text" name="location" value="{{ job.location }}" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Salary -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Salary Range</label>
+                    <input type="text" name="salary" value="{{ job.salary }}" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+
+                <!-- Experience (Added Missing Field) -->
+                <div>
+                    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Experience</label>
+                    <input type="text" name="experience" value="{{ job.experience }}" placeholder="e.g. 2-5 Years" required
+                        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Job Description</label>
+                <textarea name="description" rows="8" required
+                    class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors resize-none placeholder-gray-400 dark:placeholder-brand-border">{{ job.description }}</textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="pt-4 flex items-center gap-4">
+                <button type="submit" class="px-10 py-3.5 bg-amber-600 dark:bg-brand-gold text-white dark:text-brand-bg rounded-lg font-semibold hover:bg-amber-700 dark:hover:bg-brand-goldHover shadow-lg shadow-amber-600/20 dark:shadow-brand-gold/20 transition transform hover:-translate-y-0.5">
+                    Update Job
+                </button>
+                <a href="{% url 'manage_jobs' %}" class="px-6 py-3.5 text-light-muted dark:text-brand-textMuted hover:text-light-text dark:hover:text-white transition-colors">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

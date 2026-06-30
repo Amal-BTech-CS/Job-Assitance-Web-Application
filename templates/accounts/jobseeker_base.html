@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Job Portal{% endblock %} | CareerPilot AI</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        light: { bg: '#ffffff', card: '#f8fafc', border: '#e2e8f0', text: '#1e293b', muted: '#64748b' },
+                        brand: { bg: '#0b1320', card: '#121b2b', border: '#1e293b', gold: '#e6c387', goldHover: '#f3d095', textMuted: '#8b9bb4', textLight: '#f8fafc' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
+</style>
+</head>
+
+<body class="bg-light-bg dark:bg-brand-bg text-light-text dark:text-brand-textLight transition-colors duration-300 min-h-screen flex flex-col">
+
+    <nav class="sticky top-0 z-50 bg-light-bg/90 dark:bg-brand-bg/90 backdrop-blur-sm border-b border-light-border dark:border-brand-border shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between h-20">
+                
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center text-brand-bg shadow-lg">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                    </div>
+                    <a href="{% url 'home' %}" class="font-serif font-bold text-xl tracking-wide text-light-text dark:text-white transition">
+                        CareerPilot<span class="text-brand-gold">.</span>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    {% if user.is_authenticated %}
+                        {% if user.user_type == "jobseeker" %}
+                            <a href="{% url 'jobseeker_dashboard' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">Dashboard</a>
+                            <a href="{% url 'profile_view' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">My Profile</a>
+                        {% elif user.user_type == "company" %}
+                            <a href="{% url 'company_dashboard' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">Insights</a>
+                            <a href="{% url 'manage_jobs' %}" class="text-light-text dark:text-white font-medium transition">Manage Jobs</a>
+                            <a href="{% url 'company_profile_view' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">Profile</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'home' %}" class="text-light-text dark:text-white transition">Home</a>
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="p-2 text-brand-gold hover:bg-light-border dark:hover:bg-brand-card rounded-full transition">
+                        <i id="theme-icon" class="fa-solid fa-moon"></i>
+                    </button>
+
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="text-sm font-medium text-red-500 hover:text-red-400 transition">Logout</a>
+                    {% else %}
+                        <a href="{% url 'jobseeker_register' %}" class="px-6 py-2 bg-brand-gold text-brand-bg font-semibold rounded-lg hover:bg-brand-goldHover transition">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 flex flex-col w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        const html = document.documentElement;
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        // Initial Load
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.theme = 'dark';
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                localStorage.theme = 'light';
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        });
+    </script>
+</body>
+</html>

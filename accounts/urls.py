@@ -118,4 +118,9 @@ urlpatterns = [
     views.delete_job,
     name="delete_job"
     ),
+    path(
+    "jobseeker/cover-letter/",
+    views.cover_letter,
+    name="cover_letter"
+    ),
 ]

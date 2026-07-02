@@ -7,11 +7,13 @@ from .models import Profile, Education, Experience, CompanyProfile,Job
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import login
 from django.contrib.auth import authenticate, login
+from .ai.cover import generate_cover_letter
 
 @login_required
 @never_cache
 def jobseeker_dashboard(request):
     jobs = Job.objects.all().order_by('-id') # Fetch all jobs, newest first
+    
     return render(request, 'accounts/jobseeker_dashboard.html', {'jobs': jobs})
 
 @login_required
@@ -1021,4 +1023,32 @@ def delete_job(request,id):
 
     return redirect(
         "manage_jobs"
+    )
+@login_required
+@never_cache
+def cover_letter(request):
+
+    profile = Profile.objects.get(user=request.user)
+
+    cover_letter_text = ""
+
+    if request.method == "POST":
+
+        job_title = request.POST.get("job_title")
+        company_name = request.POST.get("company_name")
+
+        if profile.resume:
+
+            cover_letter_text = generate_cover_letter(
+                profile.resume.path,
+                job_title,
+                company_name
+            )
+
+    return render(
+        request,
+        "accounts/cover_letter.html",
+        {
+            "cover_letter": cover_letter_text
+        }
     )

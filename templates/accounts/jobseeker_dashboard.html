@@ -10,7 +10,7 @@
     <header class="mb-12">
         <p class="text-light-muted dark:text-brand-textMuted text-xs tracking-widest uppercase mb-4">{% now "l, j F Y" %}</p>
         <h1 class="text-4xl md:text-5xl font-serif font-semibold mb-4 text-light-text dark:text-white transition-colors">
-            Welcome, <span class="text-amber-600 dark:text-brand-gold">{{ request.user.username }}</span>.
+            Welcome, <span class="text-amber-600 dark:text-brand-gold">{{ user.profile.full_name }}</span>.
         </h1>
         <p class="text-light-muted dark:text-brand-textMuted text-base md:text-lg max-w-2xl transition-colors">
             Manage your career profile, discover opportunities and track your job applications.
@@ -68,6 +68,24 @@
                     <div>
                         <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">AI Matching</h3>
                         <p class="text-light-muted dark:text-brand-textMuted text-sm">Our system automatically connects your skills with suitable job opportunities.</p>
+                    </div>
+                </div>
+                <div class="flex gap-5 pt-6 border-t border-light-border dark:border-brand-border">
+                <i class="fa-solid fa-file-lines text-amber-600 dark:text-brand-gold mt-1"></i>
+
+                    <div class="flex-1">
+                        <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">
+                        AI Cover Letter
+                        </h3>
+
+                        <p class="text-light-muted dark:text-brand-textMuted text-sm mb-4">
+                        Generate a personalized ATS-friendly cover letter using your uploaded resume.
+                        </p>
+
+                        <a href="{% url 'cover_letter' %}"
+                        class="inline-flex items-center px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition">
+                        Generate Cover Letter
+                        </a>
                     </div>
                 </div>
             </div>

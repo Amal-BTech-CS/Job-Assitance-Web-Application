@@ -51,6 +51,7 @@
                         {% if user.user_type == "jobseeker" %}
                             <a href="{% url 'jobseeker_dashboard' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">Dashboard</a>
                             <a href="{% url 'profile_view' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">My Profile</a>
+                             
                         {% elif user.user_type == "company" %}
                             <a href="{% url 'company_dashboard' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">Insights</a>
                             <a href="{% url 'manage_jobs' %}" class="text-light-text dark:text-white font-medium transition">Manage Jobs</a>

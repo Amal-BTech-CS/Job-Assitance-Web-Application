@@ -1,0 +1,106 @@
+{% extends "accounts/jobseeker_base.html" %}
+
+{% block title %}AI Cover Letter{% endblock %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto px-6 lg:px-12 py-10">
+
+    <!-- Heading -->
+    <div class="mb-10">
+        <p class="text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-widest mb-3">
+            AI Career Assistant
+        </p>
+
+        <h1 class="text-4xl font-serif font-semibold text-light-text dark:text-white mb-3">
+            AI Cover Letter Generator
+        </h1>
+
+        <p class="text-light-muted dark:text-brand-textMuted">
+            Generate a personalized ATS-friendly cover letter using your uploaded resume.
+        </p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl shadow-sm p-8">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-light-text dark:text-white mb-2">
+                    Job Role
+                </label>
+
+                <input
+                    type="text"
+                    name="job_title"
+                    placeholder="e.g. Python Developer"
+                    required
+                    class="w-full rounded-lg border border-light-border dark:border-brand-border bg-white dark:bg-brand-bg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                >
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-light-text dark:text-white mb-2">
+                    Company Name
+                </label>
+
+                <input
+                    type="text"
+                    name="company_name"
+                    placeholder="e.g. Microsoft"
+                    required
+                    class="w-full rounded-lg border border-light-border dark:border-brand-border bg-white dark:bg-brand-bg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                >
+            </div>
+
+            <!-- Optional -->
+            <div class="mb-8">
+                <label class="block text-sm font-medium text-light-text dark:text-white mb-2">
+                    Job Description (Optional)
+                </label>
+
+                <textarea
+                    name="job_description"
+                    rows="6"
+                    placeholder="Paste the job description here..."
+                    class="w-full rounded-lg border border-light-border dark:border-brand-border bg-white dark:bg-brand-bg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                ></textarea>
+            </div>
+
+            <button
+                type="submit"
+                class="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold transition"
+            >
+                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>
+                Generate Cover Letter
+            </button>
+
+        </form>
+
+    </div>
+
+    {% if cover_letter %}
+
+    <div class="mt-10 bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl shadow-sm p-8">
+
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-serif font-semibold text-light-text dark:text-white">
+                Generated Cover Letter
+            </h2>
+        </div>
+
+        <div class="bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg p-6">
+
+            <pre class="whitespace-pre-wrap text-light-text dark:text-white leading-8 font-sans">{{ cover_letter }}</pre>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

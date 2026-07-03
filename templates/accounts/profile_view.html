@@ -160,7 +160,41 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 shadow-sm transition-colors duration-300">
+    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-light-border dark:border-brand-border transition-colors">
+        <i class="fa-solid fa-file-pdf text-red-500 text-xl"></i>
+        <h2 class="text-xl font-medium text-light-text dark:text-white transition-colors">
+            Resume
+        </h2>
+    </div>
 
+    {% if profile.resume %}
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <h3 class="text-lg font-medium text-light-text dark:text-white">
+                    Resume Uploaded
+                </h3>
+                <p class="text-light-muted dark:text-brand-textMuted text-sm mt-1">
+                    Your latest uploaded resume is available to view.
+                </p>
+            </div>
+
+            <a href="{{ profile.resume.url }}"
+            target="_blank"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 dark:bg-brand-gold text-white dark:text-brand-bg rounded-lg font-semibold hover:bg-amber-700 dark:hover:bg-brand-goldHover transition shadow-lg shadow-amber-600/20 dark:shadow-brand-gold/20">
+                <i class="fa-solid fa-eye"></i>
+                View Resume
+            </a>
+        </div>
+    {% else %}
+        <div class="bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border border-dashed rounded-lg p-6 text-center">
+            <i class="fa-regular fa-file text-4xl text-light-muted dark:text-brand-textMuted mb-3"></i>
+            <p class="text-light-muted dark:text-brand-textMuted">
+                No resume has been uploaded yet.
+            </p>
+        </div>
+    {% endif %}
+</div>
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-6">
             <a href="{% url 'jobseeker_dashboard' %}" class="w-full sm:w-auto px-6 py-3 bg-transparent border border-light-border dark:border-brand-border text-light-text dark:text-white rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-[#1e2b41] hover:border-gray-300 dark:hover:border-[#334155] transition text-center flex items-center justify-center gap-2">

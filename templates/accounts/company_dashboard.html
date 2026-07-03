@@ -7,7 +7,7 @@
 <div class="max-w-7xl mx-auto px-6 lg:px-12 pt-10 pb-16 transition-colors duration-300">
     <header class="mb-12">
         <h1 class="text-4xl md:text-5xl font-serif font-semibold mb-4 text-light-text dark:text-white transition-colors">
-            Welcome, <span class="text-amber-600 dark:text-brand-gold">{{ request.user.username }}</span>.
+            Welcome, <span class="text-amber-600 dark:text-brand-gold">{{ request.user.username|upper }}</span>.
         </h1>
         <p class="text-light-muted dark:text-brand-textMuted text-lg transition-colors">Manage your company profile, post new opportunities, and review talent.</p>
     </header>

@@ -7,13 +7,36 @@ from .models import Profile, Education, Experience, CompanyProfile,Job
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import login
 from django.contrib.auth import authenticate, login
+from accounts.ai.recommender import index_job
+from accounts.ai.vector_db import client, COLLECTION_NAME
+from accounts.ai.recommender import get_recommended_jobs
 
 @login_required
 @never_cache
 def jobseeker_dashboard(request):
-    jobs = Job.objects.all().order_by('-id') # Fetch all jobs, newest first
-    return render(request, 'accounts/jobseeker_dashboard.html', {'jobs': jobs})
 
+    profile = getattr(request.user, "profile", None)
+
+    all_jobs = Job.objects.all().order_by('-created_at')
+
+    # default fallback
+    recommended_jobs = []
+
+    if profile and profile.skills:
+        try:
+            recommended_jobs = get_recommended_jobs(profile)
+        except Exception as e:
+            print("AI recommendation error:", e)
+            recommended_jobs = []
+
+    return render(
+        request,
+        "accounts/jobseeker_dashboard.html",
+        {
+            "jobs": all_jobs,                 # ALL JOBS SECTION
+            "recommended_jobs": recommended_jobs  # AI SECTION
+        }
+    )
 @login_required
 @never_cache
 def company_dashboard(request):
@@ -525,23 +548,25 @@ def jobseeker_profile(request):
             resume = request.FILES.get(
                 "resume"
             )
+            print("Resume:", resume)
 
 
+                        
             if resume:
 
+                # Delete the previous resume from S3
+                if profile.resume:
+                    profile.resume.delete(save=False)
 
+                # Save the new resume
                 profile.resume = resume
-
                 profile.save()
 
+                profile.resume.open("rb")
 
+                text = extract_resume_text(profile.resume)
 
-                text = extract_resume_text(
-
-                    profile.resume.path
-
-                )
-
+                profile.resume.close()
 
                 data = analyze_resume(text)
 
@@ -936,19 +961,20 @@ def create_job(request):
     )
 
     if request.method == "POST":
-        Job.objects.create(
+        job = Job.objects.create(
             company=company,
             title=request.POST.get("title"),
             description=request.POST.get("description"),
             location=request.POST.get("location"),
             salary=request.POST.get("salary"),
-            # Capture the new experience field
             experience=request.POST.get("experience"),
-            # Capture the employment type if you added it to the form
             employment_type=request.POST.get("employment_type"),
-            # Capture skills
             skills=request.POST.get("skills")
         )
+
+        # 🔥 AI STEP 9 INTEGRATION (VERY IMPORTANT)
+        index_job(job)
+
         return redirect("manage_jobs")
 
     return render(request, "accounts/create_job.html")
@@ -988,37 +1014,39 @@ def edit_job(request, id):
         job.description = request.POST.get("description")
         job.location = request.POST.get("location")
         job.salary = request.POST.get("salary")
-        # Add this line to update the experience field
         job.experience = request.POST.get("experience")
+        job.employment_type = request.POST.get("employment_type")
+        job.skills = request.POST.get("skills")
+
         job.save()
+
+        # 🔥 UPDATE VECTOR DB ALSO
+        index_job(job)
+
         return redirect("manage_jobs")
 
     return render(
-        request, 
-        "accounts/edit_job.html", 
+        request,
+        "accounts/edit_job.html",
         {"job": job}
     )
 @login_required
-def delete_job(request,id):
-
-
-    company = CompanyProfile.objects.get(
-        user=request.user
-    )
-
+def delete_job(request, id):
+    company = CompanyProfile.objects.get(user=request.user)
 
     job = Job.objects.get(
-
         id=id,
-
         company=company
-
     )
 
+    # 🔥 STEP 1: DELETE FROM QDRANT (VECTOR DB)
+    client.delete(
+        collection_name=COLLECTION_NAME,
+        points_selector=[job.id]   # job.id is used as vector ID
+    )
 
+    # 🔥 STEP 2: DELETE FROM DJANGO DB
     job.delete()
 
+    return redirect("manage_jobs")
 
-    return redirect(
-        "manage_jobs"
-    )

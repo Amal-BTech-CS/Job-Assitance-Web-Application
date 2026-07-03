@@ -35,20 +35,19 @@ from dotenv import load_dotenv
 # Extract Resume Text
 # ==========================
 
+def extract_resume_text(file):
 
-def extract_resume_text(file_path):
+    file.seek(0)
 
-    text = ""
-
-    with pdfplumber.open(file_path) as pdf:
+    with pdfplumber.open(file) as pdf:
+        text = ""
 
         for page in pdf.pages:
-
-            text += page.extract_text() or ""
-
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + "\n"
 
     return text
-
 
 
 
@@ -99,7 +98,7 @@ Rules:
 5. Extract all skills.
 6. Extract all work experiences.
 7. Do not include experience description.
-
+8. The dates should be completed no short forms
 
 ==========================
 EDUCATION RULES
@@ -222,26 +221,17 @@ PhD
 
 Return:
 
-
 degree:
 PhD Computer Science
 
 level:
 Doctorate
 
-
-
-
 Never return lower qualifications if higher qualification exists.
-
-
-
 
 Return JSON exactly:
 
-
 {{
-
 
 "name":"",
 
@@ -253,11 +243,7 @@ Return JSON exactly:
 
 "github":"",
 
-
-
 "skills":[],
-
-
 
 "education":{{
 
@@ -273,13 +259,10 @@ Return JSON exactly:
 
     "end_year":""
 
-
 }},
 
 
-
 "experience":[
-
 
 {{
 
@@ -291,32 +274,21 @@ Return JSON exactly:
 
 "end_date":""
 
-
 }}
-
 
 ]
 
-
 }}
-
-
-
 
 Resume:
 
-
 {text}
-
 
 """
 
-
     response = client.chat.completions.create(
 
-
         model="llama-3.3-70b-versatile",
-
 
         messages=[
 
@@ -327,26 +299,9 @@ Resume:
             "content":prompt
 
             }
-
         ]
-
     )
-
-
-
     result = response.choices[0].message.content
-
-
-
-    print("===================")
-
-    print("RAW AI RESPONSE")
-
-    print(result)
-
-    print("===================")
-
-
 
 
     try:

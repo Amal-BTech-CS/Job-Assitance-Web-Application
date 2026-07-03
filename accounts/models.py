@@ -1,13 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
-
-# ==========================
-# Custom User
-# ==========================
-
-
 class User(AbstractUser):
 
     USER_TYPES = (
@@ -34,13 +27,6 @@ class User(AbstractUser):
 
         return self.username
 
-
-
-
-
-# ==========================
-# Job Seeker Profile
-# ==========================
 
 
 class Profile(models.Model):

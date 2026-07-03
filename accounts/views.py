@@ -8,6 +8,8 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth import login
 from django.contrib.auth import authenticate, login
 from .ai.cover import generate_cover_letter
+from .ai.quiz import generate_quiz, parse_quiz
+from .ai.mock_interview import generate_question, evaluate_answer
 
 @login_required
 @never_cache
@@ -1050,5 +1052,170 @@ def cover_letter(request):
         "accounts/cover_letter.html",
         {
             "cover_letter": cover_letter_text
+        }
+    )
+@login_required
+@never_cache
+def quiz_home(request):
+    if request.method == "POST":
+        topic = request.POST.get("topic")
+        difficulty = request.POST.get("difficulty")
+        count = int(request.POST.get("count"))
+
+        request.session["quiz"] = []
+        request.session["index"] = 0
+        request.session["score"] = 0
+
+        quiz_text = generate_quiz(topic, difficulty, count)
+        questions = parse_quiz(quiz_text)
+
+        request.session["quiz"] = questions
+
+        return redirect("quiz_question")
+
+    return render(request, "accounts/quiz.html")
+
+
+@login_required
+@never_cache
+def quiz_question(request):
+    quiz = request.session.get("quiz", [])
+    index = request.session.get("index", 0)
+
+    if index >= len(quiz):
+        return redirect("quiz_result")
+
+    q = quiz[index]
+
+    selected = None
+    answered = False
+
+    if request.method == "POST":
+
+        # User clicked an option
+        if "answer" in request.POST:
+
+            selected = request.POST.get("answer").upper()
+            answered = True
+
+            if selected == q["answer"]:
+                request.session["score"] = request.session.get("score", 0) + 1
+
+        # User clicked Next
+        elif "next" in request.POST:
+
+            request.session["index"] = index + 1
+            return redirect("quiz_question")
+
+    return render(request, "accounts/quiz_question.html", {
+        "q": q,
+        "selected": selected,
+        "answered": answered,
+    })
+
+
+@login_required
+@never_cache
+def quiz_result(request):
+    return render(request, "accounts/quiz_result.html", {
+        "score": request.session.get("score", 0),
+        "total": len(request.session.get("quiz", []))
+    })
+@login_required
+@never_cache
+def interview_home(request):
+
+    if request.method == "POST":
+
+        role = request.POST.get("role")
+
+        request.session["role"] = role
+        request.session["asked_questions"] = []
+        request.session["question_no"] = 1
+        request.session["evaluations"] = []
+
+        return redirect("interview_question")
+
+    return render(request, "accounts/interview.html")
+
+
+@login_required
+@never_cache
+def interview_question(request):
+
+    role = request.session.get("role")
+    asked_questions = request.session.get("asked_questions", [])
+    question_no = request.session.get("question_no", 1)
+    evaluations = request.session.get("evaluations", [])
+
+    # Finished 5 questions
+    if question_no > 5:
+        return redirect("interview_result")
+
+    # Generate question only once
+    if "current_question" not in request.session:
+        question = generate_question(role, asked_questions)
+        request.session["current_question"] = question
+    else:
+        question = request.session["current_question"]
+
+    evaluation = None
+
+    if request.method == "POST":
+
+        # Submit Answer
+        if "submit_answer" in request.POST:
+
+            answer = request.POST.get("answer", "")
+
+            evaluation = evaluate_answer(
+                role,
+                question,
+                answer
+            )
+
+            evaluations.append({
+                "question": question,
+                "answer": answer,
+                "evaluation": evaluation
+            })
+
+            request.session["evaluations"] = evaluations
+
+        # Next Question
+        elif "next_question" in request.POST:
+
+            asked_questions.append(question)
+
+            request.session["asked_questions"] = asked_questions
+            request.session["question_no"] = question_no + 1
+
+            if "current_question" in request.session:
+                del request.session["current_question"]
+
+            return redirect("interview_question")
+
+    return render(
+        request,
+        "accounts/interview_question.html",
+        {
+            "question": question,
+            "question_no": question_no,
+            "evaluation": evaluation
+        }
+    )
+
+
+@login_required
+@never_cache
+def interview_result(request):
+
+    evaluations = request.session.get("evaluations", [])
+
+    return render(
+        request,
+        "accounts/interview_result.html",
+        {
+            "evaluations": evaluations
         }
     )

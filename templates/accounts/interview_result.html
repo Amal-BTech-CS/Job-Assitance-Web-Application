@@ -1,0 +1,69 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Interview Result{% endblock %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto">
+
+    <h1 class="text-4xl font-serif font-semibold mb-10 text-light-text dark:text-white">
+
+        🎉 Mock Interview Completed
+
+    </h1>
+
+    {% for item in evaluations %}
+
+    <div class="bg-light-card dark:bg-brand-card rounded-xl border border-light-border dark:border-brand-border p-8 mb-8">
+
+        <h2 class="text-xl font-semibold mb-3 text-light-text dark:text-white">
+
+            Question {{ forloop.counter }}
+
+        </h2>
+
+        <p class="font-medium mb-4 text-amber-600">
+
+            {{ item.question }}
+
+        </p>
+
+        <h3 class="font-semibold mb-2 text-light-text dark:text-white">
+
+            Your Answer
+
+        </h3>
+
+        <p class="mb-6 text-light-muted dark:text-brand-textMuted">
+
+            {{ item.answer }}
+
+        </p>
+
+        <h3 class="font-semibold mb-2 text-light-text dark:text-white">
+
+            AI Evaluation
+
+        </h3>
+
+        <pre class="whitespace-pre-wrap text-light-text dark:text-white">{{ item.evaluation }}</pre>
+
+    </div>
+
+    {% endfor %}
+
+    <div class="text-center">
+
+        <a href="{% url 'interview_home' %}"
+           class="inline-block px-8 py-3 rounded-lg bg-amber-600 text-white hover:bg-amber-700">
+
+            Take Another Interview
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

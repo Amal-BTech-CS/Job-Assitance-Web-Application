@@ -1,0 +1,98 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}AI Quiz - CareerPilot{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto">
+
+    <!-- HEADER -->
+    <div class="mb-10">
+        <h1 class="text-4xl font-serif font-semibold text-light-text dark:text-white mb-3">
+            🧠 AI Quiz Generator
+        </h1>
+        <p class="text-light-muted dark:text-brand-textMuted">
+            Generate MCQ quizzes instantly based on any topic and test your knowledge.
+        </p>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 mb-10">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- TOPIC -->
+            <div class="mb-5">
+                <label class="block text-sm font-medium mb-2 text-light-text dark:text-white">
+                    Topic
+                </label>
+                <input
+                    type="text"
+                    name="topic"
+                    placeholder="e.g. Python, DBMS, AI, Networking"
+                    required
+                    class="w-full px-4 py-3 rounded-lg bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border text-light-text dark:text-white focus:outline-none focus:border-amber-600"
+                >
+            </div>
+
+            <!-- DIFFICULTY -->
+            <div class="mb-5">
+                <label class="block text-sm font-medium mb-2 text-light-text dark:text-white">
+                    Difficulty
+                </label>
+                <select
+                    name="difficulty"
+                    class="w-full px-4 py-3 rounded-lg bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border text-light-text dark:text-white focus:outline-none focus:border-amber-600"
+                >
+                    <option>Easy</option>
+                    <option>Medium</option>
+                    <option>Hard</option>
+                </select>
+            </div>
+
+            <!-- COUNT -->
+            <div class="mb-8">
+                <label class="block text-sm font-medium mb-2 text-light-text dark:text-white">
+                    Number of Questions
+                </label>
+                <input
+                    type="number"
+                    name="count"
+                    min="1"
+                    max="20"
+                    value="5"
+                    required
+                    class="w-full px-4 py-3 rounded-lg bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border text-light-text dark:text-white focus:outline-none focus:border-amber-600"
+                >
+            </div>
+
+            <!-- BUTTON -->
+            <button
+                type="submit"
+                class="w-full py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition"
+            >
+                🚀 Generate Quiz
+            </button>
+
+        </form>
+    </div>
+
+    <!-- INFO SECTION -->
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-6">
+        <h2 class="text-xl font-medium text-light-text dark:text-white mb-4">
+            How it works
+        </h2>
+
+        <ul class="space-y-3 text-sm text-light-muted dark:text-brand-textMuted">
+            <li>✔ Enter any topic you want to learn</li>
+            <li>✔ AI generates MCQ questions instantly</li>
+            <li>✔ Solve one-by-one like real exam</li>
+            <li>✔ Get your final score at the end</li>
+        </ul>
+    </div>
+
+</div>
+
+{% endblock %}

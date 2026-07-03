@@ -123,4 +123,42 @@ urlpatterns = [
     views.cover_letter,
     name="cover_letter"
     ),
+ 
+
+    path(
+    "quiz/",
+    views.quiz_home,
+    name="quiz_home"
+    ),
+
+    path(
+    "quiz/question/",
+    views.quiz_question,
+    name="quiz_question"
+    ),
+
+    path(
+    "quiz/result/",
+    views.quiz_result,
+    name="quiz_result"
+    ),
+
+    path(
+    "jobseeker/mock-interview/",
+    views.interview_home,
+    name="interview_home"
+    ),
+
+    path(
+    "jobseeker/mock-interview/question/",
+    views.interview_question,
+    name="interview_question"
+    ),
+
+    path(
+    "jobseeker/mock-interview/result/",
+    views.interview_result,
+    name="interview_result"
+    ),
+    
 ]

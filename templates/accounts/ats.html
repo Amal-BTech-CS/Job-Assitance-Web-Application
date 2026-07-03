@@ -1,0 +1,191 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}ATS Resume Score - CareerPilot{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="mb-10">
+    <h1 class="text-4xl font-serif font-semibold text-light-text dark:text-white mb-3">
+        📄 ATS Resume Score Calculator
+    </h1>
+
+    <p class="text-light-muted dark:text-brand-textMuted">
+        Compare your uploaded resume against a job description and discover how ATS-friendly it is.
+    </p>
+</div>
+
+<!-- INPUT CARD -->
+<div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 mb-10">
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label class="block text-sm font-medium mb-3 text-light-text dark:text-white">
+            Paste Job Description
+        </label>
+
+        <textarea
+            name="job_description"
+            rows="12"
+            required
+            placeholder="Paste the complete Job Description here..."
+            class="w-full px-4 py-3 rounded-lg bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border text-light-text dark:text-white focus:outline-none focus:border-amber-600"
+        ></textarea>
+
+        <button
+            type="submit"
+            class="mt-6 w-full py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition"
+        >
+            🚀 Calculate ATS Score
+        </button>
+
+    </form>
+
+</div>
+
+{% if result %}
+
+<!-- RESULT -->
+<div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8">
+
+    <h2 class="text-3xl font-serif font-semibold text-center text-light-text dark:text-white mb-8">
+        ATS Report
+    </h2>
+
+    <!-- FINAL SCORE -->
+    <div class="text-center mb-10">
+
+        <div class="text-6xl font-bold text-amber-600 mb-2">
+            {{ result.final }}%
+        </div>
+
+        <p class="text-light-muted dark:text-brand-textMuted">
+            Overall ATS Compatibility
+        </p>
+
+    </div>
+
+    <!-- SCORE GRID -->
+    <div class="grid md:grid-cols-3 gap-6 mb-10">
+
+        <div class="rounded-xl border border-light-border dark:border-brand-border p-6 text-center">
+            <h3 class="font-semibold text-lg mb-2 text-light-text dark:text-white">
+                Semantic Match
+            </h3>
+
+            <p class="text-3xl font-bold text-green-500">
+                {{ result.semantic }}%
+            </p>
+        </div>
+
+        <div class="rounded-xl border border-light-border dark:border-brand-border p-6 text-center">
+            <h3 class="font-semibold text-lg mb-2 text-light-text dark:text-white">
+                Keyword Match
+            </h3>
+
+            <p class="text-3xl font-bold text-blue-500">
+                {{ result.keyword }}%
+            </p>
+        </div>
+
+        <div class="rounded-xl border border-light-border dark:border-brand-border p-6 text-center">
+            <h3 class="font-semibold text-lg mb-2 text-light-text dark:text-white">
+                Experience Score
+            </h3>
+
+            <p class="text-3xl font-bold text-purple-500">
+                {{ result.experience }}%
+            </p>
+        </div>
+
+    </div>
+
+    <!-- MATCHED & MISSING -->
+    <div class="grid lg:grid-cols-2 gap-8">
+
+        <!-- MATCHED -->
+        <div>
+
+            <h3 class="text-xl font-semibold text-green-600 mb-4">
+                ✅ Matched Keywords
+            </h3>
+
+            <div class="flex flex-wrap gap-2">
+
+                {% for word in result.matched %}
+
+                <span class="px-3 py-2 rounded-full bg-green-100 text-green-700 text-sm">
+                    {{ word }}
+                </span>
+
+                {% empty %}
+
+                <p class="text-light-muted dark:text-brand-textMuted">
+                    No matched keywords.
+                </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- MISSING -->
+        <div>
+
+            <h3 class="text-xl font-semibold text-red-600 mb-4">
+                ❌ Missing Keywords
+            </h3>
+
+            <div class="flex flex-wrap gap-2">
+
+                {% for word in result.missing %}
+
+                <span class="px-3 py-2 rounded-full bg-red-100 text-red-700 text-sm">
+                    {{ word }}
+                </span>
+
+                {% empty %}
+
+                <p class="text-light-muted dark:text-brand-textMuted">
+                    No missing keywords.
+                </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TIPS -->
+    <div class="mt-10 rounded-xl bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border p-6">
+
+        <h3 class="text-xl font-semibold mb-4 text-light-text dark:text-white">
+            💡 Tips to Improve Your ATS Score
+        </h3>
+
+        <ul class="space-y-3 text-light-muted dark:text-brand-textMuted">
+
+            <li>✔ Include more of the missing keywords naturally in your resume.</li>
+
+            <li>✔ Highlight projects and technical skills related to the job.</li>
+
+            <li>✔ Use standard section titles like <strong>Skills</strong>, <strong>Experience</strong>, and <strong>Projects</strong>.</li>
+
+            <li>✔ Avoid images, tables, and complex formatting in resumes.</li>
+
+            <li>✔ Tailor your resume specifically for each job application.</li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

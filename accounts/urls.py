@@ -161,4 +161,9 @@ urlpatterns = [
     name="interview_result"
     ),
     
+    path(
+    "jobseeker/ats/",
+    views.ats_checker,
+    name="ats_checker"
+    ),
 ]

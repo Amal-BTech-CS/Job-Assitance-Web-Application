@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login
 from .ai.cover import generate_cover_letter
 from .ai.quiz import generate_quiz, parse_quiz
 from .ai.mock_interview import generate_question, evaluate_answer
+from .ai.ats import extract_pdf_text,ats_score
 
 @login_required
 @never_cache
@@ -1217,5 +1218,33 @@ def interview_result(request):
         "accounts/interview_result.html",
         {
             "evaluations": evaluations
+        }
+    )
+@login_required
+@never_cache
+def ats_checker(request):
+
+    profile = Profile.objects.get(user=request.user)
+
+    result = None
+
+    if request.method == "POST":
+
+        job_description = request.POST.get("job_description")
+
+        if profile.resume:
+
+            resume_text = extract_pdf_text(profile.resume.path)
+
+            result = ats_score(
+                resume_text,
+                job_description
+            )
+
+    return render(
+        request,
+        "accounts/ats.html",
+        {
+            "result": result
         }
     )

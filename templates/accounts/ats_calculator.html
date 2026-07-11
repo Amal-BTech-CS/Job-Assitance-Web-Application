@@ -1,0 +1,141 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}ATS Calculator | CareerPilot AI{% endblock %}
+
+{% block content %}
+
+    <!-- HEADER -->
+    <header class="mb-10">
+        <p class="text-brand-accent text-xs font-black tracking-widest uppercase mb-3">Resume Match</p>
+        <h1 class="text-3xl md:text-4xl font-black mb-3 text-light-text dark:text-white tracking-tight">
+            ATS <span class="text-brand-accent">Calculator</span>
+        </h1>
+        <p class="text-light-muted dark:text-brand-textMuted text-base font-medium max-w-2xl">
+            See how well your profile resume matches a job description, and which keywords you're missing.
+        </p>
+    </header>
+
+    
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- FORM CARD -->
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-6">
+
+            <h2 class="text-base font-bold text-light-text dark:text-white mb-5">Check your match</h2>
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-2">
+                        Pick an open job
+                    </label>
+                    <select name="job_id"
+                            class="w-full rounded-lg border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg px-4 py-2.5 text-sm font-medium text-light-text dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-accent/40">
+                        <option value="">-- Select a job (optional) --</option>
+                        {% for job in jobs %}
+                            <option value="{{ job.id }}" {% if selected_job and selected_job.id == job.id %}selected{% endif %}>
+                                {{ job.title }} - {{ job.company.company_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="h-px flex-1 bg-light-border dark:bg-brand-border"></div>
+                    <span class="text-xs font-bold uppercase text-light-muted dark:text-brand-textMuted">or</span>
+                    <div class="h-px flex-1 bg-light-border dark:bg-brand-border"></div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-2">
+                        Paste a job description
+                    </label>
+                    <textarea name="custom_jd" rows="8"
+                        placeholder="Paste any job description here to check your resume against it..."
+                        class="w-full rounded-lg border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg px-4 py-2.5 text-sm font-medium text-light-text dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-accent/40"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-3 bg-brand-accent hover:bg-brand-accentHover text-white rounded-lg font-bold text-sm transition-all duration-300">
+                    Calculate ATS Score
+                </button>
+
+                <p class="text-xs text-light-muted dark:text-brand-textMuted font-medium">
+                    Uses the resume from your <a href="{% url 'profile_view' %}" class="text-brand-accent font-bold">profile</a>. Upload one there first if you haven't yet.
+                </p>
+            </form>
+        </div>
+
+        <!-- RESULT CARD -->
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-6">
+
+            <h2 class="text-base font-bold text-light-text dark:text-white mb-5">Result</h2>
+
+            {% if result %}
+
+                <div class="flex items-center gap-6 mb-6">
+                    <div class="w-24 h-24 rounded-full border-4 border-brand-accent flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl font-black text-brand-accent">{{ result.final }}%</span>
+                    </div>
+                    <div class="space-y-1.5 flex-1">
+                        <div class="flex items-center justify-between text-xs font-semibold">
+                            <span class="text-light-muted dark:text-brand-textMuted">Semantic match</span>
+                            <span class="text-light-text dark:text-white">{{ result.semantic }}%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs font-semibold">
+                            <span class="text-light-muted dark:text-brand-textMuted">Keyword match</span>
+                            <span class="text-light-text dark:text-white">{{ result.keyword }}%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs font-semibold">
+                            <span class="text-light-muted dark:text-brand-textMuted">Experience signals</span>
+                            <span class="text-light-text dark:text-white">{{ result.experience }}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-2">
+                            Matched keywords
+                        </h3>
+                        <div class="flex flex-wrap gap-1.5">
+                            {% for word in result.matched %}
+                                <span class="text-[11px] font-semibold px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500">{{ word }}</span>
+                            {% empty %}
+                                <span class="text-xs text-light-muted dark:text-brand-textMuted">None found.</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-2">
+                            Missing keywords
+                        </h3>
+                        <div class="flex flex-wrap gap-1.5">
+                            {% for word in result.missing %}
+                                <span class="text-[11px] font-semibold px-2 py-1 rounded-full bg-red-500/10 text-red-500">{{ word }}</span>
+                            {% empty %}
+                                <span class="text-xs text-light-muted dark:text-brand-textMuted">None missing.</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+
+                <div class="flex flex-col items-center justify-center text-center py-16">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-accent/10 flex items-center justify-center text-brand-accent mb-4">
+                        <i class="fa-solid fa-gauge-high text-xl"></i>
+                    </div>
+                    <p class="text-sm font-semibold text-light-muted dark:text-brand-textMuted max-w-xs">
+                        Pick a job or paste a description, then calculate to see your match score here.
+                    </p>
+                </div>
+
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

@@ -33,14 +33,33 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Employment Type -->
                 <div>
                     <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Employment Type</label>
                     <input type="text" name="employment_type" placeholder="Full Time" required
                         class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
                 </div>
+                <!-- Job Status -->
+<div>
+    <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">
+        Job Status
+    </label>
 
+    <select
+        name="status"
+        class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors">
+
+        <option value="Open" selected>
+            Open
+        </option>
+
+        <option value="Closed">
+            Closed
+        </option>
+
+    </select>
+</div>
                 <!-- Experience -->
                 <div>
                     <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Experience</label>
@@ -55,14 +74,19 @@
                         class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors placeholder-gray-400 dark:placeholder-brand-border">
                 </div>
             </div>
-
-            <!-- Skills -->
+            <!-- Required Skills -->
             <div>
-                <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Required Skills</label>
-                <textarea name="skills" rows="2" placeholder="e.g. Python, Django, AWS, CI/CD..." required
+                <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">
+                    Required Skills
+                </label>
+
+                <textarea
+                    name="job_skills"
+                    rows="2"
+                    placeholder="e.g. Python, Django, AWS, CI/CD..."
+                    required
                     class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg px-4 py-3 text-light-text dark:text-white focus:outline-none focus:border-amber-600 dark:focus:border-brand-gold focus:ring-1 focus:ring-amber-600 dark:focus:ring-brand-gold transition-colors resize-none placeholder-gray-400 dark:placeholder-brand-border"></textarea>
             </div>
-
             <!-- Description -->
             <div>
                 <label class="block text-light-muted dark:text-brand-textMuted text-xs uppercase tracking-wider font-medium mb-2 transition-colors">Job Description</label>

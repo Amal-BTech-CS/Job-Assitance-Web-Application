@@ -8,84 +8,362 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        light: { bg: '#ffffff', card: '#f8fafc', border: '#e2e8f0', text: '#1e293b', muted: '#64748b' },
-                        brand: { bg: '#0b1320', card: '#121b2b', border: '#1e293b', gold: '#e6c387', goldHover: '#f3d095', textMuted: '#8b9bb4', textLight: '#f8fafc' }
+                        light: {
+                            bg: '#f1f5f9',
+                            card: '#ffffff',
+                            border: '#e2e8f0',
+                            text: '#0f172a',
+                            muted: '#64748b'
+                        },
+                        brand: {
+                            bg: '#020617',
+                            card: '#1e293b',
+                            border: '#334155',
+                            accent: '#6366f1',
+                            accentHover: '#4f46e5',
+                            textMuted: '#94a3b8',
+                            textLight: '#f8fafc'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     <style>
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
-    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; }
-</style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+    </style>
 </head>
 
-<body class="bg-light-bg dark:bg-brand-bg text-light-text dark:text-brand-textLight transition-colors duration-300 min-h-screen flex flex-col">
+<body class="bg-light-bg dark:bg-brand-bg text-light-text dark:text-brand-textLight transition-colors duration-500 min-h-screen flex flex-col font-sans">
 
-    <nav class="sticky top-0 z-50 bg-light-bg/90 dark:bg-brand-bg/90 backdrop-blur-sm border-b border-light-border dark:border-brand-border shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-            <div class="flex items-center justify-between h-20">
-                
+    <!-- FLOATING NAVIGATION -->
+    <div class="sticky top-4 z-50 w-full px-4 sm:px-6 lg:px-8">
+        <nav class="max-w-7xl mx-auto bg-light-card/90 dark:bg-brand-card/90 backdrop-blur-2xl border border-light-border dark:border-brand-border rounded-full shadow-lg shadow-brand-accent/5 dark:shadow-none transition-all duration-300">
+            <div class="flex items-center justify-between h-16 px-4 md:px-6">
+
+                <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center text-brand-bg shadow-lg">
-                        <i class="fa-solid fa-arrow-trend-up"></i>
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-accent to-blue-400 flex items-center justify-center text-white shadow-md shadow-brand-accent/40">
+                        <i class="fa-solid fa-layer-group text-sm"></i>
                     </div>
-                    <a href="{% url 'home' %}" class="font-serif font-bold text-xl tracking-wide text-light-text dark:text-white transition">
-                        CareerPilot<span class="text-brand-gold">.</span>
+                    <a href="{% url 'home' %}" class="font-black text-xl tracking-tighter text-light-text dark:text-white">
+                        CareerPilot<span class="text-brand-accent">.ai</span>
                     </a>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-8">
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center space-x-2">
                     {% if user.is_authenticated %}
                         {% if user.user_type == "jobseeker" %}
-                            <a href="{% url 'jobseeker_dashboard' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">Dashboard</a>
-                            <a href="{% url 'profile_view' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">My Profile</a>
+                            <a href="{% url 'jobseeker_dashboard' %}"
+                            class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-300
+                            {% if request.resolver_match.url_name == 'jobseeker_dashboard' %}
+                                bg-brand-accent text-white shadow-md shadow-brand-accent/20
+                            {% else %}
+                                text-light-muted dark:text-brand-textMuted hover:bg-light-border/50 dark:hover:bg-brand-border/50 hover:text-light-text dark:hover:text-white
+                            {% endif %}">
+                            Dashboard
+                            </a>
+                            <a href="{% url 'browse_jobs' %}"
+                                class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-300
+                                {% if request.resolver_match.url_name == 'browse_jobs' %}
+                                    bg-brand-accent text-white shadow-md shadow-brand-accent/20
+                                {% else %}
+                                    text-light-muted dark:text-brand-textMuted hover:bg-light-border/50 dark:hover:bg-brand-border/50 hover:text-light-text dark:hover:text-white
+                                {% endif %}">
+                                
+                                <!-- Search Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" 
+                                        class="inline w-4 h-4 mr-1" 
+                                        fill="none" 
+                                        viewBox="0 0 24 24" 
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" 
+                                            stroke-linejoin="round" 
+                                            stroke-width="2" 
+                                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z" />
+                                </svg>
+
+                                Search Jobs
+                                </a>
                         {% elif user.user_type == "company" %}
-                            <a href="{% url 'company_dashboard' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">Insights</a>
-                            <a href="{% url 'manage_jobs' %}" class="text-light-text dark:text-white font-medium transition">Manage Jobs</a>
-                            <a href="{% url 'company_profile_view' %}" class="text-light-muted dark:text-brand-textMuted hover:text-brand-gold transition">Profile</a>
+                            <a href="{% url 'company_dashboard' %}"
+                            class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-300
+                            {% if request.resolver_match.url_name == 'company_dashboard' %}
+                                bg-brand-accent text-white shadow-md shadow-brand-accent/20
+                            {% else %}
+                                text-light-muted dark:text-brand-textMuted hover:bg-light-border/50 dark:hover:bg-brand-border/50 hover:text-light-text dark:hover:text-white
+                            {% endif %}">
+                            Dashboard
+                            </a>
+
+                            <a href="{% url 'manage_jobs' %}"
+                            class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-300
+                            {% if request.resolver_match.url_name == 'manage_jobs' %}
+                                bg-brand-accent text-white shadow-md shadow-brand-accent/20
+                            {% else %}
+                                text-light-muted dark:text-brand-textMuted hover:bg-light-border/50 dark:hover:bg-brand-border/50 hover:text-light-text dark:hover:text-white
+                            {% endif %}">
+                            My Jobs
+                            </a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'home' %}" class="text-light-text dark:text-white transition">Home</a>
+                        <a href="{% url 'home' %}" class="px-5 py-2 rounded-full text-sm font-bold text-light-text dark:text-white hover:bg-light-border/50 dark:hover:bg-brand-border/50 transition">Find Jobs</a>
+                        <a href="#" class="px-5 py-2 rounded-full text-sm font-bold text-light-muted dark:text-brand-textMuted hover:bg-light-border/50 dark:hover:bg-brand-border/50 hover:text-light-text dark:hover:text-white transition">Companies</a>
                     {% endif %}
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <button id="theme-toggle" class="p-2 text-brand-gold hover:bg-light-border dark:hover:bg-brand-card rounded-full transition">
+                <!-- Right Actions -->
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" class="w-10 h-10 flex items-center justify-center bg-light-bg dark:bg-brand-bg text-brand-accent rounded-full hover:ring-2 ring-brand-accent/50 transition-all border border-light-border dark:border-brand-border">
                         <i id="theme-icon" class="fa-solid fa-moon"></i>
                     </button>
 
+                    {% if user.is_authenticated and user.user_type == "jobseeker" %}
+                        <!-- CareerPilot AI Trigger -->
+                        <button id="ai-chat-btn" onclick="toggleChat()"
+                            class="flex items-center gap-2 px-4 py-2 bg-brand-accent text-white text-sm font-bold rounded-full hover:bg-brand-accentHover transition-all shadow-md shadow-brand-accent/30">
+                            <i class="fa-solid fa-robot text-sm"></i>
+                            <span class="hidden sm:inline">CareerPilot AI</span>
+                        </button>
+                    {% endif %}
+
                     {% if user.is_authenticated %}
-                        <a href="{% url 'logout' %}" class="text-sm font-medium text-red-500 hover:text-red-400 transition">Logout</a>
+                        <div class="relative group">
+                            <button class="flex items-center gap-3 px-1 py-1 pr-4 bg-light-bg dark:bg-brand-bg rounded-full border border-light-border dark:border-brand-border text-sm font-bold hover:border-brand-accent/50 transition-all">
+                                <div class="w-8 h-8 rounded-full bg-brand-accent/10 text-brand-accent flex items-center justify-center">
+                                    <i class="fa-solid fa-user text-xs"></i>
+                                </div>
+                                <span class="hidden sm:inline">{{ user.username|truncatechars:10 }}</span>
+                                <i class="fa-solid fa-chevron-down text-[10px] opacity-50"></i>
+                            </button>
+                            <div class="absolute right-0 mt-3 w-52 bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl shadow-xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                                <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                                </a>
+                            </div>
+                        </div>
                     {% else %}
-                        <a href="{% url 'jobseeker_register' %}" class="px-6 py-2 bg-brand-gold text-brand-bg font-semibold rounded-lg hover:bg-brand-goldHover transition">Register</a>
+                        <a href="{% url 'jobseeker_register' %}" class="hidden sm:flex px-6 py-2 bg-brand-accent text-white font-bold rounded-full hover:bg-brand-accentHover transition-all transform hover:scale-105 shadow-lg shadow-brand-accent/30">Register</a>
                     {% endif %}
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
 
-    <main class="flex-1 flex flex-col w-full">
-        {% block content %}{% endblock %}
+    <!-- MAIN CONTENT WITH SIDEBAR -->
+    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col lg:flex-row gap-8 font-sans">
+
+        <!-- ========================================== -->
+        <!-- SHARED DYNAMIC NAVIGATION SIDEBAR -->
+        <!-- ========================================== -->
+        <aside class="w-full lg:w-72 flex-shrink-0">
+            <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-6 sticky top-28 shadow-sm">
+
+                <!-- User Profile Snippet -->
+                <div class="flex items-center gap-4 mb-8 pb-8 border-b border-light-border dark:border-brand-border">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-brand-accent to-blue-400 flex items-center justify-center text-white shadow-md shadow-brand-accent/30 flex-shrink-0 text-lg font-bold">
+                        {{ request.user.username|make_list|first|upper|default:"U" }}
+                    </div>
+                    <div class="overflow-hidden">
+                        <h2 class="text-base font-bold text-light-text dark:text-white truncate">{{ request.user.username|title|default:"User" }}</h2>
+                        <p class="text-xs font-medium text-brand-accent capitalize">{{ user.user_type }}</p>
+                    </div>
+                </div>
+
+                <!-- NAVIGATION LOGIC -->
+                <nav class="space-y-1.5">
+                    {% if user.user_type == "jobseeker" %}
+                        <!-- JOBSEEKER LINKS -->
+                        <a href="{% url 'jobseeker_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'jobseeker_dashboard' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-solid fa-border-all w-5"></i> Dashboard
+                        </a>
+                        <a href="{% url 'profile_view' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'profile_view' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-regular fa-id-badge w-5"></i> My Profile
+                        </a>
+                        <a href="{% url 'my_applications' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'my_applications' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-solid fa-layer-group w-5"></i> Applications
+                        </a>
+                        <button onclick="toggleChat()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white transition-all">
+                            <i class="fa-solid fa-robot w-5"></i> CareerPilot AI
+                        </button>
+
+                    {% elif user.user_type == "company" %}
+                        <!-- COMPANY LINKS -->
+                        <a href="{% url 'company_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'company_dashboard' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-solid fa-chart-line w-5"></i> Dashboard
+                        </a>
+                        <a href="{% url 'manage_jobs' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'manage_jobs' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-solid fa-briefcase w-5"></i> My Jobs
+                        </a>
+                        <a href="{% url 'company_profile_view' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'company_profile_view' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-solid fa-briefcase w-5"></i> Profile
+                        </a>
+                    {% endif %}
+                </nav>
+
+                <!-- Bottom Action -->
+                <div class="mt-8 pt-6 border-t border-light-border dark:border-brand-border">
+                    <a href="{% url 'logout' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 font-semibold text-sm transition-all">
+                        <i class="fa-solid fa-arrow-right-from-bracket w-5"></i> Sign Out
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- DYNAMIC CONTENT AREA -->
+        <div class="flex-1 flex flex-col min-w-0">
+            {% block content %}{% endblock %}
+        </div>
+
     </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto py-16 border-t border-light-border dark:border-brand-border bg-light-card/50 dark:bg-brand-card/50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
+            <div class="col-span-2 md:col-span-1 space-y-4">
+                <a href="#" class="font-black text-xl block tracking-tighter">CareerPilot<span class="text-brand-accent">.ai</span></a>
+                <p class="text-sm font-medium text-light-muted dark:text-brand-textMuted leading-relaxed">Pioneering AI-driven career matching for the modern workforce.</p>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-xs mb-6 uppercase tracking-widest text-light-text dark:text-white opacity-80">Platform</h4>
+                <ul class="text-sm font-semibold space-y-4">
+                    <li><a href="#" class="text-light-muted dark:text-brand-textMuted hover:text-brand-accent transition">Browse Jobs</a></li>
+                    <li><a href="#" class="text-light-muted dark:text-brand-textMuted hover:text-brand-accent transition">For Employers</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-xs mb-6 uppercase tracking-widest text-light-text dark:text-white opacity-80">Company</h4>
+                <ul class="text-sm font-semibold space-y-4">
+                    <li><a href="#" class="text-light-muted dark:text-brand-textMuted hover:text-brand-accent transition">Help Center</a></li>
+                    <li><a href="#" class="text-light-muted dark:text-brand-textMuted hover:text-brand-accent transition">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-xs mb-6 uppercase tracking-widest text-light-text dark:text-white opacity-80">Connect</h4>
+                <div class="flex gap-4 text-light-text dark:text-white text-lg">
+                    <a href="#" class="w-10 h-10 rounded-full bg-light-border dark:bg-brand-border flex items-center justify-center hover:bg-brand-accent hover:text-white transition-all"><i class="fa-brands fa-linkedin-in text-sm"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-light-border dark:bg-brand-border flex items-center justify-center hover:bg-brand-accent hover:text-white transition-all"><i class="fa-brands fa-github text-sm"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-light-border dark:bg-brand-border flex items-center justify-center hover:bg-brand-accent hover:text-white transition-all"><i class="fa-brands fa-twitter text-sm"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================================================
+         CAREERPILOT AI CHAT POPUP
+         Only rendered for authenticated jobseekers
+         ================================================ -->
+    {% if user.is_authenticated and user.user_type == "jobseeker" %}
+
+    <div id="ai-chat-panel"
+         class="fixed top-20 sm:top-[104px] bottom-4 right-3 sm:right-6 left-3 sm:left-auto z-[100] sm:w-[420px] max-w-[calc(100vw-24px)]
+                bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border
+                rounded-2xl shadow-2xl flex flex-col overflow-hidden
+                transition-all duration-300 ease-in-out
+                opacity-0 scale-95 pointer-events-none">
+
+        <!-- Panel Header -->
+        <div class="flex items-center gap-3 px-5 py-4 border-b border-light-border dark:border-brand-border shrink-0 rounded-t-2xl bg-light-bg dark:bg-brand-bg">
+            <div class="w-8 h-8 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent">
+                <i class="fa-solid fa-robot text-sm"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-light-text dark:text-white font-semibold text-sm leading-tight">CareerPilot AI</p>
+                <p class="text-light-muted dark:text-brand-textMuted text-xs">Your AI Career Assistant</p>
+            </div>
+            <div class="flex items-center gap-2 mr-2">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-[11px] text-light-muted dark:text-brand-textMuted">Online</span>
+            </div>
+            <button onclick="toggleChat()" class="text-light-muted dark:text-brand-textMuted hover:text-light-text dark:hover:text-white transition p-1 rounded-lg hover:bg-light-border dark:hover:bg-brand-border">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Messages -->
+        <div id="cp-messages"
+             class="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-4 custom-scrollbar">
+
+            <!-- Welcome bubble -->
+            <div class="flex items-start gap-2">
+                <div class="w-7 h-7 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent shrink-0 mt-0.5">
+                    <i class="fa-solid fa-robot text-xs"></i>
+                </div>
+                <div class="bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-xl rounded-tl-sm px-4 py-3 text-xs text-light-text dark:text-white leading-relaxed">
+                    <span class="font-medium text-brand-accent">Hello, {{ request.user.username }}!</span> 👋
+                    <br>Ask me about your resume, job matches, missing skills, or career guidance.
+                </div>
+            </div>
+
+            <!-- Quick chips -->
+            <div class="flex flex-wrap gap-1.5 pl-9">
+                <button onclick="cpSendQuick('Summarize my resume')"
+                        class="px-3 py-1.5 text-[11px] font-medium rounded-full border border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white transition">
+                    📄 My Resume
+                </button>
+                <button onclick="cpSendQuick('How well does my resume match the available jobs?')"
+                        class="px-3 py-1.5 text-[11px] font-medium rounded-full border border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white transition">
+                    📊 ATS Score
+                </button>
+                <button onclick="cpSendQuick('What skills am I missing for the available jobs?')"
+                        class="px-3 py-1.5 text-[11px] font-medium rounded-full border border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white transition">
+                    🔍 Missing Skills
+                </button>
+                <button onclick="cpSendQuick('Give me a career roadmap')"
+                        class="px-3 py-1.5 text-[11px] font-medium rounded-full border border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white transition">
+                    🗺️ Career Path
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Input -->
+        <div class="shrink-0 border-t border-light-border dark:border-brand-border px-4 py-3 rounded-b-2xl bg-light-bg dark:bg-brand-bg">
+            <div class="flex items-end gap-2">
+                <textarea
+                    id="cp-input"
+                    rows="1"
+                    placeholder="Ask anything about your career..."
+                    class="flex-1 resize-none bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl px-4 py-2.5 text-xs text-light-text dark:text-white placeholder-light-muted dark:placeholder-brand-textMuted focus:outline-none focus:border-brand-accent transition custom-scrollbar"
+                    style="max-height: 100px;"
+                    onkeydown="cpHandleKey(event)"
+                    oninput="cpAutoResize(this)">
+                </textarea>
+                <button id="cp-send-btn" onclick="cpSend()"
+                        class="w-9 h-9 rounded-xl bg-brand-accent text-white flex items-center justify-center hover:bg-brand-accentHover transition shrink-0">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    {% endif %}
+    <!-- ================================================ -->
 
     <script>
         const html = document.documentElement;
         const toggleBtn = document.getElementById('theme-toggle');
         const icon = document.getElementById('theme-icon');
 
-        // Initial Load
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             html.classList.add('dark');
             icon.classList.replace('fa-moon', 'fa-sun');
@@ -93,14 +371,142 @@
 
         toggleBtn.addEventListener('click', () => {
             html.classList.toggle('dark');
-            if (html.classList.contains('dark')) {
-                localStorage.theme = 'dark';
-                icon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                localStorage.theme = 'light';
-                icon.classList.replace('fa-sun', 'fa-moon');
-            }
+            const isDark = html.classList.contains('dark');
+            localStorage.theme = isDark ? 'dark' : 'light';
+            icon.classList.replace(isDark ? 'fa-moon' : 'fa-sun', isDark ? 'fa-sun' : 'fa-moon');
         });
     </script>
+
+    {% if user.is_authenticated and user.user_type == "jobseeker" %}
+    <script>
+        // ---- Toggle panel open/close ----
+        let cpOpen = false;
+        function toggleChat() {
+            const panel = document.getElementById('ai-chat-panel');
+            cpOpen = !cpOpen;
+            if (cpOpen) {
+                panel.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                panel.classList.add('opacity-100', 'scale-100');
+                document.getElementById('cp-input').focus();
+            } else {
+                panel.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                panel.classList.remove('opacity-100', 'scale-100');
+            }
+        }
+
+        // ---- Helpers ----
+        function cpAutoResize(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+        }
+
+        function cpHandleKey(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                cpSend();
+            }
+        }
+
+        function cpSendQuick(text) {
+            document.getElementById('cp-input').value = text;
+            cpSend();
+        }
+
+        function cpEscape(text) {
+            return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        function cpFormat(text) {
+            return cpEscape(text)
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/^([\w ]+:)$/gm, '<strong class="text-brand-accent">$1</strong>');
+        }
+
+        function cpScrollBottom() {
+            const box = document.getElementById('cp-messages');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function cpAppend(role, text) {
+            const box = document.getElementById('cp-messages');
+            const wrap = document.createElement('div');
+            if (role === 'user') {
+                wrap.className = 'flex justify-end';
+                wrap.innerHTML = `<div class="max-w-[80%] bg-brand-accent text-white rounded-xl rounded-tr-sm px-4 py-2.5 text-xs leading-relaxed whitespace-pre-wrap">${cpEscape(text)}</div>`;
+            } else {
+                wrap.className = 'flex items-start gap-2';
+                wrap.innerHTML = `
+                    <div class="w-7 h-7 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent shrink-0 mt-0.5">
+                        <i class="fa-solid fa-robot text-xs"></i>
+                    </div>
+                    <div class="bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-xl rounded-tl-sm px-4 py-3 text-xs text-light-text dark:text-white leading-relaxed whitespace-pre-wrap flex-1">${cpFormat(text)}</div>`;
+            }
+            box.appendChild(wrap);
+            cpScrollBottom();
+        }
+
+        function cpShowTyping() {
+            const box = document.getElementById('cp-messages');
+            const wrap = document.createElement('div');
+            wrap.id = 'cp-typing';
+            wrap.className = 'flex items-start gap-2';
+            wrap.innerHTML = `
+                <div class="w-7 h-7 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent shrink-0">
+                    <i class="fa-solid fa-robot text-xs"></i>
+                </div>
+                <div class="bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-xl rounded-tl-sm px-4 py-3">
+                    <div class="flex gap-1 items-center h-3">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-accent animate-bounce" style="animation-delay:0ms"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-accent animate-bounce" style="animation-delay:150ms"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-accent animate-bounce" style="animation-delay:300ms"></span>
+                    </div>
+                </div>`;
+            box.appendChild(wrap);
+            cpScrollBottom();
+        }
+
+        function cpHideTyping() {
+            const el = document.getElementById('cp-typing');
+            if (el) el.remove();
+        }
+
+        // ---- Main send ----
+        async function cpSend() {
+            const input = document.getElementById('cp-input');
+            const btn   = document.getElementById('cp-send-btn');
+            const msg   = input.value.trim();
+            if (!msg || btn.disabled) return;
+
+            input.value = '';
+            input.style.height = 'auto';
+            cpAppend('user', msg);
+
+            btn.disabled  = true;
+            input.disabled = true;
+            cpShowTyping();
+
+            try {
+                const res = await fetch("{% url 'chat_api' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify({ message: msg }),
+                });
+                const data = await res.json();
+                cpHideTyping();
+                cpAppend('ai', data.answer || data.error || 'Something went wrong.');
+            } catch {
+                cpHideTyping();
+                cpAppend('ai', 'Network error. Please try again.');
+            }
+
+            btn.disabled   = false;
+            input.disabled = false;
+            input.focus();
+        }
+    </script>
+    {% endif %}
 </body>
 </html>

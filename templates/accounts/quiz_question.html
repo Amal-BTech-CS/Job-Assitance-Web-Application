@@ -1,0 +1,189 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Quiz Question - CareerPilot{% endblock %}
+
+{% block content %}
+
+<!-- Progress -->
+<div class="mb-8">
+
+    <div class="flex justify-between items-center mb-3">
+
+        <h1 class="text-2xl font-bold text-light-text dark:text-white">
+            Question {{ current }} of {{ total }}
+        </h1>
+
+        <span class="text-brand-accent font-semibold">
+            {{ current }}/{{ total }}
+        </span>
+
+    </div>
+
+    <div class="w-full bg-gray-200 dark:bg-brand-bg rounded-full h-2">
+
+        <div
+            class="bg-brand-accent h-2 rounded-full"
+            style="width:{% widthratio current total 100 %}%;">
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Question Card -->
+<div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8">
+
+    <p class="text-light-muted dark:text-brand-textMuted mb-4">
+        Read the question carefully and choose the correct answer.
+    </p>
+
+    <pre class="whitespace-pre-wrap font-sans text-lg text-light-text dark:text-white mb-8">
+{{ q.question }}
+    </pre>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-2 gap-4">
+
+            <!-- A -->
+            <button
+                {% if not answered %}
+                    type="submit"
+                    name="answer"
+                    value="A"
+                {% else %}
+                    type="button"
+                {% endif %}
+
+                class="h-14 rounded-lg border transition
+                {% if answered %}
+                    {% if q.answer == 'A' %}
+                        bg-green-600 text-white border-green-600
+                    {% elif selected == 'A' %}
+                        bg-red-600 text-white border-red-600
+                    {% else %}
+                        border-light-border dark:border-brand-border
+                    {% endif %}
+                {% else %}
+                    border-light-border dark:border-brand-border hover:bg-brand-accent hover:text-white
+                {% endif %}"
+
+                {% if answered %}disabled{% endif %}
+            >
+                A
+            </button>
+
+            <!-- B -->
+            <button
+                {% if not answered %}
+                    type="submit"
+                    name="answer"
+                    value="B"
+                {% else %}
+                    type="button"
+                {% endif %}
+
+                class="h-14 rounded-lg border transition
+                {% if answered %}
+                    {% if q.answer == 'B' %}
+                        bg-green-600 text-white border-green-600
+                    {% elif selected == 'B' %}
+                        bg-red-600 text-white border-red-600
+                    {% else %}
+                        border-light-border dark:border-brand-border
+                    {% endif %}
+                {% else %}
+                    border-light-border dark:border-brand-border hover:bg-brand-accent hover:text-white
+                {% endif %}"
+
+                {% if answered %}disabled{% endif %}
+            >
+                B
+            </button>
+
+            <!-- C -->
+            <button
+                {% if not answered %}
+                    type="submit"
+                    name="answer"
+                    value="C"
+                {% else %}
+                    type="button"
+                {% endif %}
+
+                class="h-14 rounded-lg border transition
+                {% if answered %}
+                    {% if q.answer == 'C' %}
+                        bg-green-600 text-white border-green-600
+                    {% elif selected == 'C' %}
+                        bg-red-600 text-white border-red-600
+                    {% else %}
+                        border-light-border dark:border-brand-border
+                    {% endif %}
+                {% else %}
+                    border-light-border dark:border-brand-border hover:bg-brand-accent hover:text-white
+                {% endif %}"
+
+                {% if answered %}disabled{% endif %}
+            >
+                C
+            </button>
+
+            <!-- D -->
+            <button
+                {% if not answered %}
+                    type="submit"
+                    name="answer"
+                    value="D"
+                {% else %}
+                    type="button"
+                {% endif %}
+
+                class="h-14 rounded-lg border transition
+                {% if answered %}
+                    {% if q.answer == 'D' %}
+                        bg-green-600 text-white border-green-600
+                    {% elif selected == 'D' %}
+                        bg-red-600 text-white border-red-600
+                    {% else %}
+                        border-light-border dark:border-brand-border
+                    {% endif %}
+                {% else %}
+                    border-light-border dark:border-brand-border hover:bg-brand-accent hover:text-white
+                {% endif %}"
+
+                {% if answered %}disabled{% endif %}
+            >
+                D
+            </button>
+
+        </div>
+
+        {% if answered %}
+
+        <div class="mt-8 text-center">
+
+            <button
+                type="submit"
+                name="next"
+                class="px-8 py-3 rounded-lg bg-brand-accent text-white hover:opacity-90 transition">
+
+                {% if is_last %}
+                    View Result 🎉
+                {% else %}
+                    Next Question →
+                {% endif %}
+
+            </button>
+
+        </div>
+
+        {% endif %}
+
+    </form>
+
+</div>
+
+{% endblock %}

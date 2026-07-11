@@ -1,0 +1,199 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Apply for {{ job.title }} | CareerPilot AI{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 pt-10 pb-20 transition-colors duration-300">
+
+    <!-- PAGE HEADER -->
+    <header class="mb-10 text-center md:text-left">
+        <a href="javascript:history.back()" class="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-brand-accent hover:underline mb-6 transition-colors cursor-pointer">
+            <i class="fa-solid fa-arrow-left"></i> Back to Job Details
+        </a>
+        <h1 class="text-3xl md:text-4xl font-black mb-3 text-gray-900 dark:text-white tracking-tight">
+            Submit Your Application
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base font-medium max-w-2xl mx-auto md:mx-0">
+            Applying for <span class="font-black text-brand-accent">{{ job.title }}</span> 
+            at <span class="font-black text-gray-900 dark:text-white">{{ job.company.company_name }}</span>
+        </p>
+        
+        <!-- Job Meta Chips -->
+        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-5">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-[#1e293b] border border-gray-200 dark:border-gray-800 rounded-lg text-[10px] font-black uppercase tracking-widest text-gray-600 dark:text-gray-300">
+                <i class="fa-solid fa-location-dot text-brand-accent"></i> {{ job.location }}
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-[#1e293b] border border-gray-200 dark:border-gray-800 rounded-lg text-[10px] font-black uppercase tracking-widest text-gray-600 dark:text-gray-300">
+                <i class="fa-solid fa-wallet text-brand-accent"></i> {{ job.salary }}
+            </span>
+        </div>
+    </header>
+
+    <!-- FORM CONTAINER -->
+    <div class="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-[2rem] p-8 md:p-10 shadow-xl shadow-brand-accent/5 relative overflow-hidden transition-all">
+        
+        <!-- Subtle Background Glow -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-brand-accent/5 blur-3xl rounded-full pointer-events-none -mt-20 -mr-20"></div>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-10 relative z-10">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="p-5 rounded-2xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-700 dark:text-red-400 text-sm font-bold">
+                {% for error in form.non_field_errors %}
+                    <p class="flex items-center gap-2"><i class="fa-solid fa-circle-exclamation"></i> {{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- RESUME SELECTION SECTION -->
+            <div>
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
+                    <div class="w-10 h-10 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent">
+                        <i class="fa-regular fa-file-pdf text-lg"></i>
+                    </div>
+                    <h2 class="text-xl font-black tracking-tight text-gray-900 dark:text-white">Resume Selection</h2>
+                </div>
+
+                <!-- Interactive Radio Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+
+                    <!-- Profile Resume -->
+                    <label class="relative cursor-pointer group">
+                        <input
+                            type="radio"
+                            name="resume_option"
+                            value="profile"
+                            {% if form.resume_option.value == "profile" or not form.resume_option.value %}checked{% endif %}
+                            onchange="toggleResume()"
+                            class="peer sr-only">
+
+                        <div class="p-6 bg-gray-50 dark:bg-[#1e293b] border-2 border-gray-200 dark:border-gray-700 rounded-2xl transition-all duration-300
+                                    peer-checked:border-brand-accent peer-checked:bg-brand-accent/5
+                                    hover:border-brand-accent/50">
+
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-black text-sm text-gray-900 dark:text-white">Profile Resume</span>
+                                <i class="fa-solid fa-circle-check text-brand-accent opacity-0 scale-50 peer-checked:opacity-100 peer-checked:scale-100 transition-all text-lg"></i>
+                            </div>
+
+                            <p class="text-[11px] font-bold text-gray-500 dark:text-gray-400">
+                                Submit the standard resume saved in your profile.
+                            </p>
+                        </div>
+                    </label>
+
+                    <!-- Upload New Resume -->
+                    <label class="relative cursor-pointer group">
+                        <input
+                            type="radio"
+                            name="resume_option"
+                            value="new"
+                            {% if form.resume_option.value == "new" %}checked{% endif %}
+                            onchange="toggleResume()"
+                            class="peer sr-only">
+
+                        <div class="p-6 bg-gray-50 dark:bg-[#1e293b] border-2 border-gray-200 dark:border-gray-700 rounded-2xl transition-all duration-300
+                                    peer-checked:border-brand-accent peer-checked:bg-brand-accent/5
+                                    hover:border-brand-accent/50">
+
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-black text-sm text-gray-900 dark:text-white">Upload Custom Resume</span>
+                                <i class="fa-solid fa-circle-check text-brand-accent opacity-0 scale-50 peer-checked:opacity-100 peer-checked:scale-100 transition-all text-lg"></i>
+                            </div>
+
+                            <p class="text-[11px] font-bold text-gray-500 dark:text-gray-400">
+                                Upload a resume tailored specifically for this role.
+                            </p>
+                        </div>
+                    </label>
+
+                </div>
+
+                
+
+                <!-- Upload Box -->
+                <div id="resume_upload" class="hidden mt-4">
+                    <div class="p-8 border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-brand-accent dark:hover:border-brand-accent transition-colors rounded-2xl bg-gray-50 dark:bg-[#1e293b] text-center">
+                        
+                        <div class="w-14 h-14 bg-brand-accent/10 rounded-full flex items-center justify-center text-brand-accent mx-auto mb-4">
+                            <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
+                        </div>
+
+                        <input
+                            type="file"
+                            name="new_resume"
+                            accept=".pdf,.doc,.docx"
+                            class="block w-full max-w-sm mx-auto text-xs font-bold text-gray-500 dark:text-gray-400
+                            file:mr-4 file:py-2.5 file:px-5
+                            file:rounded-xl file:border-0
+                            file:text-[10px] file:font-black file:uppercase file:tracking-widest
+                            file:bg-brand-accent file:text-white
+                            hover:file:bg-brand-accentHover
+                            cursor-pointer transition-all">
+
+                        {% if form.new_resume.errors %}
+                            <p class="mt-4 text-sm font-bold text-red-600 dark:text-red-400">
+                                <i class="fa-solid fa-circle-exclamation"></i> {{ form.new_resume.errors.0 }}
+                            </p>
+                        {% endif %}
+
+                        <p class="text-[10px] font-black text-gray-400 dark:text-gray-500 mt-4 uppercase tracking-widest">
+                            Supported: PDF or DOCX (Max 5 MB)
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COVER LETTER SECTION -->
+            <div class="group">
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
+                    <div class="w-10 h-10 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent">
+                        <i class="fa-regular fa-envelope text-lg"></i>
+                    </div>
+                    <h2 class="text-xl font-black tracking-tight text-gray-900 dark:text-white">Cover Letter</h2>
+                </div>
+                
+                <label class="block text-[10px] font-black tracking-widest uppercase text-gray-500 dark:text-gray-400 group-focus-within:text-brand-accent mb-3 ml-1 transition-colors">
+                    Pitch Yourself (Optional but Recommended)
+                </label>
+                
+                <textarea
+                    name="cover_letter"
+                    rows="8"
+                    placeholder="Dear Hiring Manager,&#10;&#10;I am writing to express my interest in..."
+                    class="w-full px-5 py-5 rounded-2xl bg-gray-50 dark:bg-[#1e293b] border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all resize-none custom-scrollbar placeholder-gray-400 dark:placeholder-gray-600"
+                >{{ form.cover_letter.value|default_if_none:'' }}</textarea>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="javascript:history.back()"
+                    class="w-full sm:w-auto px-8 py-3.5 text-center rounded-xl text-xs font-bold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1e293b] transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
+                    Cancel
+                </a>
+                <button type="submit"
+                    class="w-full sm:w-auto px-10 py-3.5 bg-brand-accent text-white rounded-xl text-xs font-bold hover:bg-brand-accentHover transition-all shadow-lg shadow-brand-accent/20 transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Application
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleResume() {
+    const selected = document.querySelector('input[name="resume_option"]:checked').value;
+    const uploadBox = document.getElementById("resume_upload");
+    if (selected === "new") {
+        uploadBox.classList.remove("hidden");
+    } else {
+        uploadBox.classList.add("hidden");
+    }
+}
+document.addEventListener("DOMContentLoaded", toggleResume);
+</script>
+
+{% endblock %}

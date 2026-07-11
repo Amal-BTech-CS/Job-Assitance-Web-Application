@@ -1,64 +1,75 @@
 {% extends 'accounts/jobseeker_base.html' %}
 {% load static %}
 
-{% block title %}Company Profile{% endblock %}
+{% block title %}Company Profile | CareerPilot AI{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto px-6 lg:px-12 pt-10 pb-20 w-full transition-colors duration-300">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 pt-10 pb-20 w-full transition-colors duration-300">
 
-    <!-- Header Card -->
-    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-8 md:p-10 mb-8 relative overflow-hidden shadow-lg shadow-amber-600/5 dark:shadow-brand-gold/5 flex flex-col md:flex-row items-center md:items-start gap-6 text-center md:text-left transition-colors duration-300">
-        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-amber-500/10 dark:bg-brand-gold/10 blur-3xl rounded-full pointer-events-none transition-colors"></div>
+    <!-- HERO HEADER CARD -->
+    <div class="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-[2rem] p-8 md:p-10 mb-8 relative overflow-hidden shadow-xl shadow-brand-accent/5 flex flex-col md:flex-row items-center md:items-start gap-8 text-center md:text-left group transition-all">
         
-        <div class="w-24 h-24 md:w-28 md:h-28 rounded-xl bg-gradient-to-br from-amber-500 dark:from-brand-gold to-amber-700 dark:to-[#c29b57] flex items-center justify-center shadow-lg flex-shrink-0 border-4 border-light-bg dark:border-brand-bg transition-colors">
-            <span class="text-4xl md:text-5xl font-serif font-bold text-white dark:text-brand-bg uppercase">
+        <!-- Decorative Background Glow -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-brand-accent/10 blur-3xl rounded-full pointer-events-none -mt-10 -mr-10 transition-opacity group-hover:opacity-70"></div>
+        
+        <!-- Premium Avatar Graphic -->
+        <div class="w-28 h-28 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-brand-accent to-blue-600 flex items-center justify-center shadow-lg shadow-brand-accent/30 flex-shrink-0 border-4 border-white dark:border-[#0f172a] relative z-10 transform group-hover:scale-105 transition-transform duration-500">
+            <span class="text-5xl md:text-6xl font-black text-white uppercase drop-shadow-md">
                 {{ profile.company_name|first|default:"C" }}
             </span>
         </div>
         
-        <div class="flex-1 mt-2">
-            <h1 class="text-3xl md:text-4xl font-serif font-semibold text-light-text dark:text-white mb-2 transition-colors">
+        <!-- Header Text Details -->
+        <div class="flex-1 mt-2 relative z-10 flex flex-col items-center md:items-start">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] rounded-lg font-black tracking-widest uppercase border border-emerald-500/20 mb-3">
+                <i class="fa-solid fa-circle-check"></i> Verified Employer
+            </span>
+            <h1 class="text-3xl md:text-4xl font-black tracking-tight text-light-text dark:text-white mb-2">
                 {{ profile.company_name }}
             </h1>
-            <p class="text-light-muted dark:text-brand-textMuted text-lg mb-4 flex items-center justify-center md:justify-start gap-2 transition-colors">
-                <i class="fa-regular fa-envelope"></i> {{ profile.company_email }}
+            <p class="text-gray-500 dark:text-gray-400 font-medium mb-4 flex items-center gap-2">
+                <i class="fa-regular fa-envelope text-brand-accent"></i> {{ profile.company_email }}
             </p>
-            <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                <span class="px-3 py-1 bg-emerald-50 dark:bg-[#1e2b41] text-emerald-600 dark:text-emerald-400 text-xs rounded-full font-medium tracking-wide uppercase border border-emerald-200 dark:border-emerald-400/20 transition-colors">
-                    Verified Employer
-                </span>
-            </div>
         </div>
     </div>
 
-    <div class="space-y-8">
-        <!-- Company Information -->
-        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 shadow-sm transition-colors duration-300">
-            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-light-border dark:border-brand-border transition-colors">
-                <i class="fa-regular fa-building text-light-muted dark:text-brand-textMuted text-xl transition-colors"></i>
-                <h2 class="text-xl font-medium text-light-text dark:text-white transition-colors">Company Information</h2>
+    <!-- PROFILE DATA SECTIONS -->
+    <div class="space-y-6">
+        
+        <!-- Company Information Matrix -->
+        <div class="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-8 shadow-sm hover:border-brand-accent/30 transition-colors duration-300">
+            <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
+                <div class="w-10 h-10 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent">
+                    <i class="fa-regular fa-building text-lg"></i>
+                </div>
+                <h2 class="text-xl font-black tracking-tight text-light-text dark:text-white">Company Information</h2>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
-                <div>
-                    <label class="block text-light-muted dark:text-brand-textMuted text-xs tracking-widest uppercase mb-1 transition-colors">Company Name</label>
-                    <p class="text-light-text dark:text-white font-medium transition-colors">{{ profile.company_name }}</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-50 dark:bg-[#1e293b] p-4 rounded-2xl border border-gray-100 dark:border-gray-800">
+                    <label class="block text-[10px] font-black tracking-widest uppercase text-brand-accent mb-1">Company Name</label>
+                    <p class="text-light-text dark:text-white font-bold text-sm">{{ profile.company_name }}</p>
                 </div>
-                <div>
-                    <label class="block text-light-muted dark:text-brand-textMuted text-xs tracking-widest uppercase mb-1 transition-colors">Email</label>
-                    <p class="text-light-text dark:text-white font-medium transition-colors">{{ profile.company_email }}</p>
+                
+                <div class="bg-gray-50 dark:bg-[#1e293b] p-4 rounded-2xl border border-gray-100 dark:border-gray-800">
+                    <label class="block text-[10px] font-black tracking-widest uppercase text-brand-accent mb-1">Email Address</label>
+                    <p class="text-light-text dark:text-white font-bold text-sm">{{ profile.company_email }}</p>
                 </div>
-                <div>
-                    <label class="block text-light-muted dark:text-brand-textMuted text-xs tracking-widest uppercase mb-1 transition-colors">Phone</label>
-                    <p class="text-light-text dark:text-white font-medium transition-colors">{{ profile.company_phone|default:"Not added" }}</p>
+                
+                <div class="bg-gray-50 dark:bg-[#1e293b] p-4 rounded-2xl border border-gray-100 dark:border-gray-800">
+                    <label class="block text-[10px] font-black tracking-widest uppercase text-brand-accent mb-1">Phone Number</label>
+                    <p class="text-light-text dark:text-white font-bold text-sm">{{ profile.company_phone|default:"Not added" }}</p>
                 </div>
-                <div>
-                    <label class="block text-light-muted dark:text-brand-textMuted text-xs tracking-widest uppercase mb-1 transition-colors">Website</label>
-                    <p class="text-amber-600 dark:text-brand-gold hover:text-amber-700 dark:hover:text-brand-goldHover transition font-medium">
+                
+                <div class="bg-gray-50 dark:bg-[#1e293b] p-4 rounded-2xl border border-gray-100 dark:border-gray-800">
+                    <label class="block text-[10px] font-black tracking-widest uppercase text-brand-accent mb-1">Website</label>
+                    <p class="font-bold text-sm">
                         {% if profile.website %}
-                            <a href="{{ profile.website }}" target="_blank"><i class="fa-solid fa-globe mr-1"></i> {{ profile.website }}</a>
+                            <a href="{{ profile.website }}" target="_blank" class="text-light-text dark:text-white hover:text-brand-accent dark:hover:text-brand-accent flex items-center gap-1.5 transition-colors">
+                                <i class="fa-solid fa-globe text-brand-accent"></i> {{ profile.website }}
+                            </a>
                         {% else %}
-                            <span class="text-gray-400 dark:text-[#334155] italic">Not added</span>
+                            <span class="text-gray-400 dark:text-gray-600 italic">Not added</span>
                         {% endif %}
                     </p>
                 </div>
@@ -66,23 +77,25 @@
         </div>
 
         <!-- About Company -->
-        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 shadow-sm transition-colors duration-300">
-            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-light-border dark:border-brand-border transition-colors">
-                <i class="fa-solid fa-circle-info text-light-muted dark:text-brand-textMuted text-xl transition-colors"></i>
-                <h2 class="text-xl font-medium text-light-text dark:text-white transition-colors">About Company</h2>
+        <div class="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-8 shadow-sm hover:border-brand-accent/30 transition-colors duration-300">
+            <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
+                <div class="w-10 h-10 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent">
+                    <i class="fa-solid fa-circle-info text-lg"></i>
+                </div>
+                <h2 class="text-xl font-black tracking-tight text-light-text dark:text-white">About Company</h2>
             </div>
-            <p class="text-light-muted dark:text-[#8b9bb4] leading-relaxed bg-light-bg dark:bg-brand-bg p-6 rounded-lg border border-light-border dark:border-brand-border transition-colors">
-                {{ profile.description|default:"No description provided." }}
-            </p>
+            <div class="bg-gray-50 dark:bg-[#1e293b] p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
+                <p class="text-gray-600 dark:text-gray-300 text-sm font-medium leading-relaxed whitespace-pre-line">{{ profile.description|default:"No description provided." }}</p>
+            </div>
         </div>
 
-        <!-- Buttons -->
+        <!-- Call to Action Buttons -->
         <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-6">
-            <a href="{% url 'company_dashboard' %}" class="w-full sm:w-auto px-6 py-3 bg-transparent border border-light-border dark:border-brand-border text-light-text dark:text-white rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-[#1e2b41] hover:border-gray-300 dark:hover:border-[#334155] transition text-center">
+            <a href="{% url 'company_dashboard' %}" class="w-full sm:w-auto px-6 py-3 bg-gray-100 dark:bg-[#1e293b] text-light-text dark:text-white rounded-xl font-bold hover:bg-gray-200 dark:hover:bg-[#334155] transition text-center border border-gray-200 dark:border-gray-700">
                 Dashboard
             </a>
-            <a href="{% url 'company_profile' %}" class="w-full sm:w-auto px-8 py-3 bg-amber-600 dark:bg-brand-gold text-white dark:text-brand-bg rounded-lg font-semibold hover:bg-amber-700 dark:hover:bg-brand-goldHover shadow-lg shadow-amber-600/20 dark:shadow-brand-gold/20 transition transform hover:-translate-y-0.5 text-center">
-                Edit Profile
+            <a href="{% url 'company_profile' %}" class="w-full sm:w-auto px-8 py-3 bg-brand-accent text-white rounded-xl font-bold hover:bg-brand-accentHover shadow-lg shadow-brand-accent/20 transition transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2">
+                <i class="fa-solid fa-pen-to-square text-sm"></i> Edit Profile
             </a>
         </div>
     </div>

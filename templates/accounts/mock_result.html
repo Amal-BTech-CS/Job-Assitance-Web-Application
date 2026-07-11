@@ -1,0 +1,60 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Interview Result{% endblock %}
+
+{% block content %}
+
+<div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-10">
+
+    <div class="text-center mb-10">
+
+        <div class="text-6xl mb-5">
+
+            🎉
+
+        </div>
+
+        <h1 class="text-4xl font-serif font-semibold text-light-text dark:text-white">
+
+            Interview Completed
+
+        </h1>
+
+        <p class="text-light-muted dark:text-brand-textMuted mt-3">
+
+            Review your AI feedback below.
+
+        </p>
+
+    </div>
+
+    {% for item in feedbacks %}
+
+    <div class="mb-8 rounded-xl border border-light-border dark:border-brand-border p-6">
+
+        <h3 class="text-lg font-semibold text-brand-accent mb-3">
+            Q{{ forloop.counter }}: {{ item.question }}
+        </h3>
+
+        <pre class="whitespace-pre-wrap font-sans text-light-text dark:text-white">{{ item.feedback }}</pre>
+
+    </div>
+
+    {% endfor %}
+
+    <div class="flex justify-center gap-4 mt-10">
+
+        <a href="{% url 'mock_interview' %}" class="px-6 py-3 rounded-lg bg-brand-accent text-white hover:opacity-90 transition">
+            Take Another Interview
+        </a>
+
+        <a href="{% url 'jobseeker_dashboard' %}" class="px-6 py-3 rounded-lg border border-light-border dark:border-brand-border text-light-text dark:text-white hover:bg-gray-100 dark:hover:bg-brand-bg transition">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

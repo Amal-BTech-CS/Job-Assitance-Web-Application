@@ -26,8 +26,5 @@ embeddings = get_embeddings()
 # Job Retriever
 # ==================================
 
-job_retriever = load_retriever(
-    JOB_INDEX_PATH,
-    embeddings,
-    TOP_K,
-)
+from accounts.ai.chatbot.rag.qdrant_job_retriever import QdrantJobRetriever
+job_retriever = QdrantJobRetriever(k=TOP_K)

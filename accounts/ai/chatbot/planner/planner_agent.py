@@ -1,16 +1,28 @@
 import json
-import re
 
 from accounts.ai.chatbot.core.resources import llm
+from accounts.ai.chatbot.utils.patterns import SMALL_TALK_PATTERNS, ACKNOWLEDGEMENT_PATTERNS
 
-
-# Greetings and small talk — handle directly, no agent needed
-SMALL_TALK_PATTERNS = re.compile(
-    r"^\s*(hi+|hello+|hey+|howdy|good\s*(morning|afternoon|evening|night)|"
-    r"what'?s up|sup|greetings|hiya|yo|namaste|how are you|how r u|"
-    r"thank(s| you)|bye|goodbye|ok|okay|cool|great|nice|got it|sure)\s*[!?.]*\s*$",
-    re.IGNORECASE
+# Safety net for planner misclassification: if the LLM returns "smalltalk"
+# but the message clearly contains career/resume/job content, override it
+# rather than silently swallowing a real question with a canned reply.
+# Excludes pure courtesy phrasing so "thanks for the career advice!"
+# doesn't get needlessly promoted back into a full agent run.
+CONTENT_SIGNAL_WORDS = (
+    "resume", "cv", "ats", "score", "job", "role", "salary",
+    "interview", "certification", "roadmap", "skill", "project",
+    "match", "apply", "application", "upskill", "career path",
 )
+
+COURTESY_WORDS = ("thank", "thanks", "bye", "goodbye")
+
+
+def _looks_career_related(question):
+    q = question.lower()
+    if any(w in q for w in COURTESY_WORDS):
+        return False
+    return any(w in q for w in CONTENT_SIGNAL_WORDS)
+
 
 SYSTEM_PROMPT = """
 You are the Planner Agent of an AI Career Assistant.
@@ -74,24 +86,49 @@ Rules
 5. Preserve order of importance.
 6. If the message is a greeting, small talk, or not career-related,
    return {"agents": [], "type": "smalltalk"}
+7. If the message asks to reformat, shorten, expand, re-list, or otherwise
+   change the PRESENTATION of the assistant's PREVIOUS answer (e.g. "just
+   give me 5 points", "make it shorter", "put that in a table") and is NOT
+   asking for new information, return {"agents": [], "type": "followup"}.
+   Only use this when conversation history is provided below AND the
+   request is clearly about the previous answer's format, not new content.
+8. Otherwise, return {"agents": [...], "type": "agents"}
 
 Example:
 
 {
     "agents":["ATS","RESUME"],
+    "type": "agents",
     "reason":"The question requires resume analysis and ATS comparison."
 }
 """
 
 
-def create_plan(question):
+def create_plan(question, history=None):
 
-    # Fast-path: detect small talk locally without calling the LLM
-    if SMALL_TALK_PATTERNS.match(question.strip()):
+    stripped = question.strip()
+
+    # Unambiguous small talk — always safe to skip the LLM call.
+    if SMALL_TALK_PATTERNS.match(stripped):
         return {"agents": [], "type": "smalltalk"}
+
+    # Bare "ok"/"sure"/etc — only treat as small talk when there's no
+    # history for it to be a follow-up to. With history, let the planner
+    # LLM decide (it might be a truncated followup instruction).
+    if not history and ACKNOWLEDGEMENT_PATTERNS.match(stripped):
+        return {"agents": [], "type": "smalltalk"}
+
+    history_block = ""
+    if history:
+        recent = history[-4:]
+        history_block = "Recent conversation:\n" + "\n".join(
+            f"{h['role']}: {h['content'][:300]}" for h in recent
+        )
 
     prompt = f"""
 {SYSTEM_PROMPT}
+
+{history_block}
 
 User Question:
 {question}
@@ -99,15 +136,29 @@ User Question:
 
     response = llm.invoke(prompt)
 
-    print("========== Planner Raw Response ==========")
-    print(response.content)
-    print("==========================================")
+    raw = response.content.strip()
+
+    if raw.startswith("```"):
+        raw = raw.strip("`")
+        if raw.lower().startswith("json"):
+            raw = raw[4:]
+        raw = raw.strip()
 
     try:
-        plan = json.loads(response.content)
+        plan = json.loads(raw)
 
         if "agents" not in plan:
             raise ValueError()
+
+        plan.setdefault("type", "agents")
+
+        if plan["type"] == "smalltalk" and _looks_career_related(question):
+            plan = {
+                "agents": ["CAREER"],
+                "type": "agents",
+                "reason": "Safety net: message contains career-related "
+                          "keywords, overriding smalltalk misclassification.",
+            }
 
         return plan
 
@@ -115,5 +166,6 @@ User Question:
 
         return {
             "agents": ["CAREER"],
+            "type": "agents",
             "reason": "Planner fallback."
         }

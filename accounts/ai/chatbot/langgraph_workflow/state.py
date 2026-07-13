@@ -9,8 +9,16 @@ class GraphState(TypedDict):
     # Logged-in Django user
     user: Any
 
-    # User's current question
+    # User's current question, exactly as typed
     question: str
+
+    # Recent turns: [{"role": "user"|"assistant", "content": str}, ...]
+    history: list
+
+    # `question` rewritten to resolve references to prior turns
+    # (e.g. "what about the second one?" -> "Tell me more about the
+    # Backend Developer role at Acme Corp"). Used for planning + retrieval.
+    standalone_question: str
 
     # Planner output
     plan: dict

@@ -33,8 +33,6 @@ def extract_pdf_text(pdf_file):
     """
 
     text = []
-
-    # Always rewind first, in case something upstream already read from it.
     pdf_file.seek(0)
 
     with pdfplumber.open(pdf_file) as pdf:
@@ -70,15 +68,11 @@ def extract_pdf_text(pdf_file):
 
                 text.append(page_text)
 
-    # Rewind again so the file can still be reused after this call.
     pdf_file.seek(0)
 
     return "\n".join(text)
 
 
-# ==========================================
-# CLEAN TEXT
-# ==========================================
 
 def preprocess(text):
 
@@ -119,9 +113,6 @@ def preprocess(text):
     return text.strip()
 
 
-# ==========================================
-# IMPORTANT RESUME SECTIONS
-# ==========================================
 
 def extract_relevant_sections(text):
 

@@ -25,7 +25,8 @@ def apply_job(request, job_id):
     profile = get_object_or_404(Profile, user=request.user)
     job = get_object_or_404(Job, id=job_id)
 
-    # Prevent duplicate applications
+
+
     if Application.objects.filter(applicant=profile, job=job).exists():
         messages.warning(request, "You have already applied for this job.")
         return redirect("jobseeker_dashboard")
@@ -41,10 +42,6 @@ def apply_job(request, job_id):
             new_resume = form.cleaned_data.get("new_resume")
 
             resume_file = None
-
-            # ====================================
-            # USE PROFILE RESUME
-            # ====================================
             if resume_option == "profile":
 
                 latest_resume = Resume.objects.filter(
@@ -58,8 +55,6 @@ def apply_job(request, job_id):
                     )
 
                     return redirect("jobseeker_profile")
-
-                # Read profile resume
                 latest_resume.resume_file.open("rb")
                 resume_content = latest_resume.resume_file.read()
                 latest_resume.resume_file.close()
@@ -80,9 +75,6 @@ def apply_job(request, job_id):
 
                 resume_file = saved_path
 
-            # ====================================
-            # USE NEWLY UPLOADED RESUME
-            # ====================================
             elif resume_option == "new":
 
                 extension = os.path.splitext(
@@ -117,10 +109,6 @@ def apply_job(request, job_id):
                     }
                 )
 
-            # ====================================
-            # CREATE APPLICATION
-            # ====================================
-
             Application.objects.create(
                 applicant=profile,
                 job=job,
@@ -135,9 +123,6 @@ def apply_job(request, job_id):
             )
 
             return redirect("my_applications")
-
-        # Form validation failed
-        print(form.errors)
 
     else:
 

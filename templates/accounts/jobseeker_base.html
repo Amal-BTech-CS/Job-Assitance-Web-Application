@@ -176,13 +176,15 @@
 
                 <!-- User Profile Snippet -->
                 <div class="flex items-center gap-4 mb-8 pb-8 border-b border-light-border dark:border-brand-border">
+                    {% with display_name=request.user.profile.full_name|default:request.user.username|title %}
                     <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-brand-accent to-blue-400 flex items-center justify-center text-white shadow-md shadow-brand-accent/30 flex-shrink-0 text-lg font-bold">
-                        {{ request.user.username|make_list|first|upper|default:"U" }}
+                        {{ display_name|first|upper }}
                     </div>
                     <div class="overflow-hidden">
-                        <h2 class="text-base font-bold text-light-text dark:text-white truncate">{{ request.user.username|title|default:"User" }}</h2>
+                        <h2 class="text-base font-bold text-light-text dark:text-white truncate">{{ display_name }}</h2>
                         <p class="text-xs font-medium text-brand-accent capitalize">{{ user.user_type }}</p>
                     </div>
+                    {% endwith %}
                 </div>
 
                 <!-- NAVIGATION LOGIC -->
@@ -201,6 +203,18 @@
                         <button onclick="toggleChat()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white transition-all">
                             <i class="fa-solid fa-robot w-5"></i> CareerPilot AI
                         </button>
+
+                        <!-- CAREER TOOLS -->
+                        <p class="px-4 pt-5 pb-1 text-[10px] font-black uppercase tracking-widest text-light-muted dark:text-brand-textMuted opacity-70">Career Tools</p>
+                        <a href="{% url 'ats_calculator' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'ats_calculator' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-solid fa-gauge-high w-5"></i> ATS Calculator
+                        </a>
+                        <a href="{% url 'mock_interview' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'mock_interview' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-solid fa-video w-5"></i> Mock Interview
+                        </a>
+                        <a href="{% url 'quiz_home' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'quiz_home' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-solid fa-brain w-5"></i> Quiz
+                        </a>
 
                     {% elif user.user_type == "company" %}
                         <!-- COMPANY LINKS -->

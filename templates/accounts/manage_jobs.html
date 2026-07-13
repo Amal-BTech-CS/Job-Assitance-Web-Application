@@ -1,14 +1,14 @@
 {% extends 'accounts/jobseeker_base.html' %}
 {% load static %}
 
-{% block title %}Manage Jobs{% endblock %}
+{% block title %}My Jobs{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-6 lg:px-12 pt-10 pb-20 w-full transition-colors duration-300">
     
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
         <div>
-            <h1 class="text-4xl font-serif font-semibold text-light-text dark:text-white mb-2 transition-colors">Manage Jobs</h1>
+            <h1 class="text-4xl font-serif font-semibold text-light-text dark:text-white mb-2 transition-colors">My Jobs</h1>
             <p class="text-light-muted dark:text-brand-textMuted transition-colors">View, edit, and manage all your published job postings.</p>
         </div>
         <a href="{% url 'create_job' %}" class="px-6 py-3 bg-amber-600 dark:bg-brand-gold text-white dark:text-brand-bg rounded-lg font-semibold hover:bg-amber-700 dark:hover:bg-brand-goldHover transition shadow-lg shadow-amber-600/20 dark:shadow-brand-gold/20 flex items-center justify-center gap-2">
@@ -26,34 +26,96 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for job in jobs %}
         <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-6 hover:border-amber-600 dark:hover:border-brand-gold/50 transition group flex flex-col duration-300">
+
+            <!-- TITLE + APPLICANTS -->
             <div class="flex justify-between items-start mb-4">
-                <h2 class="text-xl font-medium text-light-text dark:text-white group-hover:text-amber-700 dark:group-hover:text-brand-gold transition-colors">{{ job.title }}</h2>
-                <span class="px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] uppercase font-bold tracking-wider rounded">Active</span>
-            </div>
-            
-            <div class="text-light-muted dark:text-brand-textMuted text-sm space-y-3 mb-6 flex-grow transition-colors">
-                <p><i class="fa-solid fa-location-dot mr-2 w-4 text-amber-600 dark:text-brand-gold"></i> {{ job.location }}</p>
-                <p><i class="fa-solid fa-wallet mr-2 w-4 text-amber-600 dark:text-brand-gold"></i> {{ job.salary }}</p>
-                <p><i class="fa-solid fa-briefcase mr-2 w-4 text-amber-600 dark:text-brand-gold"></i> {{ job.experience }}</p>
+
+                <div>
+                    <h2 class="text-xl font-medium text-light-text dark:text-white group-hover:text-amber-700 dark:group-hover:text-brand-gold transition-colors">
+                        {{ job.title }}
+                    </h2>
+
+                    <!-- APPLICATION COUNT -->
+                    <p class="text-xs text-light-muted dark:text-brand-textMuted mt-1">
+                        No of Applicants:{{ job.applicant_count|default:0 }}
+                    </p>
+                </div>
+
+                {% if job.status == "Open" %}
+                <span class="px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] uppercase font-bold tracking-wider rounded">
+                    Open
+                </span>
+                {% else %}
+                <span class="px-2 py-1 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 text-[10px] uppercase font-bold tracking-wider rounded">
+                    Closed
+                </span>
+                {% endif %}
+
             </div>
 
-            <button type="button" 
-                    onclick="viewJob('{{ job.title }}', '{{ job.location }}', '{{ job.salary }}', '{{ job.experience }}', '{{ job.description|escapejs }}')"
-                    class="w-full py-2 mb-4 bg-gray-100 dark:bg-brand-bg text-light-text dark:text-white rounded-lg text-xs font-semibold hover:bg-gray-200 dark:hover:bg-[#1e2b41] transition-colors">
+            <!-- JOB DETAILS -->
+            <div class="text-light-muted dark:text-brand-textMuted text-sm space-y-3 mb-6 flex-grow transition-colors">
+
+                <p>
+                    <i class="fa-solid fa-location-dot mr-2 w-4 text-amber-600 dark:text-brand-gold"></i>
+                    {{ job.location }}
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-wallet mr-2 w-4 text-amber-600 dark:text-brand-gold"></i>
+                    {{ job.salary }}
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-briefcase mr-2 w-4 text-amber-600 dark:text-brand-gold"></i>
+                    {{ job.experience }}
+                </p>
+
+            </div>
+
+            <!-- VIEW BUTTON -->
+            <button type="button"
+                onclick="viewJob(
+                    '{{ job.title|escapejs }}',
+                    '{{ job.location|escapejs }}',
+                    '{{ job.salary|escapejs }}',
+                    '{{ job.experience|escapejs }}',
+                    '{{ job.description|escapejs }}'
+                )"
+                class="w-full py-2 mb-4 bg-gray-100 dark:bg-brand-bg text-light-text dark:text-white rounded-lg text-xs font-semibold hover:bg-gray-200 dark:hover:bg-[#1e2b41] transition-colors">
+
                 View Full Details
             </button>
+            <a href="{% url 'job_applicants' job.id %}"
+                class="w-full mt-2 py-2 text-center bg-amber-600 text-white rounded-lg text-xs font-semibold">
 
+                View Applicants ({{ job.applicant_count|default:0 }})
+
+            </a>
+            <!-- ACTIONS -->
             <div class="pt-4 border-t border-light-border dark:border-brand-border mt-auto flex items-center justify-between transition-colors">
-                <small class="text-light-muted dark:text-brand-textMuted text-[10px] uppercase tracking-widest">Manage Posting</small>
+
+                <small class="text-light-muted dark:text-brand-textMuted text-[10px] uppercase tracking-widest">
+                    Manage Posting
+                </small>
+
                 <div class="flex gap-4">
-                    <a href="{% url 'edit_job' job.id %}" class="text-light-muted dark:text-brand-textMuted hover:text-light-text dark:hover:text-white transition-colors" title="Edit Job">
+                    <a href="{% url 'edit_job' job.id %}"
+                    class="text-light-muted dark:text-brand-textMuted hover:text-light-text dark:hover:text-white transition-colors"
+                    title="Edit Job">
                         <i class="fa-solid fa-pencil"></i>
                     </a>
-                    <a href="{% url 'delete_job' job.id %}" onclick="return confirm('Are you sure?');" class="text-light-muted dark:text-brand-textMuted hover:text-red-500 transition-colors" title="Delete Job">
+
+                    <a href="{% url 'delete_job' job.id %}"
+                    onclick="return confirm('Are you sure?');"
+                    class="text-light-muted dark:text-brand-textMuted hover:text-red-500 transition-colors"
+                    title="Delete Job">
                         <i class="fa-solid fa-trash"></i>
                     </a>
                 </div>
+
             </div>
+
         </div>
         {% endfor %}
     </div>

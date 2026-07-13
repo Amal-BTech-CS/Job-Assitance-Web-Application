@@ -1,0 +1,88 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Applicants - {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 lg:px-12 pt-10 pb-20">
+
+    <!-- HEADER -->
+    <div class="mb-10">
+        <h1 class="text-3xl md:text-4xl font-serif font-semibold text-light-text dark:text-white">
+            {{ job.title }}
+        </h1>
+        <p class="text-light-muted dark:text-brand-textMuted text-sm mt-2">
+            Applicants Overview
+        </p>
+    </div>
+
+    <!-- APPLICANTS GRID -->
+   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    {% for app in applications %}
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-6 flex flex-col hover:border-amber-600 dark:hover:border-brand-gold transition">
+
+        <!-- NAME -->
+        <h2 class="text-lg font-semibold text-light-text dark:text-white">
+            {{ app.applicant.full_name|default:app.applicant.user.username }}
+        </h2>
+
+        <!-- EMAIL -->
+        <p class="text-sm text-light-muted dark:text-brand-textMuted mb-3">
+            {{ app.applicant.user.email }}
+        </p>
+
+        <!-- STATUS -->
+        <div class="mb-4">
+            <span class="px-3 py-1 text-xs rounded-full font-semibold
+                {% if app.status == 'applied' %}bg-gray-200 text-gray-700
+                {% elif app.status == 'under_review' %}bg-yellow-100 text-yellow-700
+                {% elif app.status == 'shortlisted' %}bg-blue-100 text-blue-700
+                {% elif app.status == 'interview' %}bg-purple-100 text-purple-700
+                {% elif app.status == 'hired' %}bg-green-100 text-green-700
+                {% elif app.status == 'rejected' %}bg-red-100 text-red-700
+                {% endif %}">
+                {{ app.get_status_display }}
+            </span>
+        </div>
+
+        <!-- COVER LETTER -->
+        {% if app.cover_letter %}
+        <p class="text-sm text-light-muted dark:text-brand-textMuted mb-4 line-clamp-4">
+            {{ app.cover_letter }}
+        </p>
+        {% endif %}
+
+        <!-- ACTION BUTTONS -->
+        <div class="mt-auto flex flex-col gap-2">
+
+            {% if app.resume_file %}
+            <a href="{{ app.resume_file.url }}" target="_blank"
+               class="w-full text-center py-2 bg-amber-600 text-white rounded-lg text-xs font-semibold hover:bg-amber-700 transition">
+                View Resume
+            </a>
+            {% else %}
+            <button disabled
+                class="w-full py-2 bg-gray-300 text-gray-600 rounded-lg text-xs font-semibold cursor-not-allowed">
+                No Resume Uploaded
+            </button>
+            {% endif %}
+
+            <a href="{% url 'applicant_detail' app.id %}"
+               class="w-full text-center py-2 bg-gray-100 dark:bg-brand-bg text-light-text dark:text-white rounded-lg text-xs font-semibold hover:bg-gray-200 dark:hover:bg-[#1e2b41] transition">
+                View Full Profile
+            </a>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+    <div class="col-span-full text-center text-light-muted dark:text-brand-textMuted">
+        No applications yet for this job.
+    </div>
+    {% endfor %}
+
+</div>
+</div>
+{% endblock %}

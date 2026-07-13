@@ -1,0 +1,70 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Quiz Result{% endblock %}
+
+{% block content %}
+
+<div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-10 text-center">
+
+    <div class="text-6xl mb-5">
+        🎉
+    </div>
+
+    <h1 class="text-4xl font-bold text-light-text dark:text-white mb-3">
+        Quiz Completed
+    </h1>
+
+    <p class="text-light-muted dark:text-brand-textMuted mb-8">
+        Your Final Score
+    </p>
+
+    <div class="text-6xl font-bold text-brand-accent mb-8">
+
+        {{ score }} / {{ total }}
+
+    </div>
+
+    {% if score == total %}
+
+        <p class="text-green-600 text-xl font-semibold mb-8">
+            🌟 Excellent! Perfect Score.
+        </p>
+
+    {% elif score >= total|add:"-2" %}
+
+        <p class="text-yellow-500 text-xl font-semibold mb-8">
+            👍 Great Job! Keep it up.
+        </p>
+
+    {% else %}
+
+        <p class="text-red-500 text-xl font-semibold mb-8">
+            📚 Keep Practicing.
+        </p>
+
+    {% endif %}
+
+    <div class="flex justify-center gap-4">
+
+        <a
+            href="{% url 'quiz_home' %}"
+            class="px-6 py-3 rounded-lg bg-brand-accent text-white hover:opacity-90">
+
+            Take Another Quiz
+
+        </a>
+
+        <a
+            href="{% url 'jobseeker_dashboard' %}"
+            class="px-6 py-3 rounded-lg border border-light-border dark:border-brand-border">
+
+            Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

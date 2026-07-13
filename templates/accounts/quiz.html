@@ -1,0 +1,80 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}AI Quiz - CareerPilot{% endblock %}
+
+{% block content %}
+
+<div class="mb-10">
+    <h1 class="text-4xl font-serif font-semibold text-light-text dark:text-white mb-3">
+        🧠 AI Quiz Generator
+    </h1>
+
+    <p class="text-light-muted dark:text-brand-textMuted">
+        Generate AI-powered MCQ quizzes on any topic and test your knowledge.
+    </p>
+</div>
+
+<div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 mb-10">
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-5">
+            <label class="block text-sm font-medium mb-2 text-light-text dark:text-white">
+                Topic
+            </label>
+
+            <input
+                type="text"
+                name="topic"
+                required
+                placeholder="Python, SQL, Machine Learning..."
+                class="w-full px-4 py-3 rounded-lg bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border text-light-text dark:text-white focus:outline-none focus:border-brand-accent"
+            >
+        </div>
+
+        <div class="mb-5">
+            <label class="block text-sm font-medium mb-2 text-light-text dark:text-white">
+                Difficulty
+            </label>
+
+            <select
+                name="difficulty"
+                class="w-full px-4 py-3 rounded-lg bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+
+                <option>Easy</option>
+                <option>Medium</option>
+                <option>Hard</option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-8">
+            <label class="block text-sm font-medium mb-2 text-light-text dark:text-white">
+                Number of Questions
+            </label>
+
+            <input
+                type="number"
+                name="count"
+                min="1"
+                max="20"
+                value="5"
+                class="w-full px-4 py-3 rounded-lg bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+
+        </div>
+
+        <button
+            class="w-full py-3 rounded-lg bg-brand-accent text-white hover:opacity-90 transition">
+
+            🚀 Generate Quiz
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

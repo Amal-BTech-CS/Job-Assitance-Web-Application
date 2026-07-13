@@ -1,0 +1,85 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Browse Jobs | CareerPilot AI{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<header class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-black mb-3 text-light-text dark:text-white tracking-tight">
+        Browse Jobs
+    </h1>
+    <p class="text-light-muted dark:text-brand-textMuted text-base font-medium">
+        Find your next career opportunity from our curated list.
+    </p>
+</header>
+
+<!-- SEARCH BAR -->
+<form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10 bg-light-card dark:bg-brand-card p-4 rounded-2xl border border-light-border dark:border-brand-border shadow-sm">
+
+    <input type="text" name="q" value="{{ query }}" placeholder="Job title or keywords..." 
+           class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-xl px-4 py-3 text-sm font-semibold text-light-text dark:text-white focus:outline-none focus:ring-1 focus:ring-brand-accent focus:border-brand-accent transition-all">
+
+    <input type="text" name="location" value="{{ location }}" placeholder="Location" 
+           class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-xl px-4 py-3 text-sm font-semibold text-light-text dark:text-white focus:outline-none focus:ring-1 focus:ring-brand-accent focus:border-brand-accent transition-all">
+
+    <select name="type" class="w-full bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-xl px-4 py-3 text-sm font-semibold text-light-text dark:text-white focus:outline-none focus:ring-1 focus:ring-brand-accent focus:border-brand-accent transition-all cursor-pointer">
+        <option value="">All Types</option>
+        <option value="Full Time">Full Time</option>
+        <option value="Part Time">Part Time</option>
+        <option value="Internship">Internship</option>
+    </select>
+
+    <button class="w-full bg-brand-accent text-white rounded-xl px-4 py-3 font-bold text-sm hover:bg-brand-accentHover transition-all shadow-md shadow-brand-accent/20">
+        Search Jobs
+    </button>
+</form>
+
+<!-- JOB LIST -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+
+    {% for job in jobs %}
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-5 flex flex-col hover:border-brand-accent transition-all duration-300 group shadow-sm">
+        
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-light-bg dark:bg-brand-bg flex items-center justify-center text-brand-accent border border-light-border dark:border-brand-border flex-shrink-0 shadow-sm">
+                <i class="fa-solid fa-briefcase text-sm"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-base line-clamp-1 text-light-text dark:text-white group-hover:text-brand-accent transition-colors leading-tight mb-1">{{ job.title }}</h3>
+                <p class="text-xs text-brand-accent font-semibold">{{ job.company.company_name }}</p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 mt-4 mb-5 text-[11px] font-semibold text-light-muted dark:text-brand-textMuted">
+            <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+                <i class="fa-solid fa-location-dot text-brand-accent"></i> {{ job.location }}
+            </span>
+            <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+                <i class="fa-solid fa-wallet text-brand-accent"></i> {{ job.salary }}
+            </span>
+            <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+                <i class="fa-solid fa-clock text-brand-accent"></i> {{ job.employment_type }}
+            </span>
+        </div>
+
+        <div class="border-t border-light-border dark:border-brand-border pt-4 mt-auto">
+            <a href="{% url 'apply_job' job.id %}" class="block w-full text-center py-2.5 bg-brand-accent text-white rounded-xl text-xs font-bold hover:bg-brand-accentHover transition-colors shadow-sm shadow-brand-accent/20">
+                View Details
+            </a>
+        </div>
+    </div>
+    {% empty %}
+        <div class="col-span-full py-16 flex flex-col items-center justify-center bg-light-card dark:bg-brand-card rounded-2xl border border-dashed border-light-border dark:border-brand-border">
+            <div class="w-12 h-12 bg-light-bg dark:bg-brand-bg rounded-full flex items-center justify-center text-brand-accent mb-3">
+                <i class="fa-solid fa-search text-lg"></i>
+            </div>
+            <h3 class="text-base font-bold text-light-text dark:text-white mb-1">No jobs found</h3>
+            <p class="text-light-muted dark:text-brand-textMuted font-medium text-xs">Try adjusting your search criteria.</p>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

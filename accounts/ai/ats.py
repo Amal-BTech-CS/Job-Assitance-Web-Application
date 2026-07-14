@@ -22,11 +22,20 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 # EXTRACT PDF TEXT
 # ==========================================
 
-def extract_pdf_text(path):
+def extract_pdf_text(pdf_file):
+    """
+    pdf_file must be a file-like object - e.g. a Django FieldFile
+    (resume.resume_file, backed by the DB + S3), or an UploadedFile.
+
+    NOT a local path anymore. The resume now lives in the database/S3,
+    so the caller is responsible for passing the FieldFile itself
+    (opened with .open("rb") beforehand), not a filesystem path.
+    """
 
     text = []
+    pdf_file.seek(0)
 
-    with pdfplumber.open(path) as pdf:
+    with pdfplumber.open(pdf_file) as pdf:
 
         for page in pdf.pages:
 
@@ -59,12 +68,11 @@ def extract_pdf_text(path):
 
                 text.append(page_text)
 
+    pdf_file.seek(0)
+
     return "\n".join(text)
 
 
-# ==========================================
-# CLEAN TEXT
-# ==========================================
 
 def preprocess(text):
 
@@ -105,9 +113,6 @@ def preprocess(text):
     return text.strip()
 
 
-# ==========================================
-# IMPORTANT RESUME SECTIONS
-# ==========================================
 
 def extract_relevant_sections(text):
 

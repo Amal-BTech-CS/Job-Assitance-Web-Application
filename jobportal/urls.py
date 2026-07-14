@@ -24,8 +24,11 @@ urlpatterns = [
         admin.site.urls
     ),
 
-    path(
-        '',
-        include('accounts.urls')
-    ),
+    path('', include('accounts.urls')),
+    path('', include('dashboards.urls')),
+    path('', include('profiles.urls')),
+    path('', include('jobs.urls')),
+    path('', include('applications.urls')),
+    path('', include('chatbot.urls')),
+    path('', include('resume_builder.urls')),
 ]

@@ -1,0 +1,77 @@
+{% extends 'accounts/jobseeker_base.html' %}
+{% load static %}
+
+{% block title %}Mock Interview{% endblock %}
+
+{% block content %}
+
+<div class="flex justify-between items-center mb-3">
+
+    <h1 class="text-2xl font-bold text-light-text dark:text-white">
+        Question {{ current }} of {{ total }}
+    </h1>
+
+    <span class="text-brand-accent font-semibold">
+        {{ current }}/{{ total }}
+    </span>
+
+</div>
+
+<div class="w-full bg-gray-200 dark:bg-brand-bg rounded-full h-2 mb-8">
+    <div class="bg-brand-accent h-2 rounded-full" style="width: {{ progress }}%;"></div>
+</div>
+
+<div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8">
+
+    <h2 class="text-2xl font-semibold text-light-text dark:text-white mb-6">
+        {{ question }}
+    </h2>
+
+    {% if not answered %}
+
+        <!-- STATE 1: Question not answered yet - show the answer form -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <textarea
+                name="answer"
+                rows="8"
+                required
+                placeholder="Type your answer here..."
+                class="w-full rounded-lg border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg p-4 text-light-text dark:text-white focus:outline-none focus:border-brand-accent"></textarea>
+
+            <div class="text-center mt-8">
+                <button type="submit"
+                    class="px-8 py-3 rounded-lg bg-brand-accent text-white hover:opacity-90 transition">
+                    Submit Answer
+                </button>
+            </div>
+
+        </form>
+
+    {% else %}
+
+        <!-- STATE 2: Answer submitted - show feedback, then a Next button -->
+        <div class="bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border rounded-lg p-5 mb-6 whitespace-pre-line text-sm text-light-text dark:text-white leading-relaxed">
+            {{ feedback }}
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="text-center">
+                <button type="submit" name="next" value="1"
+                    class="px-8 py-3 rounded-lg bg-brand-accent text-white hover:opacity-90 transition">
+                    {% if is_last %}
+                        Finish Interview 🎉
+                    {% else %}
+                        Next Question →
+                    {% endif %}
+                </button>
+            </div>
+        </form>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends 'accounts/jobseeker_base.html' %}{% load static %}
+
+{% block title %}Applicants - {{ job.title }}{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+    <div>
+        <h1 class="text-3xl md:text-4xl font-serif font-semibold text-light-text dark:text-white">
+            {{ job.title }}
+        </h1>
+        <p class="text-light-muted dark:text-brand-textMuted text-sm mt-2">
+            Applicants Overview
+        </p>
+    </div>
+
+    <!-- SCREENING TOGGLE -->
+    <div class="flex gap-2">
+        <a href="{% url 'job_applicants' job.id %}"
+           class="px-4 py-2 rounded-lg text-xs font-semibold transition
+                  {% if not show_qualified_only %}bg-blue-600 text-white{% else %}bg-gray-100 dark:bg-brand-bg text-light-text dark:text-white hover:bg-gray-200 dark:hover:bg-[#1e2b41]{% endif %}">
+            All Applicants
+        </a>
+        <a href="{% url 'job_applicants' job.id %}?filter=qualified"
+           class="px-4 py-2 rounded-lg text-xs font-semibold transition
+                  {% if show_qualified_only %}bg-blue-600 text-white{% else %}bg-gray-100 dark:bg-brand-bg text-light-text dark:text-white hover:bg-gray-200 dark:hover:bg-[#1e2b41]{% endif %}">
+            High ATS Match (60+) · {{ qualified_count }}
+        </a>
+    </div>
+</div>
+
+<!-- TOTAL APPLICANTS PILL -->
+<div class="mb-6">
+    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600/10 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-wide border border-blue-600/20">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        Total Applicants: {{ applications|length }}
+    </span>
+</div>
+
+<!-- APPLICANTS TABLE -->
+<div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-light-border dark:border-brand-border">
+                    <th class="text-left px-6 py-4 text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted">Candidate</th>
+                    <th class="text-left px-6 py-4 text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted">Status</th>
+                    <th class="text-left px-6 py-4 text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted">ATS Score</th>
+                    <th class="text-left px-6 py-4 text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted">Applied</th>
+                    <th class="text-right px-6 py-4 text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr class="border-b border-light-border dark:border-brand-border last:border-0 hover:bg-gray-50 dark:hover:bg-[#1e2b41]/40 transition">
+
+                    <!-- CANDIDATE -->
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="h-10 w-10 shrink-0 rounded-full bg-blue-600/20 flex items-center justify-center text-sm font-bold text-blue-700 dark:text-blue-400">
+                                {{ app.applicant.full_name|default:app.applicant.user.username|first|upper }}
+                            </div>
+                            <div>
+                                <p class="font-semibold text-light-text dark:text-white">
+                                    {{ app.applicant.full_name|default:app.applicant.user.username }}
+                                </p>
+                                <p class="text-xs text-light-muted dark:text-brand-textMuted">
+                                    {{ app.applicant.user.email }}
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- STATUS -->
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 text-xs rounded-full font-semibold whitespace-nowrap
+                            {% if app.status == 'applied' %}bg-gray-200 text-gray-700
+                            {% elif app.status == 'under_review' %}bg-blue-100 text-blue-700
+                            {% elif app.status == 'shortlisted' %}bg-indigo-100 text-indigo-700
+                            {% elif app.status == 'interview' %}bg-purple-100 text-purple-700
+                            {% elif app.status == 'hired' %}bg-green-100 text-green-700
+                            {% elif app.status == 'rejected' %}bg-red-100 text-red-700
+                            {% endif %}">
+                            {{ app.get_status_display }}
+                        </span>
+                    </td>
+
+                    <!-- ATS SCORE -->
+                    <td class="px-6 py-4">
+                        {% if app.ats_score is not None %}
+                        <span class="px-3 py-1 text-xs rounded-full font-semibold whitespace-nowrap
+                            {% if app.ats_score >= 60 %}bg-green-100 text-green-700{% else %}bg-gray-200 text-gray-600{% endif %}">
+                            ATS {{ app.ats_score|floatformat:0 }}%
+                        </span>
+                        {% else %}
+                        <span class="text-xs text-light-muted dark:text-brand-textMuted">—</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- APPLIED DATE -->
+                    <td class="px-6 py-4 whitespace-nowrap text-light-text dark:text-white">
+                        {{ app.applied_at|date:"M d, Y" }}
+                    </td>
+
+                    <!-- ACTIONS -->
+                    <td class="px-6 py-4">
+                        <div class="flex items-center justify-end gap-2 flex-wrap">
+
+                            <a href="{% url 'applicant_detail' app.id %}"
+                               class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition whitespace-nowrap">
+                                Review
+                            </a>
+
+                            {% if app.resume_file %}
+                            <a href="{{ app.resume_file.url }}" target="_blank"
+                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-100 dark:bg-brand-bg text-light-text dark:text-white rounded-lg text-xs font-semibold hover:bg-gray-200 dark:hover:bg-[#1e2b41] transition whitespace-nowrap">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                Resume
+                            </a>
+                            {% else %}
+                            <button disabled
+                                class="px-4 py-2 bg-gray-100 dark:bg-brand-bg text-gray-400 dark:text-brand-textMuted/50 rounded-lg text-xs font-semibold cursor-not-allowed whitespace-nowrap">
+                                No Resume
+                            </button>
+                            {% endif %}
+
+                        </div>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-10 text-light-muted dark:text-brand-textMuted">
+                        No applications yet for this job.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

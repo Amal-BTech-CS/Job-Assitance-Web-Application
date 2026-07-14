@@ -1,391 +1,186 @@
 import pdfplumber
 from groq import Groq
-import json,os
 from dotenv import load_dotenv
+import json
+import os
+
+
+# ============================================
+# Extract Resume Text
+# ============================================
+
 def extract_resume_text(file_path):
 
     text = ""
 
     with pdfplumber.open(file_path) as pdf:
-
         for page in pdf.pages:
-
             text += page.extract_text() or ""
 
     return text
 
 
-
+# ============================================
+# Load Groq
+# ============================================
 
 load_dotenv()
 
 client = Groq(
     api_key=os.getenv("GROQ_API_KEY")
 )
-import pdfplumber
-from groq import Groq
-import json
-import os
-
-from dotenv import load_dotenv
 
 
-
-# ==========================
-# Extract Resume Text
-# ==========================
-
-
-def extract_resume_text(file_path):
-
-    text = ""
-
-    with pdfplumber.open(file_path) as pdf:
-
-        for page in pdf.pages:
-
-            text += page.extract_text() or ""
-
-
-    return text
-
-
-
-
-
-# ==========================
-# Groq Setup
-# ==========================
-
-
-load_dotenv()
-
-
-client = Groq(
-
-    api_key=os.getenv(
-        "GROQ_API_KEY"
-    )
-
-)
-
-
-
-
-
-# ==========================
-# Resume Analysis
-# ==========================
-
+# ============================================
+# Resume Parser
+# ============================================
 
 def analyze_resume(text):
 
-
     prompt = f"""
+You are an expert Resume Parser.
 
+Extract information from the resume.
 
-You are an expert AI resume parser and recruiter.
-
-
-Analyze the resume and return ONLY valid JSON.
-
+Return ONLY valid JSON.
 
 Rules:
 
 1. Return ONLY JSON.
-2. No explanation.
-3. Missing values should be empty string.
-4. Extract LinkedIn and Github if available.
-5. Extract all skills.
-6. Extract all work experiences.
-7. Do not include experience description.
+2. No markdown.
+3. No explanation.
+4. Missing values should be "".
+5. Extract ALL skills.
+6. Extract ALL work experience.
+7. Extract ALL projects.
+8. Extract Github and LinkedIn if available.
+9. Return only the HIGHEST education qualification and the percentage or CGPA as in the resume.
 
+-------------------------------------------------
 
-==========================
-EDUCATION RULES
-==========================
-
-
-Find all education qualifications internally.
-
-
-Return ONLY the highest qualification.
-
-
-Set level using only these values:
-
+Education Level must be one of:
 
 Doctorate
-
 Post Graduate
-
 Graduate
-
 Diploma
-
 Higher Secondary
-
 Secondary
 
-
-
-Priority:
-
-
-Doctorate:
+Examples
 
 PhD
-Doctorate
-DPhil
-
-
-
-Post Graduate:
+-> Doctorate
 
 M.Tech
-M.E
 MBA
 MCA
-M.Sc
-M.Com
+MSc
 MA
-Master Degree
-
-
-
-Graduate:
+M.Com
+-> Post Graduate
 
 B.Tech
-B.E
+BE
 BCA
-B.Sc
-B.Com
+BSc
+BCom
 BA
-Bachelor Degree
+-> Graduate
 
-
-
-Diploma:
-
-Diploma courses
-
-
-
-Higher Secondary:
+Diploma
+-> Diploma
 
 12th
 Plus Two
-
-
-
-Secondary:
+-> Higher Secondary
 
 10th
 SSLC
+-> Secondary
 
+-------------------------------------------------
 
-
-Examples:
-
-
-B.Tech + M.Tech
-
-Return:
-
-
-degree:
-M.Tech Computer Science
-
-level:
-Post Graduate
-
-
-
-
-B.Sc only
-
-
-Return:
-
-
-degree:
-B.Sc Computer Science
-
-level:
-Graduate
-
-
-
-
-PhD
-
-
-Return:
-
-
-degree:
-PhD Computer Science
-
-level:
-Doctorate
-
-
-
-
-Never return lower qualifications if higher qualification exists.
-
-
-
-
-Return JSON exactly:
-
+Return JSON in EXACTLY this format.
 
 {{
+    "personal_information":
+    {{
+        "name":"",
+        "email":"",
+        "phone":"",
+        "linkedin":"",
+        "github":""
+    }},
 
+    "summary":"",
 
-"name":"",
+    "skills":[
+        {{
+            "skill_name":""
+        }}
+    ],
 
-"email":"",
+    "education":
+    {{
+        "qualification_level":"",
+        "degree":"",
+        "college":"",
+        "cgpa":"",
+        "start_year":"",
+        "end_year":""
+    }},
 
-"phone":"",
+    "experience":
+    [
+        {{
+            "job_title":"",
+            "company":"",
+            "start_date":"",
+            "end_date":""
+        }}
+    ],
 
-"linkedin":"",
-
-"github":"",
-
-
-
-"skills":[],
-
-
-
-"education":{{
-
-    "degree":"",
-
-    "level":"",
-
-    "college":"",
-
-    "percentage":"",
-
-    "start_year":"",
-
-    "end_year":""
-
-
-}},
-
-
-
-"experience":[
-
-
-{{
-
-"job_title":"",
-
-"company":"",
-
-"start_date":"",
-
-"end_date":""
-
-
+    "projects":
+    [
+        {{
+            "title":"",
+            "description":"",
+            "technologies":"",
+            "github_link":""
+        }}
+    ]
 }}
 
-
-]
-
-
-}}
-
-
-
-
-Resume:
-
+Resume
 
 {text}
-
-
 """
-
 
     response = client.chat.completions.create(
 
-
         model="llama-3.3-70b-versatile",
 
-
         messages=[
-
             {
-
-            "role":"user",
-
-            "content":prompt
-
+                "role": "user",
+                "content": prompt
             }
-
         ]
-
     )
-
-
 
     result = response.choices[0].message.content
 
-
-
-    print("===================")
-
-    print("RAW AI RESPONSE")
-
-    print(result)
-
-    print("===================")
-
-
-
-
     try:
 
-
-        result = result.replace(
-
-            "```json",
-
-            ""
-
+        result = (
+            result.replace("```json", "").replace("```", "").strip()
         )
 
-
-        result = result.replace(
-
-            "```",
-
-            ""
-
-        )
-
-
-
-        return json.loads(
-
-            result.strip()
-
-        )
-
-
+        return json.loads(result)
 
     except Exception as e:
 
-
-        print(
-            "JSON ERROR:",
-            e
-        )
-
+        print("JSON Parsing Error:", e)
 
         return {}

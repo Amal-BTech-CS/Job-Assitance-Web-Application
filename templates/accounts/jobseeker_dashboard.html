@@ -1,223 +1,181 @@
 {% extends 'accounts/jobseeker_base.html' %}
 {% load static %}
 
-{% block title %}Job Seeker Dashboard - CareerPilot AI{% endblock %}
+{% block title %}Dashboard | CareerPilot AI{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-6 lg:px-12 pt-10 pb-16 font-sans">
 
     <!-- HEADER -->
-    <header class="mb-12">
-        <p class="text-light-muted dark:text-brand-textMuted text-xs tracking-widest uppercase mb-4">{% now "l, j F Y" %}</p>
-        <h1 class="text-4xl md:text-5xl font-serif font-semibold mb-4 text-light-text dark:text-white transition-colors">
-            Welcome, <span class="text-amber-600 dark:text-brand-gold">{{ user.profile.full_name }}</span>.
+    <header class="mb-10">
+        <p class="text-brand-accent text-xs font-black tracking-widest uppercase mb-3">{% now "l, j F Y" %}</p>
+        <h1 class="text-3xl md:text-4xl font-black mb-3 text-light-text dark:text-white tracking-tight">
+            Welcome back, <span class="text-brand-accent">{{ request.user.username|title }}</span>.
         </h1>
-        <p class="text-light-muted dark:text-brand-textMuted text-base md:text-lg max-w-2xl transition-colors">
-            Manage your career profile, discover opportunities and track your job applications.
+        <p class="text-light-muted dark:text-brand-textMuted text-base font-medium max-w-2xl">
+            Here is your personalized career hub. Manage your profile, track applications, and discover your next role.
         </p>
     </header>
-
-    <!-- METRICS / PRIMARY ACTIONS GRID -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <!-- Profile Card -->
-        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 flex flex-col h-full hover:border-gray-300 dark:hover:border-[#334155] transition duration-300">
-            <div class="w-12 h-12 rounded-lg bg-gray-100 dark:bg-[#1e2b41] flex items-center justify-center text-amber-600 dark:text-brand-gold mb-6 transition-colors">
-                <i class="fa-regular fa-id-badge text-xl"></i>
-            </div>
-            <h3 class="text-light-text dark:text-white text-xl font-medium mb-3 transition-colors">My Profile</h3>
-            <p class="text-light-muted dark:text-brand-textMuted text-sm mb-8 flex-grow leading-relaxed transition-colors">Update your personal details, skills, education, experience and resume.</p>
-            <a href="{% url 'profile_view' %}" class="inline-flex items-center justify-center w-full py-3 bg-transparent border border-amber-600 dark:border-brand-gold text-amber-600 dark:text-brand-gold rounded-lg font-medium text-sm hover:bg-amber-600 dark:hover:bg-brand-gold hover:text-white dark:hover:text-brand-bg transition duration-300">View Profile</a>
-        </div>
-
-        <!-- Find Jobs Card -->
-        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 flex flex-col h-full hover:border-gray-300 dark:hover:border-[#334155] transition duration-300">
-            <div class="w-12 h-12 rounded-lg bg-gray-100 dark:bg-[#1e2b41] flex items-center justify-center text-amber-600 dark:text-brand-gold mb-6 transition-colors">
-                <i class="fa-solid fa-magnifying-glass-chart text-xl"></i>
-            </div>
-            <h3 class="text-light-text dark:text-white text-xl font-medium mb-3 transition-colors">Find Jobs</h3>
-            <p class="text-light-muted dark:text-brand-textMuted text-sm mb-8 flex-grow leading-relaxed transition-colors">Explore suitable job opportunities based on your professional skills.</p>
-            <a href="#" class="inline-flex items-center justify-center w-full py-3 bg-transparent border border-amber-600 dark:border-brand-gold text-amber-600 dark:text-brand-gold rounded-lg font-medium text-sm hover:bg-amber-600 dark:hover:bg-brand-gold hover:text-white dark:hover:text-brand-bg transition duration-300">Explore Jobs</a>
-        </div>
-
-        <!-- Applications Card -->
-        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 flex flex-col h-full hover:border-gray-300 dark:hover:border-[#334155] transition duration-300">
-            <div class="w-12 h-12 rounded-lg bg-gray-100 dark:bg-[#1e2b41] flex items-center justify-center text-amber-600 dark:text-brand-gold mb-6 transition-colors">
-                <i class="fa-solid fa-layer-group text-xl"></i>
-            </div>
-            <h3 class="text-light-text dark:text-white text-xl font-medium mb-3 transition-colors">Applications</h3>
-            <p class="text-light-muted dark:text-brand-textMuted text-sm mb-8 flex-grow leading-relaxed transition-colors">Track your applied jobs and monitor your application progress.</p>
-            <a href="#" class="inline-flex items-center justify-center w-full py-3 bg-transparent border border-amber-600 dark:border-brand-gold text-amber-600 dark:text-brand-gold rounded-lg font-medium text-sm hover:bg-amber-600 dark:hover:bg-brand-gold hover:text-white dark:hover:text-brand-bg transition duration-300">View Applications</a>
-        </div>
+    <!-- AI RECOMMENDED JOBS -->
+    {% if recommended_jobs %}
+    <div class="flex items-center justify-between mb-5">
+        <h2 class="text-xl font-black tracking-tight text-light-text dark:text-white">
+            <i class="fa-solid fa-wand-magic-sparkles text-brand-accent mr-2"></i>Recommended For You
+        </h2>
     </div>
 
-    <!-- SECONDARY GRID -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
-        <!-- Platform Insights -->
-        <div class="lg:col-span-2 bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 transition-colors duration-300">
-            <h2 class="text-2xl font-serif font-semibold text-light-text dark:text-white mb-8 transition-colors">Platform Insights</h2>
-            <div class="space-y-6">
-                <div class="flex gap-5 pb-6 border-b border-light-border dark:border-brand-border transition-colors">
-                    <i class="fa-solid fa-circle-check text-amber-600 dark:text-brand-gold mt-1"></i>
-                    <div>
-                        <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">Career Profile</h3>
-                        <p class="text-light-muted dark:text-brand-textMuted text-sm">Keep your profile updated to get better job matches.</p>
-                    </div>
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-10">
+        {% for job in recommended_jobs %}
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-5 flex flex-col justify-between hover:border-brand-accent hover:shadow-md hover:shadow-brand-accent/5 transition-all duration-300 group relative">
+
+            <!-- Match Percentage Badge -->
+            <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-brand-accent/10 text-brand-accent border border-brand-accent/20 text-[11px] font-black">
+                {{ job.match_score|floatformat:0 }}% Match
+            </span>
+
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-xl bg-light-bg dark:bg-brand-bg flex items-center justify-center text-brand-accent border border-light-border dark:border-brand-border flex-shrink-0 shadow-sm">
+                    <i class="fa-solid fa-briefcase text-sm"></i>
                 </div>
-                <div class="flex gap-5">
-                    <i class="fa-solid fa-robot text-amber-600 dark:text-brand-gold mt-1"></i>
-                    <div>
-                        <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">AI Matching</h3>
-                        <p class="text-light-muted dark:text-brand-textMuted text-sm">Our system automatically connects your skills with suitable job opportunities.</p>
-                    </div>
-                </div>
-                <div class="flex gap-5 pt-6 border-t border-light-border dark:border-brand-border">
-                <i class="fa-solid fa-file-lines text-amber-600 dark:text-brand-gold mt-1"></i>
-
-                    <div class="flex-1">
-                        <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">
-                        AI Cover Letter
-                        </h3>
-
-                        <p class="text-light-muted dark:text-brand-textMuted text-sm mb-4">
-                        Generate a personalized ATS-friendly cover letter using your uploaded resume.
-                        </p>
-
-                        <a href="{% url 'cover_letter' %}"
-                        class="inline-flex items-center px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition">
-                        Generate Cover Letter
-                        </a>
-                    </div>
-                </div>
-                <div class="flex gap-5 pt-6 border-t border-light-border dark:border-brand-border">
-                    <i class="fa-solid fa-brain text-amber-600 dark:text-brand-gold mt-1"></i>
-
-                    <div class="flex-1">
-                        <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">
-                        AI Quiz Generator
-                        </h3>
-
-                        <p class="text-light-muted dark:text-brand-textMuted text-sm mb-4">
-                        Test your knowledge with AI-generated MCQs based on any topic.
-                        </p>
-
-                        <a href="{% url 'quiz_home' %}"
-                        class="inline-flex items-center px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition">
-                        Start Quiz
-                        </a>
-                    </div>
-                </div>
-                <!-- AI Mock Interview -->
-                <div class="flex gap-5 pt-6 border-t border-light-border dark:border-brand-border">
-                    <i class="fa-solid fa-user-tie text-amber-600 dark:text-brand-gold mt-1"></i>
-
-                    <div class="flex-1">
-                        <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">
-                        AI Mock Interview
-                        </h3>
-
-                        <p class="text-light-muted dark:text-brand-textMuted text-sm mb-4">
-                        Practice technical and HR interview questions with AI and receive instant feedback on your answers.
-                        </p>
-
-                        <a href="{% url 'interview_home' %}"
-                        class="inline-flex items-center px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition">
-                        Start Mock Interview
-                        </a>
-                    </div>
-                </div>
-                <div class="flex gap-5 pt-6 border-t border-light-border dark:border-brand-border">
-
-                    <i class="fa-solid fa-chart-line text-amber-600 dark:text-brand-gold mt-1"></i>
-
-                    <div class="flex-1">
-
-                        <h3 class="text-light-text dark:text-white font-medium text-lg mb-1">
-                        ATS Resume Score
-                        </h3>
-
-                        <p class="text-light-muted dark:text-brand-textMuted text-sm mb-4">
-                        Compare your resume with a job description and calculate your ATS compatibility score.
-                        </p>
-
-                        <a href="{% url 'ats_checker' %}"
-                        class="inline-flex items-center px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition">
-                        Check ATS Score
-                        </a>
-
-                    </div>
+                <div>
+                    <h3 class="font-bold text-base line-clamp-1 text-light-text dark:text-white group-hover:text-brand-accent transition-colors leading-tight mb-1 pr-16">{{ job.title }}</h3>
+                    <p class="text-xs text-light-muted dark:text-brand-textMuted font-medium">{{ job.company.company_name }}</p>
                 </div>
             </div>
-        </div>
 
-        <!-- Quick Actions -->
-        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 transition-colors duration-300">
-            <h2 class="text-lg font-medium text-light-text dark:text-white mb-6">Quick Actions</h2>
-            <div class="space-y-4">
-                <a href="{% url 'jobseeker_profile' %}" class="flex items-center gap-4 p-4 rounded-lg bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border text-light-text dark:text-white hover:border-amber-600 dark:hover:border-brand-gold transition group">
-                    <i class="fa-regular fa-user-pen w-5 text-center text-light-muted dark:text-brand-textMuted"></i>
-                    <span class="font-medium text-sm">Edit Profile</span>
+            <div class="flex flex-wrap items-center gap-2 mt-4 mb-5 text-[11px] font-semibold text-light-muted dark:text-brand-textMuted">
+                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+                    <i class="fa-solid fa-location-dot text-brand-accent"></i> {{ job.location }}
+                </span>
+                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+                    <i class="fa-solid fa-wallet text-brand-accent"></i> {{ job.salary }}
+                </span>
+                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+                    <i class="fa-solid fa-clock text-brand-accent"></i> {{ job.employment_type }}
+                </span>
+            </div>
+
+            <div class="border-t border-light-border dark:border-brand-border pt-4 flex items-center justify-between">
+                <a href="{% url 'job_detail' job.id %}"
+                    class="text-xs font-bold text-light-muted dark:text-brand-textMuted hover:text-brand-accent dark:hover:text-brand-accent transition-colors">
+                    View Details
                 </a>
-            </div>
-        </div>
-    </div>
 
-    <!-- DYNAMIC JOB FEED -->
-    <h2 class="text-2xl font-serif font-semibold text-light-text dark:text-white mb-8">Latest Job Opportunities</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for job in jobs %}
-        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-6 hover:border-amber-600 dark:hover:border-brand-gold/50 transition group flex flex-col">
-            <h3 class="text-lg font-medium text-light-text dark:text-white mb-2">{{ job.title }}</h3>
-            <p class="text-xs text-amber-600 dark:text-brand-gold font-medium mb-4">{{ job.company.company_name }}</p>
-            <div class="text-light-muted dark:text-brand-textMuted text-sm space-y-2 mb-6 flex-grow">
-                <p><i class="fa-solid fa-location-dot mr-2 w-4"></i> {{ job.location }}</p>
-                <p><i class="fa-solid fa-wallet mr-2 w-4"></i> {{ job.salary }}</p>
-                <p><i class="fa-solid fa-briefcase mr-2 w-4"></i> {{ job.experience }}</p>
+                {% if job.id in applied_job_ids %}
+                    <button disabled class="px-4 py-1.5 bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 rounded-lg text-xs font-bold cursor-not-allowed">Applied ✓</button>
+                {% else %}
+                    <form method="POST" action="{% url 'apply_job' job.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-1.5 bg-brand-accent text-white rounded-lg text-xs font-bold hover:bg-brand-accentHover transition-colors shadow-sm shadow-brand-accent/20">Apply Now</button>
+                    </form>
+                {% endif %}
             </div>
-            <button onclick="viewJob('{{ job.title }}', '{{ job.location }}', '{{ job.salary }}', '{{ job.experience }}', '{{ job.description|escapejs }}')"
-                    class="w-full py-2 bg-gray-100 dark:bg-brand-bg text-light-text dark:text-white rounded-lg text-xs font-semibold hover:bg-gray-200 dark:hover:bg-[#1e2b41] transition-colors">
-                View Full Details
-            </button>
         </div>
-        {% empty %}
-        <p class="text-light-muted dark:text-brand-textMuted italic">No jobs available right now.</p>
         {% endfor %}
     </div>
-</div>
-
-<!-- Modal -->
-<div id="jobViewModal" class="fixed inset-0 z-50 bg-light-bg/80 dark:bg-brand-bg/80 backdrop-blur-sm hidden items-center justify-center px-4">
-    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-xl p-8 w-full max-w-lg shadow-2xl relative">
-        <button type="button" onclick="closeJobModal()" class="absolute top-6 right-6 text-xl text-light-muted dark:text-brand-textMuted">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-        <h2 id="modalTitle" class="text-2xl font-serif font-semibold text-light-text dark:text-white mb-6"></h2>
-        <div class="space-y-3 mb-6 text-sm text-light-text dark:text-white">
-            <p><span class="font-bold text-light-muted dark:text-brand-textMuted uppercase text-[10px] mr-2">Location:</span> <span id="modalLocation"></span></p>
-            <p><span class="font-bold text-light-muted dark:text-brand-textMuted uppercase text-[10px] mr-2">Salary:</span> <span id="modalSalary"></span></p>
-            <p><span class="font-bold text-light-muted dark:text-brand-textMuted uppercase text-[10px] mr-2">Experience:</span> <span id="modalExperience"></span></p>
-        </div>
-        <h3 class="text-sm font-semibold uppercase text-light-text dark:text-white mb-2">Description</h3>
-        <p id="modalDescription" class="text-light-muted dark:text-brand-textMuted text-sm leading-relaxed max-h-60 overflow-y-auto"></p>
+    {% endif %}
+    <!-- DYNAMIC JOB FEED -->
+    <div class="flex items-center justify-between mb-5">
+        <h2 class="text-xl font-black tracking-tight text-light-text dark:text-white">Latest Opportunities</h2>
+        <a href="{% url 'browse_jobs' %}" class="text-xs font-bold text-brand-accent hover:text-brand-accentHover">View All <i class="fa-solid fa-arrow-right ml-1"></i></a>
     </div>
-</div>
 
-<script>
-    function viewJob(title, location, salary, experience, description) {
-        document.getElementById('modalTitle').innerText = title;
-        document.getElementById('modalLocation').innerText = location;
-        document.getElementById('modalSalary').innerText = salary;
-        document.getElementById('modalExperience').innerText = experience;
-        document.getElementById('modalDescription').innerText = description;
-        const modal = document.getElementById("jobViewModal");
-        modal.classList.remove("hidden");
-        modal.classList.add("flex");
-        document.body.style.overflow = "hidden";
-    }
-    function closeJobModal() {
-        const modal = document.getElementById("jobViewModal");
-        modal.classList.add("hidden");
-        modal.classList.remove("flex");
-        document.body.style.overflow = "auto";
-    }
-</script>
+    <!-- REDESIGNED COMPACT JOB CARDS -->
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-12">
+        {% for job in jobs %}
+        <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-5 flex flex-col justify-between hover:border-brand-accent hover:shadow-md hover:shadow-brand-accent/5 transition-all duration-300 group">
+
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-xl bg-light-bg dark:bg-brand-bg flex items-center justify-center text-brand-accent border border-light-border dark:border-brand-border flex-shrink-0 shadow-sm">
+                    <i class="fa-solid fa-briefcase text-sm"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-base line-clamp-1 text-light-text dark:text-white group-hover:text-brand-accent transition-colors leading-tight mb-1">{{ job.title }}</h3>
+                    <p class="text-xs text-light-muted dark:text-brand-textMuted font-medium">{{ job.company.company_name }}</p>
+                </div>
+            </div>
+
+            <!-- Inline Badges -->
+            <div class="flex flex-wrap items-center gap-2 mt-4 mb-5 text-[11px] font-semibold text-light-muted dark:text-brand-textMuted">
+                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+                    <i class="fa-solid fa-location-dot text-brand-accent"></i> {{ job.location }}
+                </span>
+                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+                    <i class="fa-solid fa-wallet text-brand-accent"></i> {{ job.salary }}
+                </span>
+                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-light-bg dark:bg-brand-bg border border-light-border dark:border-brand-border">
+                    <i class="fa-solid fa-clock text-brand-accent"></i> {{ job.employment_type }}
+                </span>
+            </div>
+
+            <!-- Action Footer -->
+            <div class="border-t border-light-border dark:border-brand-border pt-4 flex items-center justify-between">
+                <a href="{% url 'job_detail' job.id %}"
+                    class="text-xs font-bold text-light-muted dark:text-brand-textMuted hover:text-brand-accent dark:hover:text-brand-accent transition-colors">
+                    View Details
+                </a>
+
+                {% if job.id in applied_job_ids %}
+                    <button disabled class="px-4 py-1.5 bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 rounded-lg text-xs font-bold cursor-not-allowed">Applied ✓</button>
+                {% else %}
+                    <form method="POST" action="{% url 'apply_job' job.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-1.5 bg-brand-accent text-white rounded-lg text-xs font-bold hover:bg-brand-accentHover transition-colors shadow-sm shadow-brand-accent/20">Apply Now</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+            <div class="col-span-full py-12 flex flex-col items-center justify-center bg-light-card dark:bg-brand-card rounded-2xl border border-dashed border-light-border dark:border-brand-border">
+                <div class="w-12 h-12 bg-light-bg dark:bg-brand-bg rounded-full flex items-center justify-center text-brand-accent mb-3">
+                    <i class="fa-solid fa-inbox text-xl"></i>
+                </div>
+                <h3 class="text-base font-bold text-light-text dark:text-white mb-1">No Jobs Available</h3>
+                <p class="text-light-muted dark:text-brand-textMuted font-medium text-xs">Check back later for new opportunities.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- CAREER TOOLS -->
+    <div class="flex items-center justify-between mb-5">
+        <h2 class="text-xl font-black tracking-tight text-light-text dark:text-white">Career Tools</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        {% with card_class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-5 flex flex-col hover:shadow-lg hover:shadow-brand-accent/5 dark:hover:shadow-none hover:border-brand-accent/30 transition-all duration-300 group" %}
+
+        <div class="{{ card_class }}">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform flex-shrink-0">
+                    <i class="fa-solid fa-gauge-high text-lg"></i>
+                </div>
+                <h3 class="text-base font-bold text-light-text dark:text-white">ATS Calculator</h3>
+            </div>
+            <p class="text-xs text-light-muted dark:text-brand-textMuted mb-5 flex-grow font-medium leading-relaxed">Check how well your resume matches a job description.</p>
+            <a href="{% url 'ats_calculator' %}" class="block text-center py-2 bg-light-bg dark:bg-brand-bg group-hover:bg-brand-accent text-light-text dark:text-white group-hover:text-white rounded-lg font-bold text-xs transition-all duration-300">Check Score</a>
+        </div>
+
+        <div class="{{ card_class }}">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform flex-shrink-0">
+                    <i class="fa-solid fa-video text-lg"></i>
+                </div>
+                <h3 class="text-base font-bold text-light-text dark:text-white">Mock Interview</h3>
+            </div>
+            <p class="text-xs text-light-muted dark:text-brand-textMuted mb-5 flex-grow font-medium leading-relaxed">Practice with AI-driven mock interview questions.</p>
+            <a href="{% url 'mock_interview' %}" class="block text-center py-2 bg-light-bg dark:bg-brand-bg group-hover:bg-brand-accent text-light-text dark:text-white group-hover:text-white rounded-lg font-bold text-xs transition-all duration-300">Start Interview</a>
+        </div>
+
+        <div class="{{ card_class }}">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform flex-shrink-0">
+                    <i class="fa-solid fa-brain text-lg"></i>
+                </div>
+                <h3 class="text-base font-bold text-light-text dark:text-white">Quiz</h3>
+            </div>
+            <p class="text-xs text-light-muted dark:text-brand-textMuted mb-5 flex-grow font-medium leading-relaxed">Test your knowledge with role-specific quizzes.</p>
+            <a href="{% url 'quiz_home' %}" class="block text-center py-2 bg-light-bg dark:bg-brand-bg group-hover:bg-brand-accent text-light-text dark:text-white group-hover:text-white rounded-lg font-bold text-xs transition-all duration-300">Take Quiz</a>
+        </div>
+        {% endwith %}
+    </div>
+
 {% endblock %}

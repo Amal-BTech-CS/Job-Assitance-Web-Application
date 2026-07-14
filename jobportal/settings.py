@@ -69,13 +69,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts',
+    'accounts.apps.AccountsConfig',
     'dashboards',
     'profiles',
     'jobs',
     'applications',
     'chatbot',
     'storages',
+    'resume_builder'
     
 ]
 

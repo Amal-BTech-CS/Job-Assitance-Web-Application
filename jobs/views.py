@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from accounts.ai.recommender.recommender import index_job, remove_job
 from accounts.models import CompanyProfile, Job,Application
+from accounts.ai.email_notify import send_status_email
 
 
 @login_required
@@ -153,21 +154,48 @@ def delete_job(request, id):
         "manage_jobs"
     )
 
-
+from django.core.paginator import Paginator
+from django.db.models import Q, Case, When, IntegerField, Value
+from django.db.models.functions import Greatest
 def browse_jobs(request):
+    query = request.GET.get("q", "").strip()
+    location = request.GET.get("location", "").strip()
+    employment_type = request.GET.get("type", "").strip()
 
-    query = request.GET.get("q", "")
-    location = request.GET.get("location", "")
-    employment_type = request.GET.get("type", "")
-
-    jobs = Job.objects.filter(status="Open")
+    jobs = Job.objects.filter(status="Open").select_related("company")
 
     if query:
-        jobs = jobs.filter(
-            Q(title__icontains=query) |
-            Q(job_skills__icontains=query) |
-            Q(description__icontains=query)
+        keywords = query.split()
+        search_query = Q()
+        relevance = Value(0, output_field=IntegerField())
+
+        for keyword in keywords:
+            search_query |= (
+                Q(title__icontains=keyword) |
+                Q(job_skills__icontains=keyword) |
+                Q(description__icontains=keyword) |
+                Q(company__company_name__icontains=keyword)
+            )
+
+            # Weight matches by field importance:
+            # title match >> skills match >> company match >> description match.
+            # Summed per keyword so multi-word queries reward jobs matching
+            # more of the query, not just any single word.
+            relevance = relevance + (
+                Case(When(title__icontains=keyword, then=Value(10)), default=Value(0), output_field=IntegerField()) +
+                Case(When(job_skills__icontains=keyword, then=Value(6)), default=Value(0), output_field=IntegerField()) +
+                Case(When(company__company_name__icontains=keyword, then=Value(3)), default=Value(0), output_field=IntegerField()) +
+                Case(When(description__icontains=keyword, then=Value(1)), default=Value(0), output_field=IntegerField())
+            )
+
+        jobs = (
+            jobs.filter(search_query)
+            .annotate(relevance=relevance)
+            .distinct()
+            .order_by("-relevance", "-created_at")
         )
+    else:
+        jobs = jobs.order_by("-created_at")
 
     if location:
         jobs = jobs.filter(location__icontains=location)
@@ -175,10 +203,19 @@ def browse_jobs(request):
     if employment_type:
         jobs = jobs.filter(employment_type__iexact=employment_type)
 
-    return render(request, "accounts/browse_jobs.html", {
-        "jobs": jobs,
-        "query": query
-    })
+    paginator = Paginator(jobs, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "jobs": page_obj,
+        "page_obj": page_obj,
+        "query": query,
+        "location": location,
+        "employment_type": employment_type,
+    }
+
+    return render(request, "accounts/browse_jobs.html", context)
 @login_required
 def job_detail(request, job_id):
 

@@ -1,0 +1,34 @@
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = []
+
+    operations = [
+        migrations.CreateModel(
+            name="Resume",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("full_name", models.CharField(max_length=150)),
+                ("target_title", models.CharField(blank=True, max_length=150)),
+                ("email", models.CharField(blank=True, max_length=150)),
+                ("phone", models.CharField(blank=True, max_length=50)),
+                ("location", models.CharField(blank=True, max_length=150)),
+                ("linkedin", models.CharField(blank=True, max_length=200)),
+                ("website", models.CharField(blank=True, max_length=200)),
+                ("summary", models.TextField(blank=True)),
+                ("skills", models.JSONField(blank=True, default=list)),
+                ("experience", models.JSONField(blank=True, default=list)),
+                ("education", models.JSONField(blank=True, default=list)),
+                ("certifications", models.JSONField(blank=True, default=list)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+            ],
+            options={
+                "ordering": ["-updated_at"],
+            },
+        ),
+    ]

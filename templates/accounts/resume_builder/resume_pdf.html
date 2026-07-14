@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ resume.full_name }} — Resume</title>
+  <style>
+    @page { size: A4; margin: 2.2cm 2.5cm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; color: #111; line-height: 1.5; font-size: 11pt; }
+
+    .resume-header { text-align: center; margin-bottom: 1.2rem; }
+    .resume-header h1 {
+      font-size: 22pt; letter-spacing: 1px; font-weight: 800;
+      margin-bottom: 0.3rem; text-transform: uppercase;
+    }
+    .resume-header .subtitle { font-weight: 700; font-size: 11pt; margin-bottom: 0.3rem; }
+    .resume-header .contact-line { font-size: 9.5pt; color: #333; }
+
+    section.resume-section { margin-bottom: 1rem; }
+    section.resume-section h2 {
+      font-size: 12pt; text-transform: uppercase; letter-spacing: 0.5px;
+      border-bottom: 1.5pt solid #111; padding-bottom: 0.15rem; margin-bottom: 0.5rem;
+    }
+    .summary-text { font-size: 10.5pt; }
+
+    .job-block { margin-bottom: 0.8rem; }
+    .job-line { font-weight: 700; font-size: 10.5pt; }
+    ul.bullets { margin-top: 0.3rem; padding-left: 1.1rem; }
+    ul.bullets li { font-size: 10pt; margin-bottom: 0.2rem; }
+
+    .edu-line { font-size: 10pt; margin-bottom: 0.4rem; }
+
+    ul.skills-grid, ul.cert-list { padding-left: 1.1rem; }
+    ul.skills-grid li, ul.cert-list li { font-size: 10pt; margin-bottom: 0.2rem; }
+  </style>
+</head>
+<body>
+  <header class="resume-header">
+    <h1>{{ resume.full_name }}</h1>
+    {% if resume.target_title %}<p class="subtitle">{{ resume.target_title }}</p>{% endif %}
+    <p class="contact-line">
+      {% if resume.location %}{{ resume.location }}{% endif %}
+      {% if resume.email %} | {{ resume.email }}{% endif %}
+      {% if resume.phone %} | {{ resume.phone }}{% endif %}
+      {% if resume.linkedin %} | {{ resume.linkedin }}{% endif %}
+      {% if resume.website %} | {{ resume.website }}{% endif %}
+    </p>
+  </header>
+
+  {% if resume.summary %}
+  <section class="resume-section">
+    <h2>Professional Summary</h2>
+    <p class="summary-text">{{ resume.summary }}</p>
+  </section>
+  {% endif %}
+
+  {% if resume.experience %}
+  <section class="resume-section">
+    <h2>Work Experience</h2>
+    {% for job in resume.experience %}
+      <div class="job-block">
+        <p class="job-line">{{ job.role_line }}</p>
+        <ul class="bullets">
+          {% for bullet in job.bullets %}<li>{{ bullet }}</li>{% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if resume.education %}
+  <section class="resume-section">
+    <h2>Education</h2>
+    {% for line in resume.education %}<p class="edu-line">{{ line }}</p>{% endfor %}
+  </section>
+  {% endif %}
+
+  {% if resume.skills %}
+  <section class="resume-section">
+    <h2>Skills</h2>
+    <ul class="skills-grid">
+      {% comment %} {% for skill in resume.skills %}<li>{{ skill }}</li>{% endfor %}  {% endcomment %}
+      {% for skill in resume.skills %}{{ skill }}{% if not forloop.last %}, {% endif %}{% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if resume.certifications %}
+  <section class="resume-section">
+    <h2>Certifications</h2>
+    <ul class="cert-list">
+      {% for cert in resume.certifications %}<li>{{ cert }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+</body>
+</html>

@@ -30,4 +30,5 @@ urlpatterns = [
     path('', include('jobs.urls')),
     path('', include('applications.urls')),
     path('', include('chatbot.urls')),
+    path('', include('resume_builder.urls')),
 ]

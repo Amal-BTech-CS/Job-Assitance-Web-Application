@@ -23,7 +23,7 @@
             </div>
             <h3 class="text-lg font-bold text-light-text dark:text-white mb-1">No applications yet</h3>
             <p class="text-light-muted dark:text-brand-textMuted font-medium text-sm mb-6">Start applying to jobs to see your progress here.</p>
-            <a href="{% url 'browse_jobs' %}" class="px-6 py-2.5 bg-brand-accent text-white rounded-xl text-sm font-bold hover:bg-brand-accentHover transition-colors shadow-md shadow-brand-accent/20">Browse Jobs</a>
+            <a href="{% url 'home' %}" class="px-6 py-2.5 bg-brand-accent text-white rounded-xl text-sm font-bold hover:bg-brand-accentHover transition-colors shadow-md shadow-brand-accent/20">Browse Jobs</a>
         </div>
     {% else %}
         <!-- REDESIGNED COMPACT GRID -->
@@ -51,11 +51,16 @@
                     </div>
                     
                     <!-- Compact Status Badge -->
+                    <!-- Compact Status Badge -->
                     <span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider whitespace-nowrap border
-                        {% if app.status == 'Accepted' %}bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20
-                        {% elif app.status == 'Rejected' %}bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20
+                        {% if app.status == 'applied' %}bg-gray-500/10 text-gray-500 dark:text-gray-300 border-gray-500/20
+                        {% elif app.status == 'under_review' or app.status == 'viewed' %}bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-500/20
+                        {% elif app.status == 'shortlisted' %}bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20
+                        {% elif app.status == 'interview' %}bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20
+                        {% elif app.status == 'hired' %}bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20
+                        {% elif app.status == 'rejected' %}bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20
                         {% else %}bg-brand-accent/10 text-brand-accent border-brand-accent/20{% endif %}">
-                        {{ app.status }}
+                        {{ app.get_status_display }}
                     </span>
                 </div>
 
@@ -75,11 +80,10 @@
                 </div>
 
                 <!-- ACTION BUTTON -->
-                <div class="border-t border-light-border dark:border-brand-border pt-4 mt-auto">
-                    <a href="{% url 'job_detail' app.job.id %}" class="block w-full text-center py-2 bg-light-bg dark:bg-brand-bg text-light-text dark:text-white hover:bg-brand-accent hover:text-white dark:hover:bg-brand-accent dark:hover:text-white rounded-lg text-xs font-bold transition-colors border border-light-border dark:border-brand-border hover:border-brand-accent dark:hover:border-brand-accent">
-                        View Details
-                    </a>
-                </div>
+                <a href="{% url 'application_detail' app.id %}"
+                class="px-4 py-2 bg-brand-accent text-white rounded-lg text-sm font-semibold hover:bg-brand-accentHover transition-colors text-center">
+                View Details
+                </a>
 
             </div>
             {% endfor %}

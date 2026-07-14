@@ -8,9 +8,11 @@
     <!-- HEADER -->
     <header class="mb-10">
         <p class="text-brand-accent text-xs font-black tracking-widest uppercase mb-3">{% now "l, j F Y" %}</p>
+        {% with display_name=request.user.profile.full_name|default:request.user.username|title %}
         <h1 class="text-3xl md:text-4xl font-black mb-3 text-light-text dark:text-white tracking-tight">
-            Welcome back, <span class="text-brand-accent">{{ request.user.username|title }}</span>.
+            Welcome back, <span class="text-brand-accent">{{ display_name.split.0 }}</span>
         </h1>
+        {% endwith %}
         <p class="text-light-muted dark:text-brand-textMuted text-base font-medium max-w-2xl">
             Here is your personalized career hub. Manage your profile, track applications, and discover your next role.
         </p>

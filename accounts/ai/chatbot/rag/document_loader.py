@@ -28,7 +28,7 @@ def load_resume_documents(user):
     text += f"Phone: {profile.phone}\n\n"
 
     # Skills
-    skills = Skill.objects.filter(resume=resume)
+    skills = Skill.objects.filter(resume=resume).order_by("id")
 
     if skills.exists():
 
@@ -40,7 +40,7 @@ def load_resume_documents(user):
         text += "\n"
 
     # Education
-    education = Education.objects.filter(resume=resume).first()
+    education = Education.objects.filter(resume=resume).order_by("id").first()
 
     if education:
 
@@ -57,7 +57,7 @@ End: {education.end_year}
 """
 
     # Experience
-    experiences = Experience.objects.filter(resume=resume)
+    experiences = Experience.objects.filter(resume=resume).order_by("id")
 
     if experiences.exists():
 
@@ -74,7 +74,7 @@ End: {exp.end_date}
 """
 
     # Projects
-    projects = Project.objects.filter(resume=resume)
+    projects = Project.objects.filter(resume=resume).order_by("id")
 
     if projects.exists():
 

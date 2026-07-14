@@ -4,32 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employer Login | CareerPilot AI</title>
-
+    <title>Employer Portal | CareerPilot AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         brand: {
-                            bg: '#0b1320',      
-                            card: '#121b2b',    
-                            border: '#1e293b',  
-                            gold: '#e6c387',    
-                            goldHover: '#f3d095',
-                            textMuted: '#8b9bb4',
+                            accent: '#4f46e5', // Modern Indigo
+                            accentHover: '#4338ca',
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155',
+                            textMuted: '#94a3b8',
                             textLight: '#f8fafc',
                         }
                     }
@@ -38,90 +30,74 @@
         }
     </script>
 </head>
-<body class="font-sans bg-brand-bg text-brand-textLight min-h-screen flex flex-col selection:bg-brand-gold selection:text-brand-bg">
+<body class="bg-brand-bg text-brand-textLight min-h-screen flex flex-col font-sans selection:bg-brand-accent selection:text-white">
 
-    <nav class="h-20 px-6 lg:px-12 flex items-center justify-between border-b border-brand-border bg-brand-bg relative z-10">
-        <a href="{% url 'home' %}" class="flex items-center gap-3 group">
-            <div class="w-8 h-8 rounded bg-brand-gold flex items-center justify-center text-brand-bg transition group-hover:scale-105">
-                <i class="fa-solid fa-arrow-trend-up text-sm"></i>
+    <!-- NAV -->
+    <nav class="h-20 px-8 flex items-center justify-between border-b border-brand-border/50">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-brand-accent flex items-center justify-center text-white">
+                <i class="fa-solid fa-bolt text-xs"></i>
             </div>
-            <span class="font-semibold tracking-widest text-sm uppercase text-white group-hover:text-brand-gold transition">
-                CareerPilot
-            </span>
-        </a>
-        <a href="{% url 'home' %}" class="text-brand-textMuted hover:text-white text-sm font-medium flex items-center gap-2 transition">
-            <i class="fa-solid fa-arrow-left"></i> Back to Home
+            <span class="font-black tracking-tighter text-lg uppercase">CareerPilot</span>
+        </div>
+        <a href="{% url 'home' %}" class="text-[10px] font-black uppercase tracking-widest text-brand-textMuted hover:text-white transition-colors">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Back to Home
         </a>
     </nav>
 
-    <div class="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
-        
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-gold/5 blur-[100px] rounded-full pointer-events-none"></div>
+    <!-- LOGIN CONTAINER -->
+    <div class="flex-1 flex items-center justify-center p-6 relative">
+        <div class="absolute w-[600px] h-[600px] bg-brand-accent/10 blur-[120px] rounded-full pointer-events-none"></div>
 
-        <div class="w-full max-w-md bg-brand-card border border-brand-border rounded-2xl p-8 shadow-2xl relative z-10">
+        <div class="w-full max-w-sm bg-brand-card border border-brand-border rounded-3xl p-8 shadow-2xl relative z-10">
             
             <div class="text-center mb-8">
-                <div class="w-12 h-12 rounded-full bg-[#1e2b41] border border-brand-border flex items-center justify-center text-brand-gold text-xl mx-auto mb-4">
-                    <i class="fa-regular fa-building"></i>
+                <div class="w-14 h-14 rounded-2xl bg-brand-accent/10 flex items-center justify-center text-brand-accent text-2xl mx-auto mb-4 border border-brand-accent/20">
+                    <i class="fa-solid fa-briefcase"></i>
                 </div>
-                <h2 class="text-2xl font-serif font-semibold text-white mb-2">Employer Login</h2>
-                <p class="text-brand-textMuted text-sm">Login to manage jobs and find talented candidates.</p>
+                <h2 class="text-2xl font-black mb-1">Employer Portal</h2>
+                <p class="text-brand-textMuted text-xs font-bold uppercase tracking-widest">Sign in to manage talent</p>
             </div>
 
             {% if error %}
-            <div class="bg-red-500/10 border border-red-500/30 text-red-400 p-3.5 rounded-lg text-sm mb-6 flex items-center justify-center gap-2 text-center">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <span>{{ error }}</span>
+            <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-bold mb-6 flex items-center gap-2 justify-center">
+                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
             </div>
             {% endif %}
 
-            <form method="POST" class="space-y-5">
+            <form method="POST" class="space-y-4">
                 {% csrf_token %}
 
-                <div>
-                    <label class="block text-brand-textMuted text-xs font-medium uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-signature mr-1"></i> Company Username
+                <div class="group">
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-brand-textMuted mb-2 ml-1 group-focus-within:text-brand-accent transition-colors">
+                        Username
                     </label>
-                    <input 
-                        type="text"
-                        name="username"
-                        placeholder="Enter your company username"
-                        required
-                        class="w-full bg-brand-bg border border-brand-border text-white px-4 py-3 rounded-lg focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition placeholder-[#475569]"
-                    >
+                    <input type="text" name="username" placeholder="company_admin" required
+                        class="w-full bg-brand-bg border border-brand-border rounded-xl px-4 py-3.5 text-sm font-bold text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all placeholder-brand-border">
                 </div>
 
-                <div>
-                    <label class="block text-brand-textMuted text-xs font-medium uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-lock mr-1"></i> Password
+                <div class="group">
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-brand-textMuted mb-2 ml-1 group-focus-within:text-brand-accent transition-colors">
+                        Password
                     </label>
-                    <input 
-                        type="password"
-                        name="password"
-                        placeholder="Enter your password"
-                        required
-                        class="w-full bg-brand-bg border border-brand-border text-white px-4 py-3 rounded-lg focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition placeholder-[#475569]"
-                    >
+                    <input type="password" name="password" placeholder="••••••••" required
+                        class="w-full bg-brand-bg border border-brand-border rounded-xl px-4 py-3.5 text-sm font-bold text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all placeholder-brand-border">
                 </div>
 
-                <div class="pt-4">
-                    <button type="submit" class="w-full py-3.5 bg-brand-gold text-brand-bg rounded-lg font-semibold hover:bg-brand-goldHover shadow-lg shadow-brand-gold/20 transition transform hover:-translate-y-0.5">
-                        Log In
-                    </button>
-                </div>
+                <button type="submit" class="w-full py-4 bg-brand-accent text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-brand-accentHover transition-all shadow-lg shadow-brand-accent/20 mt-2 hover:-translate-y-0.5">
+                    Sign In
+                </button>
             </form>
 
-            <div class="mt-8 text-center border-t border-brand-border pt-6">
-                <p class="text-brand-textMuted text-sm">
-                    New Employer? 
-                    <a href="{% url 'company_register' %}" class="text-brand-gold font-medium hover:text-brand-goldHover hover:underline transition">
-                        Register Company
+            <div class="mt-8 text-center border-t border-brand-border/50 pt-6">
+                <p class="text-brand-textMuted text-xs font-bold">
+                    Need an account? 
+                    <a href="{% url 'company_register' %}" class="text-white hover:text-brand-accent underline transition-colors font-black">
+                        Create Company Profile
                     </a>
                 </p>
             </div>
-
         </div>
     </div>
-
 </body>
 </html>

@@ -9,7 +9,22 @@ from accounts.ai.chatbot.core.resources import (
 )
 
 
-def ask(user, question):
+def _filter_informative_history(history):
+    """
+    Drop canned smalltalk turns before they reach the planner/condenser.
+    They carry no real content, and feeding them back in can bias the
+    next classification toward smalltalk too (a generic "ask me
+    anything!" reply sitting in the history makes the next real
+    question look like part of idle chit-chat). Followup turns are kept
+    since their content is real -- just reformatted.
+    """
+    return [
+        turn for turn in history
+        if turn.get("role") != "assistant" or turn.get("type") != "smalltalk"
+    ]
+
+
+def ask(user, question, history=None):
     """
     Main entry point for the AI Career Assistant.
 
@@ -21,10 +36,19 @@ def ask(user, question):
     question : str
         User's question.
 
+    history : list[dict], optional
+        Recent conversation turns, most-recent-last:
+        [{"role": "user", "content": "..."},
+         {"role": "assistant", "content": "...", "type": "agents"}, ...]
+        The "type" on assistant turns (set from the returned plan_type)
+        lets this filter out uninformative smalltalk turns before they
+        reach the planner. Caller (the view) owns where this is stored.
+
     Returns
     -------
-    str
-        Final chatbot response.
+    dict
+        {"answer": str, "plan_type": str} -- plan_type should be saved
+        alongside the answer in history so future turns can filter on it.
     """
 
     # -------------------------------
@@ -35,10 +59,13 @@ def ask(user, question):
 
     if resume_retriever is None:
 
-        return (
-            "I couldn't find your resume. "
-            "Please upload your resume before using the AI Career Assistant."
-        )
+        return {
+            "answer": (
+                "I couldn't find your resume. "
+                "Please upload your resume before using the AI Career Assistant."
+            ),
+            "plan_type": "smalltalk",
+        }
 
     # -------------------------------
     # Initial LangGraph State
@@ -49,6 +76,10 @@ def ask(user, question):
         "user": user,
 
         "question": question,
+
+        "history": _filter_informative_history(history or []),
+
+        "standalone_question": "",
 
         "plan": {},
 
@@ -69,7 +100,10 @@ def ask(user, question):
     result = graph.invoke(state)
 
     # -------------------------------
-    # Return final response
+    # Return final response + classification
     # -------------------------------
 
-    return result["final_answer"]
+    return {
+        "answer": result["final_answer"],
+        "plan_type": result.get("plan", {}).get("type", "agents"),
+    }

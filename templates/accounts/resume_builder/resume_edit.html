@@ -1,168 +1,160 @@
+{% extends 'accounts/jobseeker_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Resume</title>
-  <link rel="stylesheet" href="{% static 'style.css' %}">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background: #f0f4f8;
-      color: #1a202c;
-      line-height: 1.6;
-    }
-    .page { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
-    .site-header { text-align: center; margin-bottom: 2rem; }
-    .site-header h1 { font-size: 2.2rem; font-weight: 700; color: #2b6cb0; margin-bottom: 0.5rem; }
-    .site-header p { color: #4a5568; font-size: 1.05rem; }
-    .flash {
-      padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;
-      background: #c6f6d5; border: 1px solid #68d391; color: #22543d;
-    }
-    .flash.error { background: #fed7d7; border-color: #fc8181; color: #9b2c2c; }
-    .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.07); padding: 2rem; }
-    fieldset { border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
-    legend { font-weight: 600; font-size: 1.1rem; color: #2d3748; padding: 0 0.5rem; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .field { margin-bottom: 1rem; }
-    .field label { display: block; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.25rem; color: #2d3748; }
-    .field input, .field textarea {
-      width: 100%; padding: 0.6rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;
-      font-size: 0.95rem; font-family: inherit; transition: border 0.15s;
-    }
-    .field input:focus, .field textarea:focus {
-      outline: none; border-color: #4299e1; box-shadow: 0 0 0 3px rgba(66,153,225,0.2);
-    }
-    .field textarea { min-height: 90px; resize: vertical; }
-    #experience_text { min-height: 200px; }
-    .hint { font-size: 0.85rem; color: #718096; margin-top: 0.25rem; }
-    .actions { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
-    .btn {
-      display: inline-block; padding: 0.7rem 2rem; border: none; border-radius: 6px;
-      font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.15s;
-    }
-    .btn-primary { background: #2b6cb0; color: white; }
-    .btn-primary:hover { background: #2c5282; }
-    .btn-secondary { background: #cbd5e0; color: #1a202c; }
-    .btn-secondary:hover { background: #b6c2d1; }
-    .site-footer { text-align: center; margin-top: 2rem; color: #718096; font-size: 0.9rem; }
-    @media (max-width: 600px) { .field-row { grid-template-columns: 1fr; gap: 0; } }
-  </style>
-</head>
-<body>
-  <div class="page">
-    <header class="site-header">
-      <h1>Edit Resume</h1>
-      <p>Review the AI-generated resume and make any necessary edits.</p>
+
+{% block title %}Edit Resume | CareerPilot AI{% endblock %}
+
+{% block content %}
+
+    <!-- HEADER -->
+    <header class="mb-8">
+        <p class="text-brand-accent text-xs font-black tracking-widest uppercase mb-3">Career Tools</p>
+        <h1 class="text-3xl md:text-4xl font-black mb-3 text-light-text dark:text-white tracking-tight">
+            Edit <span class="text-brand-accent">Resume</span>.
+        </h1>
+        <p class="text-light-muted dark:text-brand-textMuted text-base font-medium max-w-2xl">
+            Review the AI-generated resume and make any necessary edits.
+        </p>
     </header>
 
     {% if messages %}
-      {% for message in messages %}
-        <div class="flash {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
-      {% endfor %}
+        {% for message in messages %}
+        <div class="flex items-center gap-3 px-4 py-3 rounded-xl mb-6 text-sm font-semibold
+            {% if message.tags == 'error' %}bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20
+            {% else %}bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20{% endif %}">
+            <i class="fa-solid {% if message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
     {% endif %}
 
-    <div class="card">
-      <form action="{% url 'resume_edit' %}" method="POST">
-        {% csrf_token %}
+    <!-- FORM CARD -->
+    <div class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-6 md:p-8 shadow-sm mb-12">
+        <form action="{% url 'resume_edit' %}" method="POST" class="space-y-8">
+            {% csrf_token %}
 
-        <fieldset>
-          <legend>Basic info</legend>
-          <div class="field-row">
-            <div class="field">
-              <label for="full_name">Full name *</label>
-              <input type="text" id="full_name" name="full_name" required value="{{ resume.full_name|default:'' }}">
+            <!-- BASIC INFO -->
+            <fieldset class="border border-light-border dark:border-brand-border rounded-2xl p-5">
+                <legend class="flex items-center gap-2 px-2 text-sm font-black text-light-text dark:text-white">
+                    <i class="fa-regular fa-id-badge text-brand-accent"></i> Basic Info
+                </legend>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="full_name" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">Full name *</label>
+                        <input type="text" id="full_name" name="full_name" required value="{{ resume.full_name|default:'' }}"
+                            class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition">
+                    </div>
+                    <div>
+                        <label for="target_title" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">Target job title</label>
+                        <input type="text" id="target_title" name="target_title" value="{{ resume.target_title|default:'' }}"
+                            class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">Email</label>
+                        <input type="email" id="email" name="email" value="{{ resume.email|default:'' }}"
+                            class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">Phone</label>
+                        <input type="text" id="phone" name="phone" value="{{ resume.phone|default:'' }}"
+                            class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition">
+                    </div>
+                    <div>
+                        <label for="location" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">Location</label>
+                        <input type="text" id="location" name="location" value="{{ resume.location|default:'' }}"
+                            class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition">
+                    </div>
+                    <div>
+                        <label for="linkedin" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">LinkedIn</label>
+                        <input type="text" id="linkedin" name="linkedin" value="{{ resume.linkedin|default:'' }}"
+                            class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="website" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">Portfolio / website</label>
+                        <input type="text" id="website" name="website" value="{{ resume.website|default:'' }}"
+                            class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition">
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- SUMMARY -->
+            <fieldset class="border border-light-border dark:border-brand-border rounded-2xl p-5">
+                <legend class="flex items-center gap-2 px-2 text-sm font-black text-light-text dark:text-white">
+                    <i class="fa-solid fa-align-left text-brand-accent"></i> Professional Summary
+                </legend>
+                <label for="summary" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">
+                    AI-generated summary — edit freely
+                </label>
+                <textarea id="summary" name="summary" rows="3"
+                    class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition resize-y">{{ resume.summary|default:'' }}</textarea>
+            </fieldset>
+
+            <!-- EXPERIENCE -->
+            <fieldset class="border border-light-border dark:border-brand-border rounded-2xl p-5">
+                <legend class="flex items-center gap-2 px-2 text-sm font-black text-light-text dark:text-white">
+                    <i class="fa-solid fa-briefcase text-brand-accent"></i> Work Experience
+                </legend>
+                <label for="experience_text" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">
+                    Role line, then bullets starting with "-", one job per block separated by a blank line
+                </label>
+                <textarea id="experience_text" name="experience_text" rows="8"
+                    class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition resize-y">{{ resume.experience_text|default:'' }}</textarea>
+                <p class="text-xs text-light-muted dark:text-brand-textMuted mt-2 leading-relaxed">
+                    Example:<br>
+                    Backend Engineer — Acme Corp, Chennai (2021 – Present)<br>
+                    - Built the payments microservice handling 2M transactions/month<br>
+                    - Reduced API latency by 40%<br><br>
+                    (blank line) then the next job block.
+                </p>
+            </fieldset>
+
+            <!-- SKILLS -->
+            <fieldset class="border border-light-border dark:border-brand-border rounded-2xl p-5">
+                <legend class="flex items-center gap-2 px-2 text-sm font-black text-light-text dark:text-white">
+                    <i class="fa-solid fa-toolbox text-brand-accent"></i> Skills
+                </legend>
+                <label for="skills_text" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">
+                    Comma or newline separated
+                </label>
+                <textarea id="skills_text" name="skills_text" rows="3"
+                    class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition resize-y">{{ resume.skills_text|default:'' }}</textarea>
+            </fieldset>
+
+            <!-- EDUCATION -->
+            <fieldset class="border border-light-border dark:border-brand-border rounded-2xl p-5">
+                <legend class="flex items-center gap-2 px-2 text-sm font-black text-light-text dark:text-white">
+                    <i class="fa-solid fa-graduation-cap text-brand-accent"></i> Education
+                </legend>
+                <label for="education_text" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">
+                    One entry per line
+                </label>
+                <textarea id="education_text" name="education_text" rows="3"
+                    class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition resize-y">{{ resume.education_text|default:'' }}</textarea>
+            </fieldset>
+
+            <!-- CERTIFICATIONS -->
+            <fieldset class="border border-light-border dark:border-brand-border rounded-2xl p-5">
+                <legend class="flex items-center gap-2 px-2 text-sm font-black text-light-text dark:text-white">
+                    <i class="fa-solid fa-certificate text-brand-accent"></i> Certifications
+                </legend>
+                <label for="certifications_text" class="block text-xs font-bold uppercase tracking-wide text-light-muted dark:text-brand-textMuted mb-1.5">
+                    One entry per line (optional)
+                </label>
+                <textarea id="certifications_text" name="certifications_text" rows="2"
+                    class="w-full px-4 py-2.5 rounded-xl border border-light-border dark:border-brand-border bg-light-bg dark:bg-brand-bg text-light-text dark:text-white text-sm focus:outline-none focus:border-brand-accent transition resize-y">{{ resume.certifications_text|default:'' }}</textarea>
+            </fieldset>
+
+            <div class="flex items-center justify-between pt-2">
+                <a href="{% url 'resume_builder' %}"
+                    class="inline-flex items-center gap-2 px-6 py-2.5 bg-light-bg dark:bg-brand-bg text-light-text dark:text-white border border-light-border dark:border-brand-border rounded-xl font-bold text-sm hover:border-brand-accent hover:text-brand-accent transition-all">
+                    <i class="fa-solid fa-rotate-left"></i> Start Over
+                </a>
+                <button type="submit"
+                    class="inline-flex items-center gap-2 px-8 py-3 bg-brand-accent text-white rounded-xl font-bold text-sm hover:bg-brand-accentHover transition-all shadow-md shadow-brand-accent/30">
+                    <i class="fa-solid fa-check"></i> Save Resume
+                </button>
             </div>
-            <div class="field">
-              <label for="target_title">Target job title</label>
-              <input type="text" id="target_title" name="target_title" value="{{ resume.target_title|default:'' }}">
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" value="{{ resume.email|default:'' }}">
-            </div>
-            <div class="field">
-              <label for="phone">Phone</label>
-              <input type="text" id="phone" name="phone" value="{{ resume.phone|default:'' }}">
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="location">Location</label>
-              <input type="text" id="location" name="location" value="{{ resume.location|default:'' }}">
-            </div>
-            <div class="field">
-              <label for="linkedin">LinkedIn</label>
-              <input type="text" id="linkedin" name="linkedin" value="{{ resume.linkedin|default:'' }}">
-            </div>
-          </div>
-          <div class="field">
-            <label for="website">Portfolio / website</label>
-            <input type="text" id="website" name="website" value="{{ resume.website|default:'' }}">
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Professional summary</legend>
-          <div class="field">
-            <label for="summary">AI-generated summary — edit freely</label>
-            <textarea id="summary" name="summary">{{ resume.summary|default:'' }}</textarea>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Work experience</legend>
-          <div class="field">
-            <label for="experience_text">Role line, then bullets starting with "-", one job per block separated by a blank line</label>
-            <textarea id="experience_text" name="experience_text">{{ resume.experience_text|default:'' }}</textarea>
-            <p class="hint">Example:<br>
-              Backend Engineer — Acme Corp, Chennai (2021 – Present)<br>
-              - Built the payments microservice handling 2M transactions/month<br>
-              - Reduced API latency by 40%<br><br>
-              (blank line) then the next job block.
-            </p>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Skills</legend>
-          <div class="field">
-            <label for="skills_text">Comma or newline separated</label>
-            <textarea id="skills_text" name="skills_text">{{ resume.skills_text|default:'' }}</textarea>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Education</legend>
-          <div class="field">
-            <label for="education_text">One entry per line</label>
-            <textarea id="education_text" name="education_text">{{ resume.education_text|default:'' }}</textarea>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Certifications</legend>
-          <div class="field">
-            <label for="certifications_text">One entry per line (optional)</label>
-            <textarea id="certifications_text" name="certifications_text">{{ resume.certifications_text|default:'' }}</textarea>
-          </div>
-        </fieldset>
-
-        <div class="actions">
-          <a href="{% url 'resume_builder' %}" class="btn btn-secondary">Start over</a>
-          <button type="submit" class="btn btn-primary">Generated Resume</button>
-        </div>
-      </form>
+        </form>
     </div>
 
-    <footer class="site-footer">
-      <p>AI Resume Builder</p>
-    </footer>
-  </div>
-</body>
-</html>
+{% endblock %}

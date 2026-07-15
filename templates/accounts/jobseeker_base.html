@@ -57,11 +57,11 @@
 
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-accent to-blue-400 flex items-center justify-center text-white shadow-md shadow-brand-accent/40">
-                        <i class="fa-solid fa-layer-group text-sm"></i>
+                    <div class="w-10 h-10 rounded-xl bg-brand-accent flex items-center justify-center text-white shadow-lg shadow-brand-accent/20 transition-all">
+                        <i class="fa-solid fa-arrow-trend-up text-lg"></i>
                     </div>
                     <a href="{% url 'home' %}" class="font-black text-xl tracking-tighter text-light-text dark:text-white">
-                        CareerPilot<span class="text-brand-accent">.ai</span>
+                        CareerPilot<span class="text-brand-accent"></span>
                     </a>
                 </div>
 
@@ -200,9 +200,6 @@
                         <a href="{% url 'my_applications' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'my_applications' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
                             <i class="fa-solid fa-layer-group w-5"></i> Applications
                         </a>
-                        <a href="{% url 'resume_builder' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'resume_builder' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
-                            <i class="fa-solid fa-file-lines w-5"></i> Resume Builder
-                        </a>
                         <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white transition-all">
                             <i class="fa-regular fa-bookmark w-5"></i> Saved Jobs
                         </a>
@@ -212,6 +209,9 @@
 
                         <!-- CAREER TOOLS -->
                         <p class="px-4 pt-5 pb-1 text-[10px] font-black uppercase tracking-widest text-light-muted dark:text-brand-textMuted opacity-70">Career Tools</p>
+                        <a href="{% url 'resume_builder' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'resume_builder' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
+                            <i class="fa-solid fa-file-lines w-5"></i> Resume Builder
+                        </a>
                         <a href="{% url 'ats_calculator' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all {% if request.resolver_match.url_name == 'ats_calculator' %}bg-brand-accent text-white{% else %}text-light-muted dark:text-brand-textMuted hover:bg-light-bg dark:hover:bg-brand-bg hover:text-light-text dark:hover:text-white{% endif %}">
                             <i class="fa-solid fa-gauge-high w-5"></i> ATS Calculator
                         </a>

@@ -8,13 +8,15 @@
     <!-- HEADER -->
     <header class="mb-10">
         <p class="text-brand-accent text-xs font-black tracking-widest uppercase mb-3">{% now "l, j F Y" %}</p>
+        {% with display_name=request.user.profile.full_name|default:request.user.username|title %}
         <h1 class="text-3xl md:text-4xl font-black mb-3 text-light-text dark:text-white tracking-tight">
-            Welcome back, <span class="text-brand-accent">{{ request.user.username|title }}</span>.
+            Welcome back, <span class="text-brand-accent">{{ display_name.split.0 }}</span>.
         </h1>
+        {% endwith %}
         <p class="text-light-muted dark:text-brand-textMuted text-base font-medium max-w-2xl">
             Here is your personalized career hub. Manage your profile, track applications, and discover your next role.
         </p>
-    </header>
+</header>
     <!-- AI RECOMMENDED JOBS -->
     {% if recommended_jobs %}
     <div class="flex items-center justify-between mb-5">
@@ -140,8 +142,19 @@
         <h2 class="text-xl font-black tracking-tight text-light-text dark:text-white">Career Tools</h2>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
         {% with card_class="bg-light-card dark:bg-brand-card border border-light-border dark:border-brand-border rounded-2xl p-5 flex flex-col hover:shadow-lg hover:shadow-brand-accent/5 dark:hover:shadow-none hover:border-brand-accent/30 transition-all duration-300 group" %}
+
+        <div class="{{ card_class }}">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform flex-shrink-0">
+                    <i class="fa-solid fa-file-lines text-lg"></i>
+                </div>
+                <h3 class="text-base font-bold text-light-text dark:text-white">Resume Builder</h3>
+            </div>
+            <p class="text-xs text-light-muted dark:text-brand-textMuted mb-5 flex-grow font-medium leading-relaxed">Build a polished, ATS-friendly resume in minutes.</p>
+            <a href="{% url 'resume_builder' %}" class="block text-center py-2 bg-light-bg dark:bg-brand-bg group-hover:bg-brand-accent text-light-text dark:text-white group-hover:text-white rounded-lg font-bold text-xs transition-all duration-300">Build Resume</a>
+        </div>
 
         <div class="{{ card_class }}">
             <div class="flex items-center gap-4 mb-3">

@@ -1,249 +1,152 @@
+{% extends 'accounts/jobseeker_base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ resume.full_name }} — Resume Preview</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #e5e9ef;
-      color: #111;
-      line-height: 1.5;
-    }
-    .page-wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
-    .toolbar {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .btn {
-      display: inline-block;
-      padding: 0.6rem 1.5rem;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .btn-primary { background: #2b6cb0; color: white; }
-    .btn-secondary { background: #cbd5e0; color: #1a202c; }
 
-    .flash {
-      background: #c6f6d5;
-      border: 1px solid #68d391;
-      color: #22543d;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-    .flash.error {
-      background: #fed7d7;
-      border-color: #fc8181;
-      color: #9b2c2c;
-    }
+{% block title %}{{ resume.full_name }} — Resume Result | CareerPilot AI{% endblock %}
 
+{% block content %}
+<style>
     .resume-sheet {
-      background: white;
-      padding: 3rem 3.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        background: #ffffff;
+        color: #111111;
+        width: 100%;
+        max-width: 210mm;
+        min-height: 297mm;
+        padding: 20mm 18mm;
+        margin: 0 auto;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.5;
     }
-
-    .resume-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    .resume-header h1 {
-      font-size: 2.2rem;
-      letter-spacing: 1px;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-    }
-    .resume-header .subtitle {
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
-    }
-    .resume-header .contact-line {
-      font-size: 0.9rem;
-      color: #333;
-    }
-
-    section.resume-section {
-      margin-bottom: 1.4rem;
-    }
+    .resume-header { text-align: center; margin-bottom: 1.5rem; }
+    .resume-header h1 { font-size: 2.2rem; letter-spacing: 1px; font-weight: 800; margin-bottom: 0.5rem; text-transform: uppercase; }
+    .resume-header .subtitle { font-weight: 700; font-size: 1rem; margin-bottom: 0.4rem; }
+    .resume-header .contact-line { font-size: 0.9rem; color: #333; }
+    section.resume-section { margin-bottom: 1.4rem; }
     section.resume-section h2 {
-      font-size: 1.1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid #111;
-      padding-bottom: 0.2rem;
-      margin-bottom: 0.6rem;
+        font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.5px;
+        border-bottom: 2px solid #111; padding-bottom: 0.2rem; margin-bottom: 0.6rem;
     }
-    .summary-text {
-      font-size: 0.95rem;
-    }
-
-    .job-block {
-      margin-bottom: 1rem;
-    }
-    .job-line {
-      display: flex;
-      justify-content: space-between;
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-    .job-line .company {
-      font-weight: 400;
-      display: block;
-      font-size: 0.9rem;
-    }
-    ul.bullets {
-      margin-top: 0.4rem;
-      padding-left: 1.2rem;
-    }
-    ul.bullets li {
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .edu-line, .skills-line {
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-    .edu-line strong { display: block; font-size: 0.95rem; }
-
-    ul.skills-grid, ul.cert-list {
-      padding-left: 1.2rem;
-    }
-    ul.skills-grid li, ul.cert-list li {
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
-    }
-
+    .summary-text { font-size: 0.95rem; }
+    .job-block { margin-bottom: 1rem; }
+    .job-line { font-weight: 700; font-size: 0.95rem; }
+    ul.bullets { margin-top: 0.4rem; padding-left: 1.2rem; }
+    ul.bullets li { font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .edu-line { font-size: 0.9rem; margin-bottom: 0.5rem; }
+    ul.skills-grid, ul.cert-list { padding-left: 1.2rem; }
+    ul.skills-grid li, ul.cert-list li { font-size: 0.9rem; margin-bottom: 0.3rem; }
     @media print {
-      body { background: white; }
-      .toolbar, .flash { display: none; }
-      .resume-sheet { box-shadow: none; padding: 0; }
+        @page { size: A4; margin: 0; }
+        body * { visibility: hidden; }
+        .resume-sheet, .resume-sheet * { visibility: visible; }
+        .resume-sheet { position: absolute; top: 0; left: 0; box-shadow: none; margin: 0; }
     }
-  </style>
-</head>
-<body>
-  <div class="page-wrap">
+</style>
+
+    <!-- HEADER -->
+    <header class="mb-8 print:hidden">
+        <p class="text-brand-accent text-xs font-black tracking-widest uppercase mb-3">Career Tools</p>
+        <h1 class="text-3xl md:text-4xl font-black mb-3 text-light-text dark:text-white tracking-tight">
+            Your Resume Is <span class="text-brand-accent">Ready</span>.
+        </h1>
+        <p class="text-light-muted dark:text-brand-textMuted text-base font-medium max-w-2xl">
+            Here's the AI-generated result. Review it below, then edit or download.
+        </p>
+    </header>
 
     {% if messages %}
-      {% for message in messages %}
-        <div class="flash {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
-      {% endfor %}
+        {% for message in messages %}
+        <div class="flex items-center gap-3 px-4 py-3 rounded-xl mb-6 text-sm font-semibold print:hidden
+            {% if message.tags == 'error' %}bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20
+            {% else %}bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20{% endif %}">
+            <i class="fa-solid {% if message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
     {% endif %}
 
-    {% comment %} <div class="toolbar">
-      <a href="{% url 'resume_builder' %}" class="btn btn-secondary">Edit Resume</a>
-      <button <button type="button" onclick="printResume()" class="btn btn-primary">Print / Save as PDF</button> {% endcomment %}
-   
-    <div class="toolbar">
-    <a href="{% url 'resume_builder' %}" class="btn btn-secondary">✏ Edit Resume</a>
-    <a href="{% url 'resume_pdf' %}" class="btn btn-primary">📄 Download PDF</a>
-    {% comment %} <button type="button" class="btn btn-primary" onclick="window.print">🖨 Print Resume</button> {% endcomment %}
-    <button type="button" onclick="window.print()" class="btn btn-primary">Print</button>
+    <!-- TOOLBAR -->
+    <div class="flex flex-wrap items-center gap-3 mb-6 print:hidden">
+        <a href="{% url 'resume_builder' %}"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-light-bg dark:bg-brand-bg text-light-text dark:text-white border border-light-border dark:border-brand-border rounded-xl font-bold text-sm hover:border-brand-accent hover:text-brand-accent transition-all">
+            <i class="fa-solid fa-pen"></i> Edit Resume
+        </a>
+        <a href="{% url 'resume_pdf' %}"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white rounded-xl font-bold text-sm hover:bg-green-700 transition-all shadow-md shadow-green-600/30">
+            <i class="fa-solid fa-download"></i> Download PDF
+        </a>
+        <button type="button" onclick="window.print()"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-accent text-white rounded-xl font-bold text-sm hover:bg-brand-accentHover transition-all shadow-md shadow-brand-accent/30">
+            <i class="fa-solid fa-print"></i> Print
+        </button>
     </div>
 
+    <!-- RESUME SHEET -->
+    <div class="rounded-2xl overflow-hidden shadow-xl mb-12">
+        <div class="resume-sheet">
+            <header class="resume-header">
+                <h1>{{ resume.full_name }}</h1>
+                {% if resume.target_title %}<p class="subtitle">{{ resume.target_title }}</p>{% endif %}
+                <p class="contact-line">
+                    {% if resume.location %}{{ resume.location }}{% endif %}
+                    {% if resume.email %} | {{ resume.email }}{% endif %}
+                    {% if resume.phone %} | {{ resume.phone }}{% endif %}
+                    {% if resume.linkedin %} | {{ resume.linkedin }}{% endif %}
+                    {% if resume.website %} | {{ resume.website }}{% endif %}
+                </p>
+            </header>
 
+            {% if ai_data.summary %}
+            <section class="resume-section">
+                <h2>Professional Summary</h2>
+                <p class="summary-text">{{ ai_data.summary }}</p>
+            </section>
+            {% endif %}
 
-    
+            {% if ai_data.experience %}
+            <section class="resume-section">
+                <h2>Work Experience</h2>
+                {% for job in ai_data.experience %}
+                    <div class="job-block">
+                        <p class="job-line">{{ job.role_line }}</p>
+                        <ul class="bullets">
+                            {% for bullet in job.bullets %}<li>{{ bullet }}</li>{% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </section>
+            {% endif %}
 
-    <div class="resume-sheet">
-      <header class="resume-header">
-        <h1>{{ resume.full_name }}</h1>
-        {% if resume.target_title %}
-          <p class="subtitle">{{ resume.target_title }}</p>
-        {% endif %}
-        <p class="contact-line">
-          {% if resume.location %}{{ resume.location }}{% endif %}
-          {% if resume.email %} | {{ resume.email }}{% endif %}
-          {% if resume.phone %} | {{ resume.phone }}{% endif %}
-          {% if resume.linkedin %} | {{ resume.linkedin }}{% endif %}
-          {% if resume.website %} | {{ resume.website }}{% endif %}
-        </p>
-      </header>
+            {% if education_lines %}
+            <section class="resume-section">
+                <h2>Education</h2>
+                {% for line in education_lines %}<p class="edu-line">{{ line }}</p>{% endfor %}
+            </section>
+            {% endif %}
 
-      {% if ai_data.summary %}
-      <section class="resume-section">
-        <h2>Professional Summary</h2>
-        <p class="summary-text">{{ ai_data.summary }}</p>
-      </section>
-      {% endif %}
+            {% if skills_list %}
+            <section class="resume-section">
+                <h2>Skills</h2>
+                <ul class="skills-grid">
+                    {% for skill in resume.skills %}<li>{{ skill }}</li>{% endfor %}
+                </ul>
+            </section>
+            {% endif %}
 
-      {% if ai_data.experience %}
-      <section class="resume-section">
-        <h2>Work Experience</h2>
-        {% for job in ai_data.experience %}
-          <div class="job-block">
-            <p class="job-line">{{ job.role_line }}</p>
-            <ul class="bullets">
-              {% for bullet in job.bullets %}
-                <li>{{ bullet }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-        {% endfor %}
-      </section>
-      {% endif %}
+            {% if cert_lines %}
+            <section class="resume-section">
+                <h2>Certifications</h2>
+                <ul class="cert-list">
+                    {% for cert in cert_lines %}<li>{{ cert }}</li>{% endfor %}
+                </ul>
+            </section>
+            {% endif %}
 
-      {% if education_lines %}
-      <section class="resume-section">
-        <h2>Education</h2>
-        {% for line in education_lines %}
-          <p class="edu-line">{{ line }}</p>
-        {% endfor %}
-      </section>
-      {% endif %}
-
-      {% if skills_list %}
-      <section class="resume-section">
-        <h2>Skills</h2>
-        <ul class="skills-grid">
-          {% for skill in resume.skills %}
-            <li>{{ skill }}</li>
-          {% endfor %}
-        </ul>
-      </section>
-      {% endif %}
-
-      {% if cert_lines %}
-      <section class="resume-section">
-        <h2>Certifications</h2>
-        <ul class="cert-list">
-          {% for cert in cert_lines %}
-            <li>{{ cert }}</li>
-          {% endfor %}
-        </ul>
-      </section>
-      {% endif %}
-
-      {% if not ai_data %}
-        <p style="color:#9b2c2c; text-align:center; margin-top:1rem;">
-          The AI-generated content could not be created. Please try again.
-        </p>
-      {% endif %} 
-      
-
-
+            {% if not ai_data %}
+                <p style="color:#9b2c2c; text-align:center; margin-top:1rem;">
+                    The AI-generated content could not be created. Please try again.
+                </p>
+            {% endif %}
+        </div>
     </div>
-  </div>
-</body>
-</html>
+
+{% endblock %}
